@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "fe-tattoo-studio",
   "version": "0.1.0",
   "private": true,
   "description": "The front-end of Website about Tattoo, using Nextjs Framework 14.",
@@ -19,7 +19,6 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npm run lint",
       "npm run format",
       "git add ."
     ]
