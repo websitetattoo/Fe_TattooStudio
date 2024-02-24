@@ -86,7 +86,7 @@ export default function Header() {
   const handleCloseDrawer = () => {
     setOpen(false);
   };
-
+  
   return (
     <header className="w-full">
       <div className="bg-tattoo-black-2 w-full" data-name="social-contact">
