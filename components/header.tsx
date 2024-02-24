@@ -57,6 +57,7 @@ const navigateLinks: NavigationLink[] = [
 ];
 
 export default function Header() {
+
   const [social] = useState<SocialProps[]>([
     {
       icon: <FacebookIcon />,
