@@ -17,6 +17,15 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        "tattoo-black-1": "#0C0C0C",
+        "tattoo-black-2": "#181818",
+        "tattoo-color-bg": "#0E1115",
+        "tattoo-gray": "#B8B8B8",
+        "tattoo-highlight": "#FF3C00",
+        "tattoo-hover": "#FDDD07",
+        "tattoo-hr": "#353535",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
