@@ -57,7 +57,6 @@ const navigateLinks: NavigationLink[] = [
 ];
 
 export default function Header() {
-
   const [social] = useState<SocialProps[]>([
     {
       icon: <FacebookIcon />,
@@ -87,28 +86,28 @@ export default function Header() {
   const handleCloseDrawer = () => {
     setOpen(false);
   };
-  
+
   return (
     <header className="w-full">
-      <div className="bg-tattoo-black-2 w-full" data-name="social-contact">
-        <ul className="lg:container flex justify-between text-white text-sm py-3">
+      <div className="w-full bg-tattoo-black-2" data-name="social-contact">
+        <ul className="flex justify-between py-3 text-sm text-white lg:container">
           {social.map((s, idx) => (
             <li key={idx} className="flex items-center">
               {s.icon}
-              <span className="text-sm hidden md:inline-block">
+              <span className="hidden text-sm md:inline-block">
                 {s.label}: {s.value}
               </span>
             </li>
           ))}
         </ul>
       </div>
-      <nav className="bg-tattoo-black-1 w-full" data-name="header-nav">
-        <div className="container flex justify-between items-center text-tattoo-gray py-[18px]">
-          <div className="hidden lg:flex gap-8">
-            <Link href="/artists" className="uppercase text-[22px]">
+      <nav className="w-full bg-tattoo-black-1" data-name="header-nav">
+        <div className="container flex items-center justify-between py-[18px] text-tattoo-gray">
+          <div className="hidden gap-8 lg:flex">
+            <Link href="/artists" className="text-[22px] uppercase">
               ARTIST
             </Link>
-            <Link href="/contact" className="uppercase text-[22px]">
+            <Link href="/contact" className="text-[22px] uppercase">
               CONTACT
             </Link>
           </div>
@@ -118,10 +117,10 @@ export default function Header() {
             </Link>
           </div>
           <div className="hidden gap-8 lg:flex">
-            <Link href="/studio" className="uppercase text-[22px]">
+            <Link href="/studio" className="text-[22px] uppercase">
               STUDIO
             </Link>
-            <Link href="/news" className="uppercase text-[22px]">
+            <Link href="/news" className="text-[22px] uppercase">
               NEWS
             </Link>
           </div>
@@ -130,8 +129,8 @@ export default function Header() {
               <DrawerTrigger>
                 <MoreHorizonIcon />
               </DrawerTrigger>
-              <DrawerContent className="h-full opacity-80 text-white">
-                <div className="w-4/5 mx-auto">
+              <DrawerContent className="h-full text-white opacity-80">
+                <div className="mx-auto w-4/5">
                   <DrawerHeader className="flex justify-between">
                     <Image src="/logo.png" alt="logo" width={136} height={69} />
                     <DrawerClose>
@@ -146,10 +145,10 @@ export default function Header() {
                           className="w-full text-start"
                           onClick={handleCloseDrawer}
                         >
-                          <li className="no-underline mb-4">
+                          <li className="mb-4 no-underline">
                             <Link
                               href={link.href}
-                              className="uppercase font-bold text-xl block"
+                              className="block text-xl font-bold uppercase"
                             >
                               {link.label}
                             </Link>
@@ -160,7 +159,7 @@ export default function Header() {
                     </ul>
                   </div>
                   <DrawerFooter>
-                    <h1 className="uppercase text-2xl">
+                    <h1 className="text-2xl uppercase">
                       FLORIDA KINGS TATTOO, EST, {new Date().getFullYear()}.
                       BASED IN LOS ANGELES, (CA)
                     </h1>

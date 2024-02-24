@@ -84,7 +84,7 @@ export const XIcon: FC<IconProps> = ({ className = "", style = {} }) => (
     strokeLinecap="round"
     strokeLinejoin="round"
     className={twMerge(
-      "h-12 w-12 dark:text-gray-300 dark:hover:text-white lucide lucide-x",
+      "lucide lucide-x h-12 w-12 dark:text-gray-300 dark:hover:text-white",
       className,
     )}
   >
