@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* <Providers> */}
         <Header />
-        {children}
+        <div className="bg-tattoo-black-2">{children}</div>
         <Footer />
         {/* </Providers> */}
       </body>
