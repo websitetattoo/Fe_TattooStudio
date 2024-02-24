@@ -1,5 +1,5 @@
 "use client";
 
-export default function index() {
+export default function Index() {
   return <>contact</>;
 }

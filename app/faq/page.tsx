@@ -60,7 +60,7 @@ Not necessarily. While we take pride in working with our clients to create a tat
   },
 ];
 
-export default function index() {
+export default function Index() {
   const [questions, setQuestions] = useState<QuestionInterface[]>(list);
 
   return (
@@ -78,7 +78,7 @@ export default function index() {
                 <AccordionTrigger className="text-left md:px-4">
                   {q.title}
                 </AccordionTrigger>
-                <AccordionContent className="text-justify md:px-4">
+                <AccordionContent className="text-gray text-justify md:px-4">
                   {q.content}
                 </AccordionContent>
               </AccordionItem>
