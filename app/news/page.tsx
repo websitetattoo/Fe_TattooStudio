@@ -1,5 +1,5 @@
 "use client";
 
 export default function index() {
-  return <>Main</>;
+  return <>news</>;
 }
