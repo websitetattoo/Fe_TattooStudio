@@ -20,7 +20,7 @@ export default function Footer() {
     },
     {
       value: "TATOO CARE",
-      href: "/tatoo-care",
+      href: "/tattoo-care",
     },
     {
       value: "POLICIES",

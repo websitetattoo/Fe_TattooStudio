@@ -6,14 +6,20 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 
-export default function ArtistCard() {
+
+type ArtistCardProps = {
+  url: string;
+};
+
+export default function ArtistCard({url}:ArtistCardProps) {
+  
   return (
     <>
       <div>
         <CardContent className="p-2">
           <div className="relative w-full overflow-hidden">
             <Image
-              src="/images/tattootImg.png"
+              src={url}
               width={300}
               height={300}
               alt="Tattoo Image"
@@ -21,11 +27,15 @@ export default function ArtistCard() {
             />
           </div>
         </CardContent>
-        <CardHeader className="text-center">
-          <CardTitle className="text-white">Jessica Lauren</CardTitle>
-          <CardDescription>Tattoo Artists</CardDescription>
+        <CardHeader className="text-center md:p-0">
+          <CardTitle className="text-white lg:text-2xl md:text-base text-2xl">Jessica Lauren</CardTitle>
+          <CardDescription style={{ marginTop: "0px" }} className="text-base lg:text-base md:text-sm block">Tattoo Artists</CardDescription>
         </CardHeader>
       </div>
     </>
   );
 }
+
+
+
+
