@@ -1,7 +1,7 @@
 "use client";
+import TextTattoo from "./_components/text-tattoo";
 
 export default function index() {
-
   const arrWeekList = [
     {
       id: 1,
@@ -53,7 +53,7 @@ export default function index() {
 
   return (
     <>
-      <div className="w-9/12 m-auto py-24">
+      <div className="m-auto w-9/12 py-24">
         <div>
           <h1 className=" mb-8 text-center text-3xl font-bold text-tattoo-highlight md:text-4xl lg:text-4xl">
             TATTOO CARE
@@ -61,15 +61,8 @@ export default function index() {
         </div>
 
         <div>
-          {arrWeekList.map((item, index) => (
-            <div className="pb-14 w-full" key={index}>
-              <h2 className = "font-bold text-white lg:text-4xl md:text-3xl text-2xl mb-2 text-center lg:text-left md:text-left ">{item.title}</h2>
-              <ul className="list-disc pl-8">
-                {item.description.map((line, index) => (
-                  <li className="text-tattoo-gray lg:text-xl md:text-xl text-base text-left" key={index}>{line}</li>
-                ))}
-              </ul>
-            </div>
+          {arrWeekList?.map((item, index) => (
+            <TextTattoo key={index} obj={item} />
           ))}
         </div>
       </div>

@@ -49,7 +49,7 @@ export default function index() {
 
           <div className="mt-12">
             <div className="lg:flex md:flex">
-            {imgArr.map((item, index) => (
+            {imgArr?.map((item, index) => (
               <div key = {index} className="w-11/12 lg:w-1/4 md:w-1/4">
                 <ArtistCard url={item.url}/>
               </div>

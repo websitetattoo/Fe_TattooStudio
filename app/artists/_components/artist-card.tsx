@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 
-
 type ArtistCardProps = {
   url: string;
 };
