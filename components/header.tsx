@@ -12,12 +12,6 @@ import {
   DrawerTrigger,
 } from "./ui/drawer";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   FacebookIcon,
   InstagramIcon,
   MailIcon,
@@ -109,24 +103,13 @@ export default function Header() {
               key={idx}
               className="flex items-center gap-2 hover:cursor-pointer"
             >
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div>
-                      <div className="rounded-full bg-white">
-                        <s.icon className="h-6 w-6" />
-                      </div>
-                      <div className="text-sm">
-                        <span>{s.label}</span>
-                        <span className="hidden sm:inline-block">{`: ${s.value}`}</span>
-                      </div>
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>{s.value}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <div className="rounded-full bg-white" data-name={s.label}>
+                <s.icon className="h-6 w-6" />
+              </div>
+              <div className="text-sm">
+                <span>{s.label}</span>
+                <span className="hidden sm:inline-block">{`: ${s.value}`}</span>
+              </div>
             </li>
           ))}
         </ul>
