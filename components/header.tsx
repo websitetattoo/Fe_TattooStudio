@@ -11,7 +11,20 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from "./ui/drawer";
-import { FacebookIcon, MoreHorizonIcon, XIcon } from "./icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  MailIcon,
+  MoreHorizonIcon,
+  WhatsAppIcon,
+  XIcon,
+} from "./icons";
 
 interface SocialProps {
   icon: any;
@@ -59,22 +72,22 @@ const navigateLinks: NavigationLink[] = [
 export default function Header() {
   const [social] = useState<SocialProps[]>([
     {
-      icon: <FacebookIcon />,
+      icon: WhatsAppIcon,
       label: "Tel",
       value: "407-799-7181",
     },
     {
-      icon: <FacebookIcon />,
+      icon: MailIcon,
       label: "Email",
       value: "floridakingstattoo@gmail.com",
     },
     {
-      icon: <FacebookIcon />,
+      icon: InstagramIcon,
       label: "Instagram",
       value: "Florida Kings Tattoo",
     },
     {
-      icon: <FacebookIcon />,
+      icon: FacebookIcon,
       label: "Facebook",
       value: "Florida Kings Tattoo",
     },
@@ -90,13 +103,30 @@ export default function Header() {
   return (
     <header className="w-full">
       <div className="w-full bg-tattoo-black-2" data-name="social-contact">
-        <ul className="flex justify-between py-3 text-sm text-white lg:container">
+        <ul className="flex justify-between py-2.5 text-sm text-white lg:container">
           {social.map((s, idx) => (
-            <li key={idx} className="flex items-center">
-              {s.icon}
-              <span className="hidden text-sm md:inline-block">
-                {s.label}: {s.value}
-              </span>
+            <li
+              key={idx}
+              className="flex items-center gap-2 hover:cursor-pointer"
+            >
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <div className="rounded-full bg-white">
+                        <s.icon className="h-6 w-6" />
+                      </div>
+                      <div className="text-sm">
+                        <span>{s.label}</span>
+                        <span className="hidden sm:inline-block">{`: ${s.value}`}</span>
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>{s.value}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </li>
           ))}
         </ul>
