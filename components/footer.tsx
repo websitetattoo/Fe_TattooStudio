@@ -76,7 +76,7 @@ export default function Footer() {
               Email: floriakingstatoo@gmail.com
             </div>
             <div
-              className="flex justify-center py-4 md:justify-start lg:flex"
+              className="flex justify-center py-4 lg:flex lg:justify-start"
               data-name="social"
             >
               <span className="pr-1 font-bold text-black" data-name="instagram">

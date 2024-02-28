@@ -1,7 +1,7 @@
 "use client";
-import TextTattoo from "@/app/tattoo-care/_components/text-tattoo";
 import HighlightText from "@/components/highlight-text";
 import PageTitle from "@/components/page-title";
+import ListPolicies from "./_components/ListPolicies";
 
 export default function index() {
   const artPolicyTitle = "At Florida Kings Tattoo, We try to keep our polices simple so the focus can remain on the art. However, we do need  to have policies in place to ensure fair treatment for all customers.";
@@ -40,6 +40,7 @@ export default function index() {
         "Remaining balance is to be paid at the end of the session in the studio.",
         "Major changes to the design will change the price quoted in the beginning of the inquiry."
       ],
+      className: false
     },
     {
       id: 5,
@@ -52,6 +53,7 @@ export default function index() {
         "If an appointment is rescheduled more than two times or deemed as no-show, your deposit will be forfeited.",
         "By submitting a deposit, you are hereby agreeing to this policy and will be held to this agreement such an event were to occur."
       ],
+      className: false
     },
   ];
 
@@ -73,7 +75,7 @@ export default function index() {
 
           <div className="text-left md:w-9/12 md:m-auto md:py-12 lg:w-full">
             {artPoliciesList?.map((item, index) => (
-              <TextTattoo key={index} obj={item} className={item.className} />
+              <ListPolicies key={index} obj={item} />
             ))}
           </div>
         </div>
