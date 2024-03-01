@@ -1,24 +1,35 @@
+//Libaries
+import Image from "next/image";
+//Components
 import {
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 
 type ArtistCardProps = {
+  id: number;
   url: string;
+  name?: string;
+  work?: string;
+  disabled?: boolean;
 };
 
-export default function ArtistCard({url}:ArtistCardProps) {
-  
+export default function ArtistCard({
+  imgObj,
+  disabled,
+}: {
+  imgObj: ArtistCardProps;
+  disabled?: boolean;
+}) {
   return (
     <>
       <div>
         <CardContent className="p-2">
           <div className="relative w-full overflow-hidden">
             <Image
-              src={url}
+              src={imgObj.url}
               width={300}
               height={300}
               alt="Tattoo Image"
@@ -26,15 +37,20 @@ export default function ArtistCard({url}:ArtistCardProps) {
             />
           </div>
         </CardContent>
-        <CardHeader className="text-center md:p-0">
-          <CardTitle className="text-white lg:text-2xl md:text-base text-2xl">Jessica Lauren</CardTitle>
-          <CardDescription style={{ marginTop: "0px" }} className="text-base lg:text-base md:text-sm block">Tattoo Artists</CardDescription>
-        </CardHeader>
+        {disabled && (
+          <CardHeader className="text-center md:p-0">
+            <CardTitle className="text-2xl text-white md:text-base lg:text-2xl">
+              {imgObj.name}
+            </CardTitle>
+            <CardDescription
+              style={{ marginTop: "0px" }}
+              className="block text-base md:text-sm lg:text-base"
+            >
+              {imgObj.work}
+            </CardDescription>
+          </CardHeader>
+        )}
       </div>
     </>
   );
 }
-
-
-
-
