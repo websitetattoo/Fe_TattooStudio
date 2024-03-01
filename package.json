@@ -9,7 +9,9 @@
     "url": "https://github.com/websitetattoo/Fe_TattooStudio"
   },
   "scripts": {
-    "dev": "next dev & tailwind-config-viewer -c tailwind.config.ts -o -p 3001",
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:next": "next dev",
+    "dev:tailwind": "tailwind-config-viewer -c tailwind.config.ts -o -p 3001",
     "build": "next build",
     "start": "next start",
     "tailwind-config-viewer": "tailwind-config-viewer -c tailwind.config.ts -o",
@@ -26,6 +28,7 @@
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",
+    "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
