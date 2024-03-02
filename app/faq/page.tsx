@@ -39,7 +39,7 @@ Not necessarily. While we take pride in working with our clients to create a tat
 
   {
     title: "How bad does it hurt to get a tattoo?",
-    content: `As everyone’s pain tolerance is different, it’s difficult to have a one range answer. While there is some discomfort experienced during the process, most clients feel that the resulting tattoo is well worth the process. There are many first time tattoo clients who state that it was much better than anticipated. Larger pieces that take all day may create discomfort in the 4th-5th hour.`,
+    content: `As everyone's pain tolerance is different, it's difficult to have a one range answer. While there is some discomfort experienced during the process, most clients feel that the resulting tattoo is well worth the process. There are many first time tattoo clients who state that it was much better than anticipated. Larger pieces that take all day may create discomfort in the 4th-5th hour.`,
   },
   {
     title: "Can I use numbing cream for my appointment",
@@ -47,12 +47,12 @@ Not necessarily. While we take pride in working with our clients to create a tat
   },
   {
     title: "Are there any aftercare requirements when getting a tattoo?",
-    content: `Yes, it’s extremely important to treat your new tattoo properly in the days after completion. To learn more about good aftercare practices, please visit our aftercare page.`,
+    content: `Yes, it's extremely important to treat your new tattoo properly in the days after completion. To learn more about good aftercare practices, please visit our aftercare page.`,
   },
 
   {
     title: "Can people with health conditions get tattoos?",
-    content: `There are some health conditions that may be dangerous for an individual to be tattooed. These include immune system problems that limit your body’s ability to heal itself. If pregnant, please consult with your doctor before reaching out. If you are in doubt about how a condition you have may impact your ability to get a tattoo, please speak directly with your healthcare provider before going any further.`,
+    content: `There are some health conditions that may be dangerous for an individual to be tattooed. These include immune system problems that limit your body's ability to heal itself. If pregnant, please consult with your doctor before reaching out. If you are in doubt about how a condition you have may impact your ability to get a tattoo, please speak directly with your healthcare provider before going any further.`,
   },
   {
     title: "Do you do touch-ups? When do I need a touch-up?",
@@ -64,28 +64,26 @@ export default function Index() {
   const [questions, setQuestions] = useState<QuestionInterface[]>(list);
 
   return (
-    <>
+    <main className="px-4 py-8 text-white sm:container sm:px-8">
       <PageTitle>
         <HighlightText className="font-bold uppercase tracking-wider">
           FAQ
         </HighlightText>
       </PageTitle>
-      <div className="container px-4 py-8 text-white sm:px-8">
-        <div className="mx-auto w-full md:w-4/5 lg:w-3/5">
-          <Accordion type="multiple" className="w-full">
-            {questions.map((q, idx) => (
-              <AccordionItem value={idx + ""} key={idx}>
-                <AccordionTrigger className="text-left md:px-4">
-                  {q.title}
-                </AccordionTrigger>
-                <AccordionContent className="text-gray text-justify md:px-4">
-                  {q.content}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+      <div className="mx-auto w-full md:w-4/5 lg:w-3/5">
+        <Accordion type="multiple" className="w-full">
+          {questions.map((q, idx) => (
+            <AccordionItem value={idx + ""} key={idx}>
+              <AccordionTrigger className="text-left text-lg md:px-4">
+                {q.title}
+              </AccordionTrigger>
+              <AccordionContent className="text-justify text-tattoo-gray md:px-4">
+                {q.content}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
-    </>
+    </main>
   );
 }

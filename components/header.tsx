@@ -97,7 +97,7 @@ export default function Header() {
   return (
     <header className="w-full">
       <div className="w-full bg-tattoo-black-2" data-name="social-contact">
-        <ul className="flex justify-between py-2.5 text-sm text-white lg:container">
+        <ul className="flex justify-start gap-2 py-2.5 text-[8px] text-white lg:container sm:justify-between sm:gap-0 lg:text-sm">
           {social.map((s, idx) => (
             <li
               key={idx}
@@ -106,7 +106,7 @@ export default function Header() {
               <div className="rounded-full bg-white" data-name={s.label}>
                 <s.icon className="h-6 w-6" />
               </div>
-              <div className="text-sm">
+              <div className="flex">
                 <span>{s.label}</span>
                 <span className="hidden sm:inline-block">{`: ${s.value}`}</span>
               </div>
@@ -117,10 +117,18 @@ export default function Header() {
       <nav className="w-full bg-tattoo-black-1" data-name="header-nav">
         <div className="container flex items-center justify-between py-[18px] text-tattoo-gray">
           <div className="hidden gap-8 lg:flex">
-            <Link href="/artists" className="text-[22px] uppercase">
+            <Link
+              href="/artists"
+              className="relative z-10 text-[22px] text-xl font-semibold uppercase transition-all duration-300 after:absolute after:inset-0 after:top-full after:z-0 after:h-1.5
+              after:w-0 after:bg-tattoo-highlight after:transition-all after:duration-500 after:content-[''] hover:text-white hover:after:w-full"
+            >
               ARTIST
             </Link>
-            <Link href="/contact" className="text-[22px] uppercase">
+            <Link
+              href="/contact"
+              className="relative z-10 text-[22px] text-xl font-semibold uppercase transition-all duration-300 after:absolute after:inset-0 after:top-full after:z-0 after:h-1.5
+              after:w-0 after:bg-tattoo-highlight after:transition-all after:duration-500 after:content-[''] hover:text-white hover:after:w-full"
+            >
               CONTACT
             </Link>
           </div>
@@ -130,10 +138,18 @@ export default function Header() {
             </Link>
           </div>
           <div className="hidden gap-8 lg:flex">
-            <Link href="/studio" className="text-[22px] uppercase">
+            <Link
+              href="/studio"
+              className="relative z-10 text-[22px] text-xl font-semibold uppercase transition-all duration-300 after:absolute after:inset-0 after:top-full after:z-0 after:h-1.5
+              after:w-0 after:bg-tattoo-highlight after:transition-all after:duration-500 after:content-[''] hover:text-white hover:after:w-full"
+            >
               STUDIO
             </Link>
-            <Link href="/news" className="text-[22px] uppercase">
+            <Link
+              href="/news"
+              className="relative z-10 text-[22px] text-xl font-semibold uppercase transition-all duration-300 after:absolute after:inset-0 after:top-full after:z-0 after:h-1.5
+              after:w-0 after:bg-tattoo-highlight after:transition-all after:duration-500 after:content-[''] hover:text-white hover:after:w-full"
+            >
               NEWS
             </Link>
           </div>
@@ -158,14 +174,17 @@ export default function Header() {
                           className="w-full text-start"
                           onClick={handleCloseDrawer}
                         >
-                          <li className="mb-4 no-underline">
+                          <li className="relative mb-4 h-7 no-underline hover:text-tattoo-black-1">
                             <Link
                               href={link.href}
-                              className="block text-xl font-bold uppercase"
+                              className="absolute z-10 block text-xl font-bold uppercase "
                             >
                               {link.label}
                             </Link>
-                            <hr className="mt-3" />
+                            <div
+                              className="absolute inset-0 bg-transparent transition-all duration-500 before:absolute before:inset-0 before:z-0 before:w-0
+                               before:bg-tattoo-highlight before:transition-all before:duration-500 before:content-[''] hover:before:w-full"
+                            ></div>
                           </li>
                         </DrawerClose>
                       ))}
