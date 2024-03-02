@@ -67,7 +67,9 @@ export default function Footer() {
             <div className="py-1 text-tattoo-gray">Daily open:9:00 - 20:00</div>
             <button className="flex w-full justify-around bg-tattoo-highlight p-3">
               <CalendarMinus2 className="text-white" />
+              <Link href="/booking">
               <span className="pl-1 font-bold">BOOK NOW</span>
+              </Link>
             </button>
           </div>
           <div className="py-4" data-name="contact-us">

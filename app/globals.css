@@ -6,3 +6,26 @@
   background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
   background-size: 30px 30px;
 }
+
+.select-css button{
+  background-color: #181818 !important;
+  border:1px solid #B8B8B8 !important;
+  border-radius: 0px !important;
+}
+
+:is(.dark .dark\:focus\:ring-slate-300:focus) {
+  --tw-ring-opacity: 0;
+  --tw-ring-color: none !important;
+}
+
+::file-selector-button {
+  background-color: transparent;
+  color: #ccc;
+  border: none;
+  outline: none;
+  height: 18px;
+}
+
+.InputFile-css input[type="file"] {
+height: 37.6px !important;
+}
