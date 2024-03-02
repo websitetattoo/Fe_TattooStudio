@@ -42,28 +42,7 @@ export default function index() {
   ];
 
   return (
-    // <div className="bg-tattoo-color-bg">
-    //   <div className="w-full py-12 lg:m-auto lg:w-9/12">
-    //     <div className="pb-16 md:pb-8 lg:pb-20">
-    //       <PageTitle>
-    //         <HighlightText className="font-bold">NEWS</HighlightText>
-    //       </PageTitle>
-    //     </div>
-    //     <div className="flex flex-wrap">
-    //       {newsList.length > 0 &&
-    //         newsList.map((newsItem) => (
-    //           <AspectRatioNews
-    //             key={newsItem.id}
-    //             imageUrl={newsItem.url}
-    //             title={newsItem.title}
-    //             alt={newsItem.alt}
-    //             createDate={newsItem.createDate}
-    //           />
-    //         ))}
-    //     </div>
-    //   </div>
-    // </div>
-    <div className="bg-tattoo-color-bg lg:p-12">
+    <div className="bg-tattoo-color-bg ">
       <div className="w-full py-12 lg:m-auto lg:w-9/12">
         <PageTitle>
           <HighlightText>NEWS</HighlightText>

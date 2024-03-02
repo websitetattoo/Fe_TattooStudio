@@ -9,9 +9,7 @@
     "url": "https://github.com/websitetattoo/Fe_TattooStudio"
   },
   "scripts": {
-    "dev": "npm-run-all --parallel dev:*",
-    "dev:next": "next dev",
-    "dev:tailwind": "tailwind-config-viewer -c tailwind.config.ts -o -p 3001",
+    "dev": "next dev && tailwind-config-viewer -c tailwind.config.ts -o -p 3001",
     "build": "next build",
     "start": "next start",
     "tailwind-config-viewer": "tailwind-config-viewer -c tailwind.config.ts -o",
