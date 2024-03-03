@@ -14,17 +14,24 @@ export default function Index() {
   const title =
     "Do you want to visit? With a little more information, we can help you with what tattoo you're looking for! Fill out the form below:";
 
+  const handlePost = () => {
+    const form = new FormData();
+    console.log(form);
+  };
+
   const arrInput = [
     {
       label: "your name:",
       content: "Ex: Christ Rock",
       type: "text",
       children: [],
+      value: "",
     },
     {
       label: "your phone number:",
       content: "Ex: 407-799-7181",
-      type: "text",
+      type: "tel",
+      value: "",
       children: [],
     },
     {
@@ -32,18 +39,21 @@ export default function Index() {
       content: "Ex: 2620 Simpson Rd, Kissimmee, FL 34744, United States",
       type: "text",
       children: [],
+      value: "",
     },
     {
       label: "Email:",
       content: "Ex: test@gmail.com",
       type: "email",
       children: [],
+      value: "",
     },
     {
       label: "Your Schedule:",
       content: "Ex: 02/08/2024",
       type: "date",
       children: [],
+      value: "",
     },
     {
       label: "Which artist(s) were you looking to work with?",
@@ -57,37 +67,39 @@ export default function Index() {
         "Ex: Dragon, vibrant color, balance between power and grace for timeless piece",
       type: "text",
       children: [],
+      value: "",
     },
     {
       label: "Additional reference image for your tattoo: (optional)",
       content: "Choose File",
       type: "file",
       children: [],
+      value: "",
     },
   ];
 
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   return (
-    <div className="m-auto lg:w-9/12 md:w-9/12 w-11/12">
+    <div className="m-auto w-11/12 md:w-9/12 lg:w-9/12">
       <div>
         <PageTitle>
           <div className="m-auto w-10/12">
-            <h1 className="mb-8 text-center font-medium text-white lg:text-2xl leading-6">
+            <h1 className="mb-8 text-center font-medium leading-6 text-white lg:text-2xl">
               {title}
             </h1>
           </div>
         </PageTitle>
       </div>
-      <div className="lg:mt-20 mt-8 lg:flex  w-full flex-wrap">
+      <div className="mt-8 w-full flex-wrap  lg:mt-20 lg:flex">
         {arrInput.map((item, index) =>
           item.type === "select" ? (
-            <div key={index} className="select-css lg:w-1/2 w-full px-3">
+            <div key={index} className="select-css w-full px-3 lg:w-1/2">
               <label className="font-medium capitalize text-white">
                 {item.label}
               </label>
               <div className="select-css my-1">
-                <Select className="w-full outline-none outline-0">
+                <Select>
                   <SelectTrigger className=" text-white">
                     <SelectValue placeholder="Choose your favorite artist" />
                   </SelectTrigger>
@@ -108,7 +120,10 @@ export default function Index() {
               </div>
             </div>
           ) : (
-            <div className="lg:w-1/2 w-full px-3 pb-4 InputFile-css" key={index}>
+            <div
+              className="InputFile-css w-full px-3 pb-4 lg:w-1/2"
+              key={index}
+            >
               <label className="font-medium capitalize text-white">
                 {item.label}
               </label>
@@ -117,13 +132,14 @@ export default function Index() {
                 type={item.type}
                 multiple
                 placeholder={item.content}
+                // value={item.value}
                 accept="image/*"
               />
             </div>
           ),
         )}
       </div>
-      <div className="text-center pb-20 pt-4">
+      <div className="pb-20 pt-4 text-center">
         <button
           className="text:lg font-meidum bg-tattoo-highlight p-2 uppercase text-white"
           type="submit"

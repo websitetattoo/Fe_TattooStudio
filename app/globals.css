@@ -7,9 +7,9 @@
   background-size: 30px 30px;
 }
 
-.select-css button{
+.select-css button {
   background-color: #181818 !important;
-  border:1px solid #B8B8B8 !important;
+  border: 1px solid #b8b8b8 !important;
   border-radius: 0px !important;
 }
 
@@ -27,5 +27,34 @@
 }
 
 .InputFile-css input[type="file"] {
-height: 37.6px !important;
+  height: 37.6px !important;
+}
+
+.InputFile-css input[type="date"]:before {
+  color: lightgrey;
+  content: attr(placeholder) !important;
+  margin-right: 0.5em;
+}
+
+.InputFile-css input[type="date"]::-webkit-datetime-edit-text {
+  -webkit-appearance: none;
+  display: none;
+}
+.InputFile-css input[type="date"]::-webkit-datetime-edit-month-field {
+  -webkit-appearance: none;
+  display: none;
+}
+.InputFile-css input[type="date"]::-webkit-datetime-edit-day-field {
+  -webkit-appearance: none;
+  display: none;
+}
+.InputFile-css input[type="date"]::-webkit-datetime-edit-year-field {
+  -webkit-appearance: none;
+  display: none;
+}
+
+.InputFile-css input[type="date"]:focus {
+  color: lightgrey;
+  content: "ddd";
+  margin-right: 0.5em;
 }
