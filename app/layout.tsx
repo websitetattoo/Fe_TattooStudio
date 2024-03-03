@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true} className="dark">
+      <head>
+        <link rel="icon" href="/logo.png" type="image/*" />
+      </head>
       <body className={inter.className}>
-        {/* <Providers> */}
-        <Header />
-        <div className="bg-tattoo-black-2">{children}</div>
-        <Footer />
-        {/* </Providers> */}
+        <div>{children}</div>
       </body>
     </html>
   );
