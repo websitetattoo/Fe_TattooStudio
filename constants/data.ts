@@ -1,5 +1,24 @@
 import { Icons } from "@/components/icons";
 
+export type Policies = {
+  headerTitle: string;
+  title: string[];
+  content: string[];
+};
+
+export const policies: Policies[] = [
+  {
+    headerTitle: "Test1",
+    title: ["Test1", "Test2"],
+    content: ["Test1", "Test2", "Test3"],
+  },
+  {
+    headerTitle: "Test1",
+    title: ["Test1", "Test2"],
+    content: ["Test1", "Test2", "Test3"],
+  },
+];
+
 export interface NavItem {
   title: string;
   href?: string;
@@ -28,6 +47,12 @@ export const navItems: NavItem[] = [
     href: "/backend/artists",
     icon: "employee",
     label: "employee",
+  },
+  {
+    title: "Policies",
+    href: "/backend/policies",
+    icon: "policy",
+    label: "policies",
   },
   {
     title: "Logout",

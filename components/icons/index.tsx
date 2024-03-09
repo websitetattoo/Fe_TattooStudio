@@ -19,6 +19,7 @@ import {
   LucideProps,
   Moon,
   MoreVertical,
+  NotebookText,
   Pizza,
   Plus,
   Settings,
@@ -60,6 +61,7 @@ export const Icons = {
   laptop: Laptop,
   twitter: Twitter,
   check: Check,
+  policy: NotebookText,
 };
 
 import { FC } from "react";
