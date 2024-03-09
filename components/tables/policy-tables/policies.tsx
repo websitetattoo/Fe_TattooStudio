@@ -24,13 +24,13 @@ export const PoliciesClient: React.FC<ProductsClientProps> = ({ data }) => {
         />
         <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/user/new`)}
+          onClick={() => router.push(`/backend/policies/createPolicies`)}
         >
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="name" columns={columns} data={data} />
+      <DataTable searchKey="headerTitle" columns={columns} data={data} />
     </>
   );
 };

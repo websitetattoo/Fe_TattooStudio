@@ -6,19 +6,6 @@ export type Policies = {
   content: string[];
 };
 
-export const policies: Policies[] = [
-  {
-    headerTitle: "Test1",
-    title: ["Test1", "Test2"],
-    content: ["Test1", "Test2", "Test3"],
-  },
-  {
-    headerTitle: "Test1",
-    title: ["Test1", "Test2"],
-    content: ["Test1", "Test2", "Test3"],
-  },
-];
-
 export interface NavItem {
   title: string;
   href?: string;

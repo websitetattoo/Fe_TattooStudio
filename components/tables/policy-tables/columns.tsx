@@ -24,21 +24,21 @@ export const columns: ColumnDef<Policies>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+  // {
+  //   accessorKey: "_id",
+  //   header: "ID",
+  // },
   {
-    accessorKey: "name",
-    header: "NAME",
+    accessorKey: "headerTitle",
+    header: "HEADERTITLE",
   },
   {
-    accessorKey: "company",
-    header: "COMPANY",
+    accessorKey: "title",
+    header: "TITLE",
   },
   {
-    accessorKey: "role",
-    header: "ROLE",
-  },
-  {
-    accessorKey: "status",
-    header: "STATUS",
+    accessorKey: "content",
+    header: "CONTENT",
   },
   {
     id: "actions",

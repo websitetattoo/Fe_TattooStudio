@@ -46,9 +46,10 @@ export function DataTable<TData, TValue>({
       <Input
         placeholder={`Search ${searchKey}...`}
         value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn(searchKey)?.setFilterValue(event.target.value)
-        }
+        onChange={(event) => {
+          table.getColumn(searchKey)?.setFilterValue(event.target.value);
+          console.log(event.target.value);
+        }}
         className="w-full md:max-w-sm"
       />
       <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
@@ -112,7 +113,6 @@ export function DataTable<TData, TValue>({
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
           >
             Previous
           </Button>
