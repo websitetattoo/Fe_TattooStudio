@@ -116,7 +116,7 @@ export default function Footer() {
           FLORIDA KINGS TATTOO, EST 2024, BASED IN LOS ANGELES, (CA)
         </div>
         <ul className="flex w-full justify-around text-center align-bottom text-white md:container lg:w-1/3">
-          {content.map((c, index) => (
+          {content?.map((c, index) => (
             <li key={index}>
               <Link href={c.href}>{c.value}</Link>
             </li>
