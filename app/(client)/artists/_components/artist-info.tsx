@@ -1,7 +1,7 @@
 //Libaries
 import { useState } from "react";
 //Components
-import { InstagramIcon } from "@/components/icons";
+import { InstagramIcon } from "@/components/forms/icons";
 
 type ArtistInfoProps = {
   id: number;

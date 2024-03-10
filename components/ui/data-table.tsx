@@ -19,6 +19,7 @@ import {
 import { Input } from "./input";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
+import draftToHtml from "draftjs-to-html";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,7 +41,18 @@ export function DataTable<TData, TValue>({
 
   /* this can be used to get the selectedrows 
   console.log("value", table.getFilteredSelectedRowModel()); */
+  function containsHTML(content: any) {
+    const htmlPattern = /<[a-z][\s\S]*>/i;
+    return htmlPattern.test(content);
+  }
 
+  function renderCellContent(content: any) {
+    if (containsHTML(content)) {
+      return <div dangerouslySetInnerHTML={{ __html: content }} />;
+    } else {
+      return <>{content}</>;
+    }
+  }
   return (
     <>
       <Input
@@ -81,10 +93,23 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      {cell.column.columnDef.cell &&
+                      typeof cell.column.columnDef.cell === "function" ? (
+                        cell.column.id === "content" ? (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: cell.column.columnDef.cell(
+                                cell.getContext(),
+                              ),
+                            }}
+                          />
+                        ) : (
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )
+                        )
+                      ) : null}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -101,6 +126,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <div className="flex items-center justify-end space-x-2 py-4">
