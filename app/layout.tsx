@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={true} className="dark">
+    <html lang="en" suppressHydrationWarning={true}>
       <head>
         <link rel="icon" href="/logo.png" type="image/*" />
       </head>

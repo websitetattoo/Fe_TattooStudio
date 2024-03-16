@@ -1,4 +1,10 @@
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/forms/icons";
+
+export type Policies = {
+  headerTitle: string;
+  title: string[];
+  content: string[];
+};
 
 export interface NavItem {
   title: string;
@@ -28,6 +34,12 @@ export const navItems: NavItem[] = [
     href: "/backend/artists",
     icon: "employee",
     label: "employee",
+  },
+  {
+    title: "Policies",
+    href: "/backend/policies",
+    icon: "policy",
+    label: "policies",
   },
   {
     title: "Logout",

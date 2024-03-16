@@ -18,7 +18,7 @@ import {
   MoreHorizonIcon,
   WhatsAppIcon,
   XIcon,
-} from "./icons";
+} from "./forms/icons";
 
 interface SocialProps {
   icon: any;
