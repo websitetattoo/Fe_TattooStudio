@@ -1,12 +1,12 @@
 import BreadCrumb from "@/components/breadcrumb";
 import { PoliciesClient } from "@/components/tables/policy-tables/policies";
-import http from "@/lib/http";
-import { Policies } from "@/constants/data";
+import axios from "axios";
 
 const breadcrumbItems = [{ title: "Policies", link: "/backend/policies" }];
 export default async function Index() {
-  const response = await http.get("/policies");
-  const policies = response.data as Policies[];
+  // Fetch policies from the backend server
+  const response = await axios.get("http://localhost:3001/policies/");
+  const policies = response.data; // Extract policies from the response
 
   return (
     <>

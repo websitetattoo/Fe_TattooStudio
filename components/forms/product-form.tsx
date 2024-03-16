@@ -99,7 +99,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
 
       const editorState = formData.content;
       const formattedContent = extractHTMLContent(editorState);
-      console.log("🚀 ~ handleSubmit ~ formattedContent:", formattedContent);
       const postData = {
         headerTitle: formData.headerTitle,
         title: formData.title,

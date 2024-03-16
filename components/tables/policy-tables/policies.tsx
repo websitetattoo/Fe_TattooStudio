@@ -8,11 +8,7 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
-interface ProductsClientProps {
-  data: Policies[];
-}
-
-export const PoliciesClient: React.FC<ProductsClientProps> = ({ data }) => {
+export const PoliciesClient: React.FC<{ data: Policies[] }> = ({ data }) => {
   const router = useRouter();
 
   return (

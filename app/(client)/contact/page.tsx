@@ -16,7 +16,6 @@ export default function Index() {
 
   const handlePost = () => {
     const form = new FormData();
-    console.log(form);
   };
 
   const arrInput = [

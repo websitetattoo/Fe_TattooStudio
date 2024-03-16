@@ -39,8 +39,6 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  /* this can be used to get the selectedrows 
-  console.log("value", table.getFilteredSelectedRowModel()); */
   function containsHTML(content: any) {
     const htmlPattern = /<[a-z][\s\S]*>/i;
     return htmlPattern.test(content);
@@ -60,7 +58,6 @@ export function DataTable<TData, TValue>({
         value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
         onChange={(event) => {
           table.getColumn(searchKey)?.setFilterValue(event.target.value);
-          console.log(event.target.value);
         }}
         className="w-full md:max-w-sm"
       />

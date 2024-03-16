@@ -1,4 +1,3 @@
-"use client";
 import PageTitle from "@/components/page-title";
 import TextTattoo from "./_components/text-tattoo";
 
