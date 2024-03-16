@@ -2,24 +2,22 @@
 import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Trash } from "lucide-react";
+import React from "react";
+import { EditorState, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useParams, useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
+import "@tonz/react-draft-wysiwyg-input/style.css";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { useToast } from "../ui/use-toast";
+import { stateToHTML } from "draft-js-export-html";
 import { AlertModal } from "../modal/alert-modal";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 export const IMG_MAX_LIMIT = 3;
 const formSchema = z.object({
   headerTitle: z
@@ -45,44 +43,96 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const title = initialData ? "Edit policy" : "Create policy";
   const description = initialData ? "Edit a policy." : "Add a new policy";
-  const toastMessage = initialData ? "Policy updated." : "Policy created.";
   const action = initialData ? "Save changes" : "Create";
-
-  const defaultValues = initialData
-    ? initialData
-    : {
-        headerTitle: "",
-        title: "",
-        content: "",
-      };
-
-  const form = useForm<ProductFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues,
+  // const defaultValues = initialData
+  //   ? initialData
+  //   : {
+  //       headerTitle: "",
+  //       title: "",
+  //       content: "",
+  //     };
+  const [formData, setFormData] = useState({
+    headerTitle: "",
+    title: "",
+    content: EditorState.createEmpty(), // Initial editor state
   });
+  // const form = useForm<ProductFormValues>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues,
+  // });
+  // Function to extract text with styles from EditorState
+  // const extractTextWithStyles = (editorState: any) => {
+  //   const contentState = editorState.getCurrentContent();
+  //   const rawContentState = convertToRaw(contentState);
 
-  const onSubmit = async (data: ProductFormValues | any) => {
+  //   let textWithStyles: any = [];
+
+  //   rawContentState.blocks.forEach((block) => {
+  //     let text = block.text;
+  //     let styles: any = [];
+
+  //     block.inlineStyleRanges.forEach((range) => {
+  //       const style = range.style;
+  //       styles.push(style);
+  //     });
+
+  //     textWithStyles.push({ text, styles });
+  //   });
+
+  //   return textWithStyles;
+  // };
+
+  const extractHTMLContent = (editorState: any) => {
+    const contentState = editorState.getCurrentContent();
+    const html = stateToHTML(contentState);
+    return html;
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
     try {
       setLoading(true);
+
+      const editorState = formData.content;
+      const formattedContent = extractHTMLContent(editorState);
+      console.log("🚀 ~ handleSubmit ~ formattedContent:", formattedContent);
+      const postData = {
+        headerTitle: formData.headerTitle,
+        title: formData.title,
+        content: formattedContent,
+      };
+
       if (initialData) {
         await axios.put(
           `http://localhost:3001/policies/${params.policiesId}`,
-          data,
+          postData,
         );
       } else {
-        const res = await axios.post(
+        await axios.post(
           `http://localhost:3001/policies/createPolicies`,
-          data,
+          postData,
         );
-        console.log("🚀 ~ onSubmit ~ res:", res);
       }
+
       router.refresh();
-      form.setValue("title", "");
-      form.setValue("headerTitle", "");
-      form.setValue("content", "");
-    } catch (error: any) {
+      setFormData({
+        headerTitle: "",
+        title: "",
+        content: EditorState.createEmpty(),
+      });
+
+      toast({
+        variant: "default",
+        title: "Policy saved successfully!",
+        description: initialData
+          ? "Policy updated successfully."
+          : "Policy created successfully.",
+      });
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -91,6 +141,23 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function to handle editor state change
+  const onEditorStateChange = (newEditorState: EditorState) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      content: newEditorState,
+    }));
+  };
+
+  // Function to handle form field change
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const onDelete = async () => {
@@ -128,69 +195,58 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
         )}
       </div>
       <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-8"
-        >
-          <div className="gap-8 md:grid md:grid-cols-3">
-            <FormField
-              control={form.control}
+      <form onSubmit={handleSubmit} className="w-full space-y-8">
+        <div className="gap-8 md:grid md:grid-cols-3">
+          <div className="FormItem">
+            <label htmlFor="headerTitle" className="FormLabel">
+              Header Title
+            </label>
+            <input
+              type="text"
+              id="headerTitle"
               name="headerTitle"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Header Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Header title policy"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              value={formData.headerTitle}
+              onChange={handleInputChange}
+              className="FormControl"
+              disabled={loading}
+              placeholder="Header title policy"
             />
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Title policy"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Content</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Content policy"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="FormMessage"></div>
           </div>
-          <Button className="ml-auto" type="submit">
-            {action}
-          </Button>
-        </form>
-      </Form>
+          <div className="FormItem">
+            <label htmlFor="title" className="FormLabel">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              className="FormControl"
+              disabled={loading}
+              placeholder="Title policy"
+            />
+            <div className="FormMessage"></div>
+          </div>
+        </div>
+        <div className="FormItem">
+          <label htmlFor="content" className="FormLabel">
+            Content
+          </label>
+          <Editor
+            editorState={formData.content}
+            toolbarClassName="toolbarClassName"
+            wrapperClassName="wrapperClassName"
+            editorClassName="editorClassName"
+            onEditorStateChange={onEditorStateChange}
+          />
+          <div className="FormMessage"></div>
+        </div>
+        <button className="ml-auto" type="submit">
+          {action}
+        </button>
+      </form>
     </>
   );
 };

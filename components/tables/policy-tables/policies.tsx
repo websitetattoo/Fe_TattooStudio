@@ -23,7 +23,7 @@ export const PoliciesClient: React.FC<ProductsClientProps> = ({ data }) => {
           description="Manage Policies (Client side table functionalities.)"
         />
         <Button
-          className="text-xs md:text-sm"
+          className="bg-tattoo-highlight text-xs md:text-sm"
           onClick={() => router.push(`/backend/policies/createPolicies`)}
         >
           <Plus className="mr-2 h-4 w-4" /> Add New

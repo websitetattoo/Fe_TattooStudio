@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { FacebookIcon, InstagramIcon } from "./icons";
+import { FacebookIcon, InstagramIcon } from "./forms/icons";
 import { CalendarMinus2, MapPin } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";

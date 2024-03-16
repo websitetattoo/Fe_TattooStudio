@@ -12,7 +12,7 @@ export default function Page() {
   const [initialData, setInitialData] = useState(null);
   const breadcrumbItems = [
     { title: "Policies", link: "/backend/policies" },
-    params.policiesId
+    params.policiesId != "createPolicies"
       ? { title: "Update", link: "/backend/policies/update" }
       : { title: "Create", link: "/backend/policies/create" },
   ];

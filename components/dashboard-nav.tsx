@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/forms/icons";
 import { cn } from "@/lib/utils";
 import { Dispatch, SetStateAction } from "react";
 import { NavItem } from "@/constants/data";

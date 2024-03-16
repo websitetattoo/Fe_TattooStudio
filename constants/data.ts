@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/forms/icons";
 
 export type Policies = {
   headerTitle: string;
