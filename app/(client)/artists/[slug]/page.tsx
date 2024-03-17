@@ -55,14 +55,6 @@ export default function index() {
   return (
     <>
       <div className="relative">
-        <div className="absolute -right-3.5 top-96 overflow-hidden rounded-full bg-tattoo-highlight blur-[150px] md:-right-3.5 md:top-0 md:top-14 md:blur-[120px] lg:right-0 lg:top-28">
-          <div className="lg:w-62 flex h-96 w-40 items-center justify-center md:w-32 lg:h-40"></div>
-        </div>
-
-        <div className="absolute left-1 top-96 hidden overflow-hidden rounded-full bg-tattoo-highlight blur-[240px] md:-left-28 md:top-[700px] md:block md:blur-[150px] lg:block">
-          <div className="flex h-96 w-96 items-center justify-center md:w-40"></div>
-        </div>
-
         <div className="m-auto w-10/12 md:w-full lg:w-9/12">
           <div className="relative pb-64 lg:pb-40">
             <PageTitle>

@@ -2,7 +2,6 @@
 
 import HighlightText from "@/components/highlight-text";
 import PageTitle from "@/components/page-title";
-import Link from "next/link";
 import NewsCard from "./_components/news-card";
 
 export default function index() {

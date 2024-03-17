@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Florida Tattoo Kings Admin Page",
 };
 
-export default function DashboardLayout({
+export default function ClientLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ export default function DashboardLayout({
   return (
     <>
       <Header />
-      <div className="bg-tattoo-black-2">{children}</div>
+      <main className="bg-tattoo-color-bg">{children}</main>
       <Footer />
     </>
   );
