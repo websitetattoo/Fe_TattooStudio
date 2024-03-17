@@ -2,7 +2,7 @@ import { Icons } from "@/components/forms/icons";
 
 export type Policies = {
   headerTitle: string;
-  title: string[];
+  title: string;
   content: string[];
 };
 

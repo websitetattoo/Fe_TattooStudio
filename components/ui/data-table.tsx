@@ -39,18 +39,6 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  function containsHTML(content: any) {
-    const htmlPattern = /<[a-z][\s\S]*>/i;
-    return htmlPattern.test(content);
-  }
-
-  function renderCellContent(content: any) {
-    if (containsHTML(content)) {
-      return <div dangerouslySetInnerHTML={{ __html: content }} />;
-    } else {
-      return <>{content}</>;
-    }
-  }
   return (
     <>
       <Input

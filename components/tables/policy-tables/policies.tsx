@@ -7,6 +7,7 @@ import { Policies } from "@/constants/data";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
+import Link from "next/link";
 
 export const PoliciesClient: React.FC<{ data: Policies[] }> = ({ data }) => {
   const router = useRouter();
@@ -18,12 +19,11 @@ export const PoliciesClient: React.FC<{ data: Policies[] }> = ({ data }) => {
           title={`Policies (${data.length})`}
           description="Manage Policies (Client side table functionalities.)"
         />
-        <Button
-          className="bg-tattoo-highlight text-xs md:text-sm"
-          onClick={() => router.push(`/backend/policies/createPolicies`)}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add New
-        </Button>
+        <Link href={`/backend/policies/create`}>
+          <Button className="bg-tattoo-highlight text-xs md:text-sm">
+            <Plus className="mr-2 h-4 w-4" /> Add New
+          </Button>
+        </Link>
       </div>
       <Separator />
       <DataTable searchKey="headerTitle" columns={columns} data={data} />

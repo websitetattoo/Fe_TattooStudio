@@ -1,43 +1,27 @@
 "use client";
-import * as z from "zod";
-import axios from "axios";
-import { useState } from "react";
-import { Trash } from "lucide-react";
-import React from "react";
-import { EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useParams, useRouter } from "next/navigation";
-import "@tonz/react-draft-wysiwyg-input/style.css";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import { EditorState } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
+import { stateFromHTML } from "draft-js-import-html";
+import { Editor } from "react-draft-wysiwyg";
+import { Trash } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { useToast } from "../ui/use-toast";
-import { stateToHTML } from "draft-js-export-html";
 import { AlertModal } from "../modal/alert-modal";
+import http from "@/lib/http";
+
+import "@tonz/react-draft-wysiwyg-input/style.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-export const IMG_MAX_LIMIT = 3;
-const formSchema = z.object({
-  headerTitle: z
-    .string()
-    .min(3, { message: "Policy Title must be at least 3 characters" }),
-  title: z
-    .string()
-    .min(3, { message: "Policy content must be at least 3 characters" }),
-  content: z
-    .string()
-    .min(3, { message: "Policy content must be at least 3 characters" }),
-});
-
-type ProductFormValues = z.infer<typeof formSchema>;
-
-interface ProductFormProps {
+interface PolicyFormProps {
   initialData: any | null;
 }
 
-export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
+export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
@@ -47,43 +31,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
   const title = initialData ? "Edit policy" : "Create policy";
   const description = initialData ? "Edit a policy." : "Add a new policy";
   const action = initialData ? "Save changes" : "Create";
-  // const defaultValues = initialData
-  //   ? initialData
-  //   : {
-  //       headerTitle: "",
-  //       title: "",
-  //       content: "",
-  //     };
+
   const [formData, setFormData] = useState({
     headerTitle: "",
     title: "",
     content: EditorState.createEmpty(), // Initial editor state
   });
-  // const form = useForm<ProductFormValues>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues,
-  // });
-  // Function to extract text with styles from EditorState
-  // const extractTextWithStyles = (editorState: any) => {
-  //   const contentState = editorState.getCurrentContent();
-  //   const rawContentState = convertToRaw(contentState);
-
-  //   let textWithStyles: any = [];
-
-  //   rawContentState.blocks.forEach((block) => {
-  //     let text = block.text;
-  //     let styles: any = [];
-
-  //     block.inlineStyleRanges.forEach((range) => {
-  //       const style = range.style;
-  //       styles.push(style);
-  //     });
-
-  //     textWithStyles.push({ text, styles });
-  //   });
-
-  //   return textWithStyles;
-  // };
 
   const extractHTMLContent = (editorState: any) => {
     const contentState = editorState.getCurrentContent();
@@ -106,15 +59,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
       };
 
       if (initialData) {
-        await axios.put(
-          `http://localhost:3001/policies/${params.policiesId}`,
-          postData,
-        );
+        await http.put(`/policies/${params.id}`, postData);
       } else {
-        await axios.post(
-          `http://localhost:3001/policies/createPolicies`,
-          postData,
-        );
+        await http.post(`/policies/createPolicies`, postData);
       }
 
       router.refresh();
@@ -162,9 +109,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`localhost:3001/policies/${params._id}`);
+      await http.delete(`/policies/${params._Id}`, {
+        message: "Delete successfully",
+      });
       router.refresh();
-      // router.push(`/${params.storeId}/products`);
     } catch (error: any) {
     } finally {
       setLoading(false);
@@ -172,6 +120,25 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
     }
   };
 
+  useEffect(() => {
+    console.log("🚀 ~ useEffect ~ initialData:", initialData);
+    if (initialData) {
+      setFormData({
+        headerTitle: initialData.headerTitle || "",
+        title: initialData.title || "",
+        content: EditorState.createWithContent(
+          stateFromHTML(initialData.content),
+        ),
+      });
+    } else {
+      setFormData({
+        headerTitle: "",
+        title: "",
+        content: EditorState.createEmpty(),
+      });
+    }
+  }, [initialData]);
+  console.log(formData);
   return (
     <>
       <AlertModal
@@ -195,10 +162,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
       </div>
       <Separator />
       <form onSubmit={handleSubmit} className="w-full space-y-8">
-        <div className="gap-8 md:grid md:grid-cols-3">
-          <div className="FormItem">
-            <label htmlFor="headerTitle" className="FormLabel">
-              Header Title
+        <div className="gap-y-4 md:grid md:grid-cols-1">
+          <div className="grid md:grid-cols-8">
+            <label htmlFor="headerTitle" className="col-span-1 pr-2">
+              Header Title:
             </label>
             <input
               type="text"
@@ -206,15 +173,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
               name="headerTitle"
               value={formData.headerTitle}
               onChange={handleInputChange}
-              className="FormControl"
+              className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
+              py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
+              focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={loading}
               placeholder="Header title policy"
             />
             <div className="FormMessage"></div>
           </div>
-          <div className="FormItem">
-            <label htmlFor="title" className="FormLabel">
-              Title
+          <div className="grid md:grid-cols-8">
+            <label htmlFor="title" className="col-span-1 pr-2">
+              Title:
             </label>
             <input
               type="text"
@@ -222,27 +191,33 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="FormControl"
+              className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
+              py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
+              focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={loading}
               placeholder="Title policy"
             />
+
             <div className="FormMessage"></div>
           </div>
         </div>
-        <div className="FormItem">
-          <label htmlFor="content" className="FormLabel">
-            Content
+        <div className="">
+          <label htmlFor="content" className="">
+            Content:
           </label>
           <Editor
             editorState={formData.content}
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
+            wrapperClassName="border border-gray-300"
+            toolbarClassName="border-b border-gray-300"
             editorClassName="editorClassName"
             onEditorStateChange={onEditorStateChange}
           />
           <div className="FormMessage"></div>
         </div>
-        <button className="ml-auto" type="submit">
+        <button
+          className="ml-auto rounded-md bg-black px-4 py-2 text-white"
+          type="submit"
+        >
           {action}
         </button>
       </form>

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Policies } from "@/constants/data";
+import http from "@/lib/http";
 import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,9 +25,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const onConfirm = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3001/policies/${data._id}`,
-      );
+      const response = await http.delete(`/policies/${data._id}`, {
+        message: "Delete successfully",
+      });
       console.log("Policy deleted:", response.data); // Log the response if needed
     } catch (error) {
       console.error("Error deleting policy:", error);
@@ -43,12 +44,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button variant="link" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent className="bg-white" align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
