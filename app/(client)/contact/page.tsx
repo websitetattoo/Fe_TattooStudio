@@ -16,6 +16,7 @@ export default function Index() {
 
   const handlePost = () => {
     const form = new FormData();
+    console.log(form);
   };
 
   const arrInput = [
@@ -77,8 +78,6 @@ export default function Index() {
     },
   ];
 
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-
   return (
     <div className="m-auto w-11/12 md:w-9/12 lg:w-9/12">
       <div>
@@ -108,7 +107,7 @@ export default function Index() {
                       item.children.map((childItem, index) => (
                         <SelectItem
                           key={index}
-                          className="text-white"
+                          className="text-black"
                           value={childItem}
                         >
                           {childItem}
@@ -127,7 +126,7 @@ export default function Index() {
                 {item.label}
               </label>
               <input
-                className="mt-1 w-full border border-tattoo-gray bg-tattoo-black-2 p-2 text-sm text-white"
+                className="mt-1 w-full cursor-pointer border border-tattoo-gray bg-tattoo-color-bg p-2 text-sm text-white"
                 type={item.type}
                 multiple
                 placeholder={item.content}

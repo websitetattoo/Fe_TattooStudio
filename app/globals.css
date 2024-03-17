@@ -30,33 +30,13 @@
   height: 37.6px !important;
 }
 
-.InputFile-css input[type="date"]:before {
-  color: lightgrey;
-  content: attr(placeholder) !important;
-  margin-right: 0.5em;
+.focus\:ring-2:focus {
+  --tw-ring-offset-shadow: none !important;
 }
 
-.InputFile-css input[type="date"]::-webkit-datetime-edit-text {
-  -webkit-appearance: none;
-  display: none;
-}
-.InputFile-css input[type="date"]::-webkit-datetime-edit-month-field {
-  -webkit-appearance: none;
-  display: none;
-}
-.InputFile-css input[type="date"]::-webkit-datetime-edit-day-field {
-  -webkit-appearance: none;
-  display: none;
-}
-.InputFile-css input[type="date"]::-webkit-datetime-edit-year-field {
-  -webkit-appearance: none;
-  display: none;
-}
-
-.InputFile-css input[type="date"]:focus {
-  color: lightgrey;
-  content: "ddd";
-  margin-right: 0.5em;
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+  cursor: pointer;
 }
 
 .scrollbar\:\!h-1\.5::-webkit-scrollbar {
