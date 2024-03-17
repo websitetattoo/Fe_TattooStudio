@@ -36,7 +36,7 @@ export default function index() {
 
   return (
     <>
-      <div className="bg-tattoo-black-1 pt-4">
+      <div className="pt-4">
         <div className="m-auto w-9/12 md:w-10/12 lg:w-9/12">
           <div>
             <PageTitle>
