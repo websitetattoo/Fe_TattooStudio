@@ -19,7 +19,7 @@ export default function DashboardLayout({
         <Sidebar />
         <main
           className="scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded 
-          scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded lg:supports-scrollbars:pr-2 w-full overflow-y-auto pt-16 "
+          scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded lg:supports-scrollbars:pr-2 w-full overflow-y-auto pt-16"
         >
           {children}
         </main>

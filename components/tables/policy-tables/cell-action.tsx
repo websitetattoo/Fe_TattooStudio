@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Policies } from "@/constants/data";
 import http from "@/lib/http";
-import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,22 +24,26 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const onConfirm = async () => {
     try {
+      setLoading(true);
       const response = await http.delete(`/policies/${data._id}`, {
         message: "Delete successfully",
       });
       console.log("Policy deleted:", response.data); // Log the response if needed
+      router.push("/"); // Redirect to the main page
     } catch (error) {
       console.error("Error deleting policy:", error);
+    } finally {
+      setLoading(false);
+      setOpen(false);
     }
   };
-
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onConfirm}
-        loading={loading}
+        loading={false}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>

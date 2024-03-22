@@ -10,8 +10,10 @@ import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { AlertModal } from "../modal/alert-modal";
+import { RoundSpinner } from "@/components/ui/spinner";
+import { ToastAction } from "@radix-ui/react-toast";
 import http from "@/lib/http";
 
 import "@tonz/react-draft-wysiwyg-input/style.css";
@@ -26,6 +28,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit policy" : "Create policy";
@@ -46,7 +49,12 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+    // Data validation
+    const errors = validateInput(formData);
+    if (Object.keys(errors).length > 0) {
+      setError(errors);
+      return;
+    }
     try {
       setLoading(true);
 
@@ -60,29 +68,29 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
 
       if (initialData) {
         await http.put(`/policies/${params.id}`, postData);
+        setError({});
       } else {
-        await http.post(`/policies/createPolicies`, postData);
+        await http.post(`/policies/create`, postData);
+        router.refresh();
+        setFormData({
+          headerTitle: "",
+          title: "",
+          content: EditorState.createEmpty(),
+        });
+        setError({});
       }
-
-      router.refresh();
-      setFormData({
-        headerTitle: "",
-        title: "",
-        content: EditorState.createEmpty(),
-      });
-
       toast({
-        variant: "default",
-        title: "Policy saved successfully!",
+        title: "Policy saved successfully",
         description: initialData
-          ? "Policy updated successfully."
-          : "Policy created successfully.",
+          ? "Policy updated successfully"
+          : "Policy created successfully",
+        action: <ToastAction altText="done">Done</ToastAction>,
       });
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
+        title: "Something went wrong.",
+        description: "There was a problem with your request",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     } finally {
       setLoading(false);
@@ -120,6 +128,21 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
     }
   };
 
+  const validateInput = (value: any): { [key: string]: string } => {
+    const errors: { [key: string]: string } = {};
+    if (value.headerTitle.length < 3) {
+      errors.headerTitle =
+        "Please enter at least 3 characters for Header Title.";
+    }
+    if (value.title.length < 3) {
+      errors.title = "Please enter at least 3 characters for Title.";
+    }
+    if (value.content.getCurrentContent().getPlainText().trim() === "") {
+      errors.content = "Content can't be empty.";
+    }
+
+    return errors;
+  };
   useEffect(() => {
     console.log("🚀 ~ useEffect ~ initialData:", initialData);
     if (initialData) {
@@ -138,7 +161,14 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
       });
     }
   }, [initialData]);
-  console.log(formData);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[500px] items-center justify-center align-middle">
+        <RoundSpinner className="h-16 w-full align-middle " size="xl" />
+      </div>
+    );
+  }
   return (
     <>
       <AlertModal
@@ -163,6 +193,11 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
       <Separator />
       <form onSubmit={handleSubmit} className="w-full space-y-8">
         <div className="gap-y-4 md:grid md:grid-cols-1">
+          {error && error.headerTitle && (
+            <div className="grid w-full">
+              <div className="text-red-500">{error.headerTitle}</div>
+            </div>
+          )}
           <div className="grid md:grid-cols-8">
             <label htmlFor="headerTitle" className="col-span-1 pr-2">
               Header Title:
@@ -181,6 +216,11 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
             />
             <div className="FormMessage"></div>
           </div>
+          {error && error.title && (
+            <div className="grid w-full">
+              <div className="text-red-500">{error.title}</div>
+            </div>
+          )}
           <div className="grid md:grid-cols-8">
             <label htmlFor="title" className="col-span-1 pr-2">
               Title:
@@ -197,29 +237,32 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
               disabled={loading}
               placeholder="Title policy"
             />
-
-            <div className="FormMessage"></div>
+          </div>
+          {error && error.content && (
+            <div className="grid w-full">
+              <div className="text-red-500">{error.content}</div>
+            </div>
+          )}
+          <div className="">
+            <label htmlFor="content" className="">
+              Content:
+            </label>
+            <Editor
+              editorState={formData.content}
+              wrapperClassName="border border-gray-300"
+              toolbarClassName="border-b border-gray-300"
+              editorClassName="editorClassName"
+              onEditorStateChange={onEditorStateChange}
+            />
           </div>
         </div>
-        <div className="">
-          <label htmlFor="content" className="">
-            Content:
-          </label>
-          <Editor
-            editorState={formData.content}
-            wrapperClassName="border border-gray-300"
-            toolbarClassName="border-b border-gray-300"
-            editorClassName="editorClassName"
-            onEditorStateChange={onEditorStateChange}
-          />
-          <div className="FormMessage"></div>
-        </div>
-        <button
+
+        <Button
           className="ml-auto rounded-md bg-black px-4 py-2 text-white"
           type="submit"
         >
           {action}
-        </button>
+        </Button>
       </form>
     </>
   );

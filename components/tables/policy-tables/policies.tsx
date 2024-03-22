@@ -9,7 +9,16 @@ import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 import Link from "next/link";
 
-export const PoliciesClient: React.FC<{ data: Policies[] }> = ({ data }) => {
+//Interface Policies
+interface PoliciesClientProps {
+  data: Policies[];
+  onRefresh: (updatedPolicies: Policies[]) => void;
+}
+
+export const PoliciesClient: React.FC<PoliciesClientProps> = ({
+  data,
+  onRefresh,
+}) => {
   const router = useRouter();
 
   return (
@@ -20,13 +29,18 @@ export const PoliciesClient: React.FC<{ data: Policies[] }> = ({ data }) => {
           description="Manage Policies (Client side table functionalities.)"
         />
         <Link href={`/backend/policies/create`}>
-          <Button className="bg-tattoo-highlight text-xs md:text-sm">
+          <Button className=" text-xs md:text-sm">
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Button>
         </Link>
       </div>
       <Separator />
-      <DataTable searchKey="headerTitle" columns={columns} data={data} />
+      <DataTable
+        searchKey="headerTitle"
+        columns={columns}
+        data={data}
+        onRefresh={onRefresh}
+      />
     </>
   );
 };
