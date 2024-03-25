@@ -1,4 +1,5 @@
 "use client";
+//Library
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { EditorState } from "draft-js";
@@ -6,7 +7,7 @@ import { stateToHTML } from "draft-js-export-html";
 import { stateFromHTML } from "draft-js-import-html";
 import { Editor } from "react-draft-wysiwyg";
 import { Trash } from "lucide-react";
-
+//.......
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
@@ -15,12 +16,22 @@ import { AlertModal } from "../modal/alert-modal";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { ToastAction } from "@radix-ui/react-toast";
 import http from "@/lib/http";
-
+//css
 import "@tonz/react-draft-wysiwyg-input/style.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Checkbox } from "../ui/checkbox";
+import { CheckBoxIsImportant, CheckBoxIsSubTitle } from "../checkbox-policy";
 
 interface PolicyFormProps {
   initialData: any | null;
+}
+
+interface FormData {
+  title: string;
+  subtitle?: string;
+  content: EditorState;
+  isSubTitle: boolean;
+  isImportant: boolean;
 }
 
 export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
@@ -35,10 +46,11 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   const description = initialData ? "Edit a policy." : "Add a new policy";
   const action = initialData ? "Save changes" : "Create";
 
-  const [formData, setFormData] = useState({
-    headerTitle: "",
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     content: EditorState.createEmpty(), // Initial editor state
+    isSubTitle: false,
+    isImportant: false,
   });
 
   const extractHTMLContent = (editorState: any) => {
@@ -48,6 +60,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   };
 
   const handleSubmit = async (event: any) => {
+    console.log("aaa:", formData);
     event.preventDefault();
     // Data validation
     const errors = validateInput(formData);
@@ -60,11 +73,24 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
 
       const editorState = formData.content;
       const formattedContent = extractHTMLContent(editorState);
-      const postData = {
-        headerTitle: formData.headerTitle,
+      // Định nghĩa data post lên api gồm title,content, subtitle(nếu có)
+      let postData: {
+        title: string;
+        content: string;
+        subtitle?: string;
+        isSubTitle: boolean;
+        isImportant: boolean;
+      } = {
         title: formData.title,
         content: formattedContent,
+        isSubTitle: formData.isSubTitle,
+        isImportant: formData.isImportant,
       };
+
+      // nếu tồn tại input SubTitle thì sẽ port cả subTitle
+      if (formData.subtitle) {
+        postData.subtitle = formData.subtitle;
+      }
 
       if (initialData) {
         await http.put(`/policies/${params.id}`, postData);
@@ -73,9 +99,10 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
         await http.post(`/policies/create`, postData);
         router.refresh();
         setFormData({
-          headerTitle: "",
           title: "",
           content: EditorState.createEmpty(),
+          isImportant: false,
+          isSubTitle: false,
         });
         setError({});
       }
@@ -106,14 +133,25 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   };
 
   // Function to handle form field change
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
-
+  const handleToggleSubTitle = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      isSubTitle: !prevState.isSubTitle,
+    }));
+  };
+  const handleToggleImportant = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      isImportant: !prevState.isImportant,
+    }));
+  };
   const onDelete = async () => {
     try {
       setLoading(true);
@@ -130,34 +168,37 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
 
   const validateInput = (value: any): { [key: string]: string } => {
     const errors: { [key: string]: string } = {};
-    if (value.headerTitle.length < 3) {
-      errors.headerTitle =
-        "Please enter at least 3 characters for Header Title.";
+    if (value.subtitle && value.subtitle.length < 3) {
+      errors.subtitle = "Please enter at least 3 characters for subtitle.";
     }
-    if (value.title.length < 3) {
-      errors.title = "Please enter at least 3 characters for Title.";
+    if (value.title && value.title.length < 3) {
+      errors.title = "Please enter at least 3 characters for title.";
     }
-    if (value.content.getCurrentContent().getPlainText().trim() === "") {
+    if (
+      value.content &&
+      value.content.getCurrentContent().getPlainText().trim() === ""
+    ) {
       errors.content = "Content can't be empty.";
     }
-
     return errors;
   };
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ initialData:", initialData);
     if (initialData) {
       setFormData({
-        headerTitle: initialData.headerTitle || "",
+        subtitle: initialData.isSubtitle === false ? "" : initialData.subtitle,
         title: initialData.title || "",
         content: EditorState.createWithContent(
           stateFromHTML(initialData.content),
         ),
+        isImportant: initialData.isImportant || false,
+        isSubTitle: initialData.isSubTitle || false,
       });
     } else {
       setFormData({
-        headerTitle: "",
         title: "",
         content: EditorState.createEmpty(),
+        isImportant: false,
+        isSubTitle: false,
       });
     }
   }, [initialData]);
@@ -192,30 +233,22 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
       </div>
       <Separator />
       <form onSubmit={handleSubmit} className="w-full space-y-8">
-        <div className="gap-y-4 md:grid md:grid-cols-1">
-          {error && error.headerTitle && (
-            <div className="grid w-full">
-              <div className="text-red-500">{error.headerTitle}</div>
-            </div>
-          )}
-          <div className="grid md:grid-cols-8">
-            <label htmlFor="headerTitle" className="col-span-1 pr-2">
-              Header Title:
-            </label>
-            <input
-              type="text"
-              id="headerTitle"
-              name="headerTitle"
-              value={formData.headerTitle}
-              onChange={handleInputChange}
-              className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
-              py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
-              focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={loading}
-              placeholder="Header title policy"
+        <div className="gap-y-4 md:grid md:grid-cols-8">
+          <div className="grid md:grid-cols-1">
+            <CheckBoxIsSubTitle
+              isChecked={formData.isSubTitle ?? false}
+              onToggle={handleToggleSubTitle}
             />
-            <div className="FormMessage"></div>
           </div>
+          <div className="grid md:grid-cols-1">
+            <CheckBoxIsImportant
+              isChecked={formData.isImportant ?? false}
+              onToggle={handleToggleImportant}
+            />
+          </div>
+        </div>
+
+        <div className="gap-y-4 md:grid md:grid-cols-1">
           {error && error.title && (
             <div className="grid w-full">
               <div className="text-red-500">{error.title}</div>
@@ -237,7 +270,32 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
               disabled={loading}
               placeholder="Title policy"
             />
+            <div className="FormMessage"></div>
           </div>
+          {error && error.subtitle && (
+            <div className="grid w-full">
+              <div className="text-red-500">{error.subtitle}</div>
+            </div>
+          )}
+          {formData.isSubTitle && (
+            <div className="grid md:grid-cols-8">
+              <label htmlFor="subtitle" className="col-span-1 pr-2">
+                Sub Title:
+              </label>
+              <input
+                type="text"
+                id="subtitle"
+                name="subtitle"
+                value={formData.subtitle}
+                onChange={handleInputChange}
+                className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
+              py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
+              focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={loading}
+                placeholder="SubTitle policy"
+              />
+            </div>
+          )}
           {error && error.content && (
             <div className="grid w-full">
               <div className="text-red-500">{error.content}</div>

@@ -43,6 +43,15 @@ const request = async <Response>(
     method,
   });
   console.log(`URL: ${fullUrl}: ${res}`);
+  //Nếu status = 204 là no content -> data = null
+  if (res.status === 204) {
+    // No content in the response
+    return {
+      status: res.status,
+      data: null, // Or any other appropriate value indicating success
+    };
+  }
+
   const payload: Response = await res.json();
   const data = {
     status: res.status,
@@ -82,7 +91,7 @@ const http = {
   },
   delete<Response>(
     url: string,
-    body: any,
+    body?: any,
     options?: Omit<CustomOptions, "body"> | undefined,
   ) {
     return request<Response>("DELETE", url, { ...options, body });

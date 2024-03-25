@@ -1,26 +1,25 @@
 "use client";
+//Library
+import { Plus } from "lucide-react";
+import Link from "next/link";
+//...
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Policies } from "@/constants/data";
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { columns } from "./columns";
-import Link from "next/link";
 
 //Interface Policies
 interface PoliciesClientProps {
   data: Policies[];
-  onRefresh: (updatedPolicies: Policies[]) => void;
+  onRefresh: () => void;
 }
 
 export const PoliciesClient: React.FC<PoliciesClientProps> = ({
   data,
   onRefresh,
 }) => {
-  const router = useRouter();
-
   return (
     <>
       <div className="flex items-start justify-between">
@@ -36,10 +35,9 @@ export const PoliciesClient: React.FC<PoliciesClientProps> = ({
       </div>
       <Separator />
       <DataTable
-        searchKey="headerTitle"
-        columns={columns}
+        searchKey="title"
+        columns={columns({ onRefresh })} // Truyền hàm onRefresh được nhận từ bên ngoài -> columns
         data={data}
-        onRefresh={onRefresh}
       />
     </>
   );

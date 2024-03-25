@@ -5,7 +5,6 @@ import BreadCrumb from "@/components/breadcrumb";
 import { PoliciesClient } from "@/components/tables/policy-tables/policies";
 import http from "@/lib/http";
 import { Policies } from "@/constants/data";
-import { LoadingIcon } from "@/components/forms/icons";
 import { RoundSpinner } from "@/components/ui/spinner";
 
 const breadcrumbItems = [{ title: "Policies", link: "/backend/policies" }];
@@ -29,8 +28,14 @@ export default function Index() {
     fetchData();
   }, []);
   // Callback function to update policies
-  const onRefresh = (updatedPolicies: Policies[]) => {
-    setPolicies(updatedPolicies);
+  const onRefresh = async () => {
+    try {
+      const response = await http.get("/policies");
+      const data = response.data as Policies[];
+      setPolicies(data);
+    } catch (error) {
+      console.error("Error fetching policies:", error);
+    }
   };
 
   if (loading) {

@@ -16,24 +16,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Policies } from "@/constants/data";
 import { Input } from "./input";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
-import draftToHtml from "draftjs-to-html";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
-  onRefresh: (updatedPolicies: Policies[]) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   searchKey,
-  onRefresh,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -41,7 +37,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
-
+  console.log("🚀 ~ data:", data);
   return (
     <>
       <Input
@@ -79,27 +75,29 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {cell.column.columnDef.cell &&
-                      typeof cell.column.columnDef.cell === "function" ? (
-                        cell.column.id === "content" ? (
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: cell.column.columnDef.cell(
-                                cell.getContext(),
-                              ),
-                            }}
-                          />
-                        ) : (
-                          flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id}>
+                        {cell.column.columnDef.cell &&
+                        typeof cell.column.columnDef.cell === "function" ? (
+                          cell.column.id === "content" ? (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: cell.column.columnDef.cell(
+                                  cell.getContext(),
+                                ),
+                              }}
+                            />
+                          ) : (
+                            flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext() ?? "No value",
+                            )
                           )
-                        )
-                      ) : null}
-                    </TableCell>
-                  ))}
+                        ) : null}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
