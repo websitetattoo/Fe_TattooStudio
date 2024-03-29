@@ -1,6 +1,15 @@
 "use client";
-import { AlertModal } from "@/components/modal/alert-modal";
+//Library
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+//....
+import http from "@/lib/http";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { AlertModal } from "@/components/modal/alert-modal";
+import { ToastAction } from "@radix-ui/react-toast";
+import { Policies } from "@/constants/data";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,39 +17,51 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Policies } from "@/constants/data";
-import http from "@/lib/http";
-import axios from "axios";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface CellActionProps {
   data: Policies | any;
+  onRefresh: () => void;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+export const CellAction: React.FC<CellActionProps> = ({ data, onRefresh }) => {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
+  // Nhấn confirm để gọi API xóa và gọi lại hàm onRefresh nếu delete thành công
   const onConfirm = async () => {
     try {
-      const response = await http.delete(`/policies/${data._id}`, {
-        message: "Delete successfully",
-      });
-      console.log("Policy deleted:", response.data); // Log the response if needed
+      setLoading(true);
+      const response = await http.delete(`/policies/${data._id}`);
+      // Check if response data exists before logging
+      if (response.data) {
+        console.log(response.data);
+      }
+      onRefresh(); // Thực thi hàm onRefresh khi delete thành công
     } catch (error) {
-      console.error("Error deleting policy:", error);
+      // Thông báo khi delete không thành công
+      toast({
+        title: "Something went wrong.",
+        description: "Error delete policy",
+        action: (
+          <div className="rounded bg-tattoo-color-bg p-2 text-white">
+            <ToastAction altText="Try again">Try again</ToastAction>
+          </div>
+        ),
+      });
+    } finally {
+      setLoading(false);
+      setOpen(false);
     }
   };
-
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onConfirm}
-        loading={loading}
+        loading={false}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>

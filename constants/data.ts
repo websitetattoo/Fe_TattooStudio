@@ -1,9 +1,11 @@
 import { Icons } from "@/components/forms/icons";
 
 export type Policies = {
-  headerTitle: string;
   title: string;
-  content: string[];
+  content: string;
+  subtitle: string;
+  isSubTitle: boolean;
+  isImportant: boolean;
 };
 
 export interface NavItem {
