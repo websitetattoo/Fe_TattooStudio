@@ -11,7 +11,6 @@ import http from "@/lib/http";
 export default function Page() {
   const params = useParams();
   // dùng loading để cải thiện giao diện người dùng
-  const [isLoading, setIsLoading] = useState(false);
   const [initialData, setInitialData] = useState<Policies | null>(null);
   const breadcrumbItems = [
     { title: "Policies", link: "/backend/policies" },
@@ -21,7 +20,6 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
         const response = await http.get(`/policies/${params.id}`);
         const data = response.data as Policies;
         setInitialData(data);
@@ -29,7 +27,6 @@ export default function Page() {
         console.error("Error fetching policy:", error);
         return null;
       } finally {
-        setIsLoading(false);
       }
     };
     fetchData();

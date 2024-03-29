@@ -44,7 +44,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data, onRefresh }) => {
       toast({
         title: "Something went wrong.",
         description: "Error delete policy",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        action: (
+          <div className="rounded bg-tattoo-color-bg p-2 text-white">
+            <ToastAction altText="Try again">Try again</ToastAction>
+          </div>
+        ),
       });
     } finally {
       setLoading(false);

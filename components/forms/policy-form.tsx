@@ -19,7 +19,6 @@ import http from "@/lib/http";
 //css
 import "@tonz/react-draft-wysiwyg-input/style.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { Checkbox } from "../ui/checkbox";
 import { CheckBoxIsImportant, CheckBoxIsSubTitle } from "../checkbox-policy";
 
 interface PolicyFormProps {
@@ -28,7 +27,7 @@ interface PolicyFormProps {
 
 interface FormData {
   title: string;
-  subtitle?: string;
+  subtitle: string;
   content: EditorState;
   isSubTitle: boolean;
   isImportant: boolean;
@@ -49,6 +48,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   const [formData, setFormData] = useState<FormData>({
     title: "",
     content: EditorState.createEmpty(), // Initial editor state
+    subtitle: "",
     isSubTitle: false,
     isImportant: false,
   });
@@ -77,7 +77,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
       let postData: {
         title: string;
         content: string;
-        subtitle?: string;
+        subtitle: string;
         isSubTitle: boolean;
         isImportant: boolean;
       } = {
@@ -85,12 +85,8 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
         content: formattedContent,
         isSubTitle: formData.isSubTitle,
         isImportant: formData.isImportant,
+        subtitle: formData.subtitle !== "" ? formData.subtitle : "No value",
       };
-
-      // nếu tồn tại input SubTitle thì sẽ port cả subTitle
-      if (formData.subtitle) {
-        postData.subtitle = formData.subtitle;
-      }
 
       if (initialData) {
         await http.put(`/policies/${params.id}`, postData);
@@ -103,6 +99,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
           content: EditorState.createEmpty(),
           isImportant: false,
           isSubTitle: false,
+          subtitle: "",
         });
         setError({});
       }
@@ -111,13 +108,21 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
         description: initialData
           ? "Policy updated successfully"
           : "Policy created successfully",
-        action: <ToastAction altText="done">Done</ToastAction>,
+        action: (
+          <div className="rounded bg-tattoo-color-bg p-2 text-white">
+            <ToastAction altText="done">Done</ToastAction>
+          </div>
+        ),
       });
     } catch (error) {
       toast({
         title: "Something went wrong.",
         description: "There was a problem with your request",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        action: (
+          <div className="rounded bg-tattoo-color-bg p-2 text-white">
+            <ToastAction altText="Try again">Try again</ToastAction>
+          </div>
+        ),
       });
     } finally {
       setLoading(false);
@@ -144,7 +149,16 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
     setFormData((prevState) => ({
       ...prevState,
       isSubTitle: !prevState.isSubTitle,
+      subtitle: prevState.isSubTitle ? "" : prevState.subtitle,
     }));
+    setError((prevError) => {
+      // Nếu isSubtitle là false, xóa lỗi subtitle
+      if (formData.isSubTitle) {
+        const { subtitle, ...restErrors } = prevError;
+        return restErrors;
+      }
+      return prevError;
+    });
   };
   const handleToggleImportant = () => {
     setFormData((prevState) => ({
@@ -167,12 +181,15 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   };
 
   const validateInput = (value: any): { [key: string]: string } => {
+    console.log("formData", formData);
     const errors: { [key: string]: string } = {};
-    if (value.subtitle && value.subtitle.length < 3) {
-      errors.subtitle = "Please enter at least 3 characters for subtitle.";
+    if (value.title.trim() === "") {
+      errors.title = "Title can't be empty.";
     }
-    if (value.title && value.title.length < 3) {
-      errors.title = "Please enter at least 3 characters for title.";
+    if (value.isSubTitle && value.subtitle.trim() === "") {
+      errors.subtitle = "Subtitle can't be empty.";
+    } else {
+      delete errors.subtitle; // Xóa thông báo lỗi cho trường subtitle nếu isSubTitle là false
     }
     if (
       value.content &&
@@ -199,6 +216,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
         content: EditorState.createEmpty(),
         isImportant: false,
         isSubTitle: false,
+        subtitle: "",
       });
     }
   }, [initialData]);
