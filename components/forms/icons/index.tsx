@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  BookOpenText,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -62,6 +63,7 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   policy: NotebookText,
+  news: BookOpenText,
 };
 
 import { FC } from "react";
