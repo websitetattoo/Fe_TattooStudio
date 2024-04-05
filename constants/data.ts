@@ -44,6 +44,12 @@ export const navItems: NavItem[] = [
     label: "policies",
   },
   {
+    title: "News",
+    href: "/backend/news",
+    icon: "news",
+    label: "news",
+  },
+  {
     title: "Logout",
     href: "/",
     icon: "login",

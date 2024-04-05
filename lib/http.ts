@@ -21,7 +21,7 @@ const request = async <Response>(
 ) => {
   const body = options?.body ? JSON.stringify(options.body) : undefined;
   const baseHeaders = {
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data;",
   };
   // Nếu không truyền baseUrl (hoặc baseUrl = undefined) thì lấy từ env.NEXT_PUBLIC_API_ENDPOINT
   // Nếu truyền baseUrl thì lấy giá trị truyền vào, truyền vào '' thì đồng nghĩa với việc chúng ta gọi API đến Next.js Server
@@ -51,8 +51,14 @@ const request = async <Response>(
       data: null, // Or any other appropriate value indicating success
     };
   }
-
-  const payload: Response = await res.json();
+  let payload;
+  try {
+    // Thử chuyển đổi dữ liệu sang JSON
+    payload = await res.json();
+  } catch (error) {
+    // Nếu không thể chuyển đổi sang JSON, sử dụng dữ liệu dưới dạng văn bản
+    payload = await JSON.stringify(res);
+  }
   const data = {
     status: res.status,
     data: payload,
