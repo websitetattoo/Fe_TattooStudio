@@ -42,7 +42,6 @@ const request = async <Response>(
     body,
     method,
   });
-  console.log(`URL: ${fullUrl}: ${res}`);
   //Nếu status = 204 là no content -> data = null
   if (res.status === 204) {
     // No content in the response
@@ -95,7 +94,7 @@ const http = {
   ) {
     return request<Response>("PUT", url, { ...options, body });
   },
-  delete<Response>(
+  remove<Response>(
     url: string,
     body?: any,
     options?: Omit<CustomOptions, "body"> | undefined,
@@ -104,4 +103,4 @@ const http = {
   },
 };
 
-export default http;
+export const { get, post, put, remove } = http;

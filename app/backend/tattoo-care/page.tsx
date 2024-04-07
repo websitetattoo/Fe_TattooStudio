@@ -1,19 +1,41 @@
-import BreadCrumb from "@/components/breadcrumb";
-import { PoliciesClient } from "@/components/tables/policy-tables/policies";
-import axios from "axios";
+// "use client";
+// //Libary
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "next/navigation";
+// //Components
+// import BreadCrumb from "@/components/breadcrumb";
+// import { PolicyForm } from "@/components/forms/policy-form";
 
-const breadcrumbItems = [{ title: "Policies", link: "/backend/policies" }];
-export default async function Index() {
-  // Fetch policies from the backend server
-  const response = await axios.get("http://localhost:3001/policies/");
-  const policies = response.data; // Extract policies from the response
+// import http from "@/lib/http";
+// import { Tattoocare } from "../types/type";
 
-  return (
-    <>
-      <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
-        <BreadCrumb items={breadcrumbItems} />
-        <PoliciesClient data={policies} />
-      </div>
-    </>
-  );
-}
+// export default function Page() {
+//   const params = useParams();
+//   const [initialData, setInitialData] = useState<Tattoocare | null>(null);
+//   const breadcrumbItems = [
+//     { title: "Tattoocare", link: "/backend/tattoocare" },
+//     { title: "Update", link: "#" },
+//   ];
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await http.get(`/tattoocare/${params.id}`);
+//         const data = response.data as Tattoocare;
+//         setInitialData(data);
+//       } catch (error) {
+//         console.error("Error fetching tattoocare:", error);
+//         return null;
+//       } finally {
+//       }
+//     };
+//     fetchData();
+//   }, [params.id]);
+
+//   return (
+//     <div className="flex-1 space-y-4 p-8">
+//       <BreadCrumb items={breadcrumbItems} />
+//       <PolicyForm initialData={initialData} key={null} />
+//     </div>
+//   );
+// }

@@ -2,11 +2,11 @@
 
 import { format } from "date-fns";
 
-import { News } from "./type/news";
 import { CellAction } from "./cell-action";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
+import { News } from "@/app/types/type";
 
 interface ColumnsProps {
   onRefresh: () => void; // Định nghĩa hàm onRefresh

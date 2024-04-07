@@ -4,12 +4,10 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 //....
-import http from "@/lib/http";
+import { remove } from "@/lib/http";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { AlertModal } from "@/components/modal/alert-modal";
 import { ToastAction } from "@radix-ui/react-toast";
-import { News } from "./type/news";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +15,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { News } from "@/app/types/type";
+import { AlertModal } from "../../modal/alert-modal";
 
 interface CellActionProps {
   data: News | any;
@@ -33,7 +33,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data, onRefresh }) => {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      const response = await http.delete(`/news/${data._id}`);
+      const response = await remove(`/news/${data._id}`);
       // Check if response data exists before logging
       if (response.data) {
         console.log(response.data);

@@ -4,11 +4,11 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 //...
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { columns } from "./columns";
-import { News } from "./type/news";
+import { News } from "@/app/types/type";
+import { DataTable } from "../../UI/data-table";
 
 //Interface Policies
 interface NewsClientProps {
