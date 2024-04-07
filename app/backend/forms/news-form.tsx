@@ -4,7 +4,6 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { EditorState } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
-import { stateFromHTML } from "draft-js-import-html";
 import { Trash } from "lucide-react";
 import dynamic from "next/dynamic"; // (if using Next.js or use own dynamic loader)
 // Lazy loading Editor when go to News Form to avoid error
@@ -18,15 +17,16 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { useToast } from "@/components/ui/use-toast";
-import { AlertModal } from "../modal/alert-modal";
+import { AlertModal } from "../../../components/modal/alert-modal";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { ToastAction } from "@radix-ui/react-toast";
-import http from "@/lib/http";
+//import http from "@/lib/http";
 //css
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "@tonz/react-draft-wysiwyg-input/style.css";
-import { News } from "../tables/news-tables/type/news";
-import CustomFileInput from "../ui/custom-choose-file";
+import CustomFileInput from "../../../components/ui/custom-choose-file";
+import { convertHTMLToEditor } from "@/app/backend/lib/utils";
+import { News } from "@/app/types/type";
 
 interface NewsFormProps {
   initialData: News | null;
@@ -205,17 +205,17 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
   };
 
   const onDelete = async () => {
-    try {
-      setLoading(true);
-      await http.delete(`/policies/${params._Id}`, {
-        message: "Delete successfully",
-      });
-      router.refresh();
-    } catch (error: any) {
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
+    // try {
+    //   setLoading(true);
+    //   await http.delete(`/policies/${params._Id}`, {
+    //     message: "Delete successfully",
+    //   });
+    //   router.refresh();
+    // } catch (error: any) {
+    // } finally {
+    //   setLoading(false);
+    //   setOpen(false);
+    // }
   };
   const validateInput = (value: any): { [key: string]: string } => {
     const errors: { [key: string]: string } = {};
@@ -241,7 +241,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
           files: file,
           title: initialData.title || "",
           content: EditorState.createWithContent(
-            stateFromHTML(initialData.content),
+            convertHTMLToEditor(initialData.content),
           ),
           createdDate: new Date(initialData.createdDate),
         });

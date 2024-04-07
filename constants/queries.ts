@@ -1,0 +1,3 @@
+export const QUERIES_KEYS = {
+  GET_POLICIES: "GET_POLICIES",
+};

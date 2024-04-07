@@ -2,29 +2,28 @@
 //Library
 import { Plus } from "lucide-react";
 import Link from "next/link";
-//...
+//UI library
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
-import { Separator } from "@/components/ui/separator";
-import { Policies } from "@/constants/data";
-import { columns } from "./columns";
 
-//Interface Policies
-interface PoliciesClientProps {
+import { columns } from "./columns";
+import { Policies } from "@/app/types/type";
+import { DataTable } from "@/app/backend/UI/data-table";
+
+interface PoliciesTablesProps {
   data: Policies[];
-  onRefresh: () => void;
+  total: number;
 }
 
-export const PoliciesClient: React.FC<PoliciesClientProps> = ({
+export const PoliciesTables: React.FC<PoliciesTablesProps> = ({
   data,
-  onRefresh,
+  total,
 }) => {
   return (
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Policies (${data.length})`}
+          title={`Policies (${total})`}
           description="Manage Policies (Client side table functionalities.)"
         />
         <Link href={`/backend/policies/create`}>
@@ -33,12 +32,7 @@ export const PoliciesClient: React.FC<PoliciesClientProps> = ({
           </Button>
         </Link>
       </div>
-      <Separator />
-      <DataTable
-        searchKey="title"
-        columns={columns({ onRefresh })} // Truyền hàm onRefresh được nhận từ bên ngoài -> columns
-        data={data}
-      />
+      <DataTable searchKey="title" columns={columns()} data={data} />
     </>
   );
 };
