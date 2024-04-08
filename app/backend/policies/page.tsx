@@ -14,9 +14,10 @@ export default function Index() {
   const [policies, setPolicies] = useState<Policies[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageSize, setCurrentPageSize] = useState(5);
   const filterDataApi = {
     page: currentPage,
-    pageSize: 3,
+    pageSize: currentPageSize,
   };
 
   const { data, isLoading: loading } = useGetDataPolicies(filterDataApi);
@@ -30,11 +31,18 @@ export default function Index() {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const handlePageChangeSize = (pageSize: number) => {
+    setCurrentPageSize(pageSize);
+    setCurrentPage(1);
+  };
+
   //Định nghĩa các hàm xử lý - End add
   const propsPage = {
-    pageSize: 3,
+    pageSize: currentPageSize,
     total: data?.total,
     onPageChange: handlePageChange,
+    onPageSizeChange: handlePageChangeSize,
   };
 
   return (

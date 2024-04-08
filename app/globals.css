@@ -90,3 +90,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .scrollbar-thumb\:bg-slate-500\/50::-webkit-scrollbar-thumb {
   background-color: #64748b80;
 }
+
+.focus-visible\:ring-slate-950:focus-visible {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: transparent !important;
+}
