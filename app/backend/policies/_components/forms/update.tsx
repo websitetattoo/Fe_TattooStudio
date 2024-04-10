@@ -4,7 +4,6 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { EditorState } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
-import { stateFromHTML } from "draft-js-import-html";
 import { Editor } from "react-draft-wysiwyg";
 import { Trash } from "lucide-react";
 //.......
@@ -12,16 +11,20 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { useToast } from "@/components/ui/use-toast";
-import { AlertModal } from "../modal/alert-modal";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { ToastAction } from "@radix-ui/react-toast";
-import http from "@/lib/http";
+import { post, put, remove } from "@/lib/http";
+import {
+  CheckBoxIsImportant,
+  CheckBoxIsSubTitle,
+} from "@/components/checkbox-policy";
 //css
 import "@tonz/react-draft-wysiwyg-input/style.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { CheckBoxIsImportant, CheckBoxIsSubTitle } from "../checkbox-policy";
+import { convertHTMLToEditor } from "@/app/backend/lib/utils";
+import { AlertModal } from "@/app/backend/modal/alert-modal";
 
-interface PolicyFormProps {
+interface UpdateFormProps {
   initialData: any | null;
 }
 
@@ -33,7 +36,7 @@ interface FormData {
   isImportant: boolean;
 }
 
-export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
+export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
@@ -59,8 +62,15 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
     return html;
   };
 
+  // Function to handle editor state change
+  const onEditorStateChange = (newEditorState: EditorState) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      content: newEditorState,
+    }));
+  };
+
   const handleSubmit = async (event: any) => {
-    console.log("aaa:", formData);
     event.preventDefault();
     // Data validation
     const errors = validateInput(formData);
@@ -89,10 +99,10 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
       };
 
       if (initialData) {
-        await http.put(`/policies/${params.id}`, postData);
+        await put(`/policies/${params.id}`, postData);
         setError({});
       } else {
-        await http.post(`/policies/create`, postData);
+        await post(`/policies/create`, postData);
         router.refresh();
         setFormData({
           title: "",
@@ -129,14 +139,6 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
     }
   };
 
-  // Function to handle editor state change
-  const onEditorStateChange = (newEditorState: EditorState) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      content: newEditorState,
-    }));
-  };
-
   // Function to handle form field change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -169,7 +171,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await http.delete(`/policies/${params._Id}`, {
+      await remove(`/policies/${params._Id}`, {
         message: "Delete successfully",
       });
       router.refresh();
@@ -181,7 +183,6 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
   };
 
   const validateInput = (value: any): { [key: string]: string } => {
-    console.log("formData", formData);
     const errors: { [key: string]: string } = {};
     if (value.title.trim() === "") {
       errors.title = "Title can't be empty.";
@@ -205,7 +206,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
         subtitle: initialData.isSubtitle === false ? "" : initialData.subtitle,
         title: initialData.title || "",
         content: EditorState.createWithContent(
-          stateFromHTML(initialData.content),
+          convertHTMLToEditor(initialData.content),
         ),
         isImportant: initialData.isImportant || false,
         isSubTitle: initialData.isSubTitle || false,
@@ -265,7 +266,6 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ initialData }) => {
             />
           </div>
         </div>
-
         <div className="gap-y-4 md:grid md:grid-cols-1">
           {error && error.title && (
             <div className="grid w-full">

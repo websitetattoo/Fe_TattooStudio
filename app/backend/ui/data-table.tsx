@@ -1,5 +1,4 @@
 "use client";
-
 import {
   ColumnDef,
   flexRender,
@@ -8,6 +7,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+//UI libaries
+import { Input } from "@/components/ui/input";
+import { ScrollBar, ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -16,9 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "./input";
-import { Button } from "./button";
-import { ScrollArea, ScrollBar } from "./scroll-area";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,6 +38,7 @@ export function DataTable<TData, TValue>({
   });
   return (
     <>
+      {/* UI nút search*/}
       <Input
         placeholder={`Search ${searchKey}...`}
         value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
@@ -47,6 +47,8 @@ export function DataTable<TData, TValue>({
         }}
         className="w-full md:max-w-sm"
       />
+
+      {/* UI bảng table chứa dữ liệu*/}
       <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
         <Table className="relative">
           <TableHeader>
@@ -115,29 +117,6 @@ export function DataTable<TData, TValue>({
 
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
     </>
   );
 }

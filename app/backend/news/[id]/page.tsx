@@ -1,15 +1,18 @@
 "use client";
-
+//Libaries
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
+//Components
 import BreadCrumb from "@/components/breadcrumb";
-import { NewsForm } from "@/components/forms/news-form";
-import http from "@/lib/http";
-import { News } from "@/components/tables/news-tables/type/news";
+//Forms
+import { NewsForm } from "@/app/backend/forms/news-form";
+//Types
+import { News } from "@/app/types/type";
+import { get } from "@/lib/http";
 
 export default function Page() {
   const params = useParams();
+
   // dùng loading để cải thiện giao diện người dùng
   const [initialData, setInitialData] = useState<News | null>(null);
   const breadcrumbItems = [
@@ -20,7 +23,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await http.get(`/news/${params.id}`);
+        const response = await get(`/news/${params.id}`);
         const data = response.data as News;
         setInitialData(data);
       } catch (error) {

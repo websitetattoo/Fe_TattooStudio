@@ -4,12 +4,10 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 //....
-import http from "@/lib/http";
+import { remove } from "@/lib/http";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { AlertModal } from "@/components/modal/alert-modal";
 import { ToastAction } from "@radix-ui/react-toast";
-import { Policies } from "@/constants/data";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,14 +15,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Policies } from "@/app/types/type";
+import { AlertModal } from "@/app/backend/modal/alert-modal";
 
 interface CellActionProps {
   data: Policies | any;
-  onRefresh: () => void;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({ data, onRefresh }) => {
-  const [loading, setLoading] = useState(false);
+export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -32,13 +30,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data, onRefresh }) => {
   // Nhấn confirm để gọi API xóa và gọi lại hàm onRefresh nếu delete thành công
   const onConfirm = async () => {
     try {
-      setLoading(true);
-      const response = await http.delete(`/policies/${data._id}`);
+      const response = await remove(`/policies/${data._id}`);
       // Check if response data exists before logging
       if (response.data) {
         console.log(response.data);
       }
-      onRefresh(); // Thực thi hàm onRefresh khi delete thành công
     } catch (error) {
       // Thông báo khi delete không thành công
       toast({
@@ -51,7 +47,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data, onRefresh }) => {
         ),
       });
     } finally {
-      setLoading(false);
       setOpen(false);
     }
   };

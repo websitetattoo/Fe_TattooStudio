@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { RoundSpinner } from "../ui/spinner";
+import { RoundSpinner } from "@/components/ui/spinner";
 
 interface AlertModalProps {
   isOpen: boolean;

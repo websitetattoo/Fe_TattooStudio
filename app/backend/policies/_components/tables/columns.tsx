@@ -2,14 +2,10 @@
 
 import { CellAction } from "./cell-action";
 import { ColumnDef } from "@tanstack/react-table";
-import { Policies } from "@/constants/data";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Policies } from "@/app/types/type";
 
-interface ColumnsProps {
-  onRefresh: () => void; // Định nghĩa hàm onRefresh
-}
-
-export const columns = ({ onRefresh }: ColumnsProps): ColumnDef<Policies>[] => [
+export const columns = (): ColumnDef<Policies>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -43,6 +39,6 @@ export const columns = ({ onRefresh }: ColumnsProps): ColumnDef<Policies>[] => [
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} onRefresh={onRefresh} />, // Truyền hàm onRefresh được nhận từ PoliciesClient sang CellAction
+    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
