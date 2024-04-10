@@ -1,21 +1,15 @@
-import type { Metadata } from "next";
+"use client";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import Provider from "@/lib/providers";
-
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Tattoos Web",
-  description: "Đây là trang Web Tattoos",
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = new QueryClient();
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <head>
