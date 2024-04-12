@@ -5,7 +5,7 @@ import BreadCrumb from "@/components/breadcrumb";
 import { get } from "@/lib/http";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { News } from "@/app/types/type";
-import { NewsClient } from "../tables/news-tables/news";
+import { NewsClient } from "./_components/tables";
 
 const breadcrumbItems = [{ title: "News", link: "/backend/news" }];
 

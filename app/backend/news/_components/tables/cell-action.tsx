@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { News } from "@/app/types/type";
-import { AlertModal } from "../../modal/alert-modal";
+import { AlertModal } from "../../../modal/alert-modal";
 
 interface CellActionProps {
   data: News | any;

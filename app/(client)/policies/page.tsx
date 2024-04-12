@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import HighlightText from "@/components/highlight-text";
 //
 import PageTitle from "@/components/page-title";
-import http from "@/lib/http";
-import { Policies } from "@/constants/data";
 import PoliciesComp from "./_components/Policies";
+import { Policies } from "@/app/types/type";
+import { get } from "@/lib/http";
 
 export default function index() {
   const artPolicyTitle =
@@ -17,7 +17,7 @@ export default function index() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await http.get("/policies");
+        const response = await get("/policies");
         const data = response.data as Policies[];
         setPolicies(data);
       } catch (error: any) {

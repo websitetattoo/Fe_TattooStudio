@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../css/custom-input.css";
+import "./css/custom-input.css";
 const CustomFileInput = ({ onFileChange, imageUrl }: any) => {
   const handleFileChange = (e: any) => {
     if (e && e.target && e.target.files && e.target.files[0]) {

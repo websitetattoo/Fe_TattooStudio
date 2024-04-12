@@ -2,31 +2,27 @@
 //Library
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { EditorState } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import { Trash } from "lucide-react";
 import dynamic from "next/dynamic"; // (if using Next.js or use own dynamic loader)
-// Lazy loading Editor when go to News Form to avoid error
-const Editor = dynamic(
-  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
-  { ssr: false },
-);
 
 //.......
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { useToast } from "@/components/ui/use-toast";
-import { AlertModal } from "../../../components/modal/alert-modal";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { ToastAction } from "@radix-ui/react-toast";
+import { AlertModal } from "../../../modal/alert-modal";
+import CustomFileInput from "../../../../../components/custom-choose-file";
+import { News } from "@/app/types/type";
 //import http from "@/lib/http";
 //css
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "@tonz/react-draft-wysiwyg-input/style.css";
-import CustomFileInput from "../../../components/ui/custom-choose-file";
-import { convertHTMLToEditor } from "@/app/backend/lib/utils";
-import { News } from "@/app/types/type";
+import "react-quill/dist/quill.snow.css";
+import { quillFormats, quillModules } from "../../../ui/react-quiff";
+import { post, put } from "@/lib/http";
+// Lazy loading Editor when go to News Form to avoid error
+const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 
 interface NewsFormProps {
   initialData: News | null;
@@ -35,7 +31,7 @@ interface NewsFormProps {
 interface FormData {
   files: File | null;
   title: string;
-  content: EditorState;
+  content: string;
   createdDate: Date;
 }
 
@@ -46,7 +42,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<{ [key: string]: string }>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
+  const [isMounted, setIsMounted] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit news" : "Create news";
@@ -56,7 +52,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
   const [formData, setFormData] = useState<FormData>({
     files: null,
     title: "",
-    content: EditorState.createEmpty(), // Initial editor state
+    content: "", // Initial editor state
     createdDate: new Date(),
   });
 
@@ -67,7 +63,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
   };
 
   const handleSubmit = async (event: any) => {
-    console.log(formData);
     event.preventDefault();
     // Data validation
     const errors = validateInput(formData);
@@ -92,28 +87,15 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
       postData.append("createDate", formData.createdDate.toISOString());
 
       if (initialData) {
-        await fetch(`http://localhost:5000/news/${params.id}`, {
-          method: "PUT",
-          body: postData,
-        });
+        await put(`/news/${params.id}`, postData);
         setError({});
       } else {
-        const response = await fetch("http://localhost:5000/news/create", {
-          method: "POST",
-          body: postData,
-        });
-        if (response.ok) {
-          // Xử lý kết quả nếu yêu cầu thành công
-          console.log(response.json());
-        } else {
-          // Xử lý lỗi nếu yêu cầu không thành công
-          console.error("Có lỗi xảy ra khi gửi yêu cầu tạo tin tức");
-        }
+        await post(`/news/create`, postData);
         router.refresh();
         setFormData({
           files: null,
           title: "",
-          content: EditorState.createEmpty(),
+          content: "",
           createdDate: new Date(),
         });
         setError({});
@@ -131,7 +113,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
         ),
       });
     } catch (error) {
-      console.log(error);
       toast({
         title: "Something went wrong.",
         description: "There was a problem with your request",
@@ -147,7 +128,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
   };
 
   // Function to handle editor state change
-  const onEditorStateChange = (newEditorState: EditorState) => {
+  const onEditorStateChange = (newEditorState: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       content: newEditorState,
@@ -165,7 +146,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
 
   const handleFileChange = (file: File) => {
     if (file) {
-      console.log(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
         files: file,
@@ -193,9 +173,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
         lastModified: new Date().getTime(),
       });
 
-      // Bây giờ bạn có thể sử dụng đối tượng file trong ứng dụng của bạn
-      console.log(file);
-
       // Trả về đối tượng file
       return file;
     } catch (error) {
@@ -204,19 +181,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
     }
   };
 
-  const onDelete = async () => {
-    // try {
-    //   setLoading(true);
-    //   await http.delete(`/policies/${params._Id}`, {
-    //     message: "Delete successfully",
-    //   });
-    //   router.refresh();
-    // } catch (error: any) {
-    // } finally {
-    //   setLoading(false);
-    //   setOpen(false);
-    // }
-  };
   const validateInput = (value: any): { [key: string]: string } => {
     const errors: { [key: string]: string } = {};
     if (!value.files) {
@@ -225,10 +189,10 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
     if (value.title.trim() === "") {
       errors.title = "Title can't be empty.";
     }
-    if (
-      value.content &&
-      value.content.getCurrentContent().getPlainText().trim() === ""
-    ) {
+    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
+    // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
+    const constaint = /^\s*$/.test(contentInsideQuiff);
+    if (value.content === "<p><br></p>" || constaint) {
       errors.content = "Content can't be empty.";
     }
     return errors;
@@ -240,9 +204,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
         setFormData({
           files: file,
           title: initialData.title || "",
-          content: EditorState.createWithContent(
-            convertHTMLToEditor(initialData.content),
-          ),
+          content: initialData.content || "",
           createdDate: new Date(initialData.createdDate),
         });
         setImageUrl(initialData.image);
@@ -253,7 +215,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
       setFormData({
         files: null,
         title: "",
-        content: EditorState.createEmpty(),
+        content: "",
         createdDate: new Date(),
       });
     }
@@ -266,12 +228,12 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
       </div>
     );
   }
+
   return (
-    <>
+    <main>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onDelete}
         loading={loading}
       />
       <div className="flex items-center justify-between">
@@ -343,26 +305,25 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
             </div>
           )}
           <div className="">
-            <label htmlFor="content" className="">
-              Content:
-            </label>
-            <Editor
-              editorState={formData.content}
-              wrapperClassName="border border-gray-300"
-              toolbarClassName="border-b border-gray-300"
-              editorClassName="editorClassName"
-              onEditorStateChange={onEditorStateChange}
+            <div className="mb-4">
+              <label htmlFor="content">Content:</label>
+            </div>
+            <QuillEditor
+              className="mb-4"
+              value={formData.content}
+              onChange={onEditorStateChange}
+              modules={quillModules}
+              formats={quillFormats}
             />
+            <Button
+              className="ml-auto rounded-md bg-black px-4 py-2 text-white"
+              type="submit"
+            >
+              {action}
+            </Button>
           </div>
         </div>
-
-        <Button
-          className="ml-auto rounded-md bg-black px-4 py-2 text-white"
-          type="submit"
-        >
-          {action}
-        </Button>
       </form>
-    </>
+    </main>
   );
 };

@@ -2,8 +2,7 @@
 import React from "react";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { PolicyForm } from "@/app/backend/forms/policy-form";
-import { NewsForm } from "@/app/backend/forms/news-form";
+import { NewsForm } from "@/app/backend/news/_components/forms/create-update-form";
 
 export default function Page() {
   const breadcrumbItems = [

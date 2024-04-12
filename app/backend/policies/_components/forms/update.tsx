@@ -2,9 +2,9 @@
 //Library
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { EditorState } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
-import { Editor } from "react-draft-wysiwyg";
+import dynamic from "next/dynamic";
+
 import { Trash } from "lucide-react";
 //.......
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,13 @@ import {
   CheckBoxIsImportant,
   CheckBoxIsSubTitle,
 } from "@/components/checkbox-policy";
-//css
-import "@tonz/react-draft-wysiwyg-input/style.css";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { convertHTMLToEditor } from "@/app/backend/lib/utils";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
+//css
+import "react-quill/dist/quill.snow.css";
+import { quillFormats, quillModules } from "@/app/backend/ui/react-quiff";
+
+// Lazy loading Editor when go to News Form to avoid error
+const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 
 interface UpdateFormProps {
   initialData: any | null;
@@ -31,7 +33,7 @@ interface UpdateFormProps {
 interface FormData {
   title: string;
   subtitle: string;
-  content: EditorState;
+  content: string;
   isSubTitle: boolean;
   isImportant: boolean;
 }
@@ -50,7 +52,7 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
 
   const [formData, setFormData] = useState<FormData>({
     title: "",
-    content: EditorState.createEmpty(), // Initial editor state
+    content: "", // Initial editor state
     subtitle: "",
     isSubTitle: false,
     isImportant: false,
@@ -63,7 +65,7 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
   };
 
   // Function to handle editor state change
-  const onEditorStateChange = (newEditorState: EditorState) => {
+  const onEditorStateChange = (newEditorState: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       content: newEditorState,
@@ -106,7 +108,7 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
         router.refresh();
         setFormData({
           title: "",
-          content: EditorState.createEmpty(),
+          content: "",
           isImportant: false,
           isSubTitle: false,
           subtitle: "",
@@ -192,10 +194,10 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
     } else {
       delete errors.subtitle; // Xóa thông báo lỗi cho trường subtitle nếu isSubTitle là false
     }
-    if (
-      value.content &&
-      value.content.getCurrentContent().getPlainText().trim() === ""
-    ) {
+    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
+    // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
+    const constaint = /^\s*$/.test(contentInsideQuiff);
+    if (value.content === "<p><br></p>" || constaint) {
       errors.content = "Content can't be empty.";
     }
     return errors;
@@ -205,16 +207,14 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
       setFormData({
         subtitle: initialData.isSubtitle === false ? "" : initialData.subtitle,
         title: initialData.title || "",
-        content: EditorState.createWithContent(
-          convertHTMLToEditor(initialData.content),
-        ),
+        content: initialData.content || "",
         isImportant: initialData.isImportant || false,
         isSubTitle: initialData.isSubTitle || false,
       });
     } else {
       setFormData({
         title: "",
-        content: EditorState.createEmpty(),
+        content: "",
         isImportant: false,
         isSubTitle: false,
         subtitle: "",
@@ -320,25 +320,24 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
             </div>
           )}
           <div className="">
-            <label htmlFor="content" className="">
-              Content:
-            </label>
-            <Editor
-              editorState={formData.content}
-              wrapperClassName="border border-gray-300"
-              toolbarClassName="border-b border-gray-300"
-              editorClassName="editorClassName"
-              onEditorStateChange={onEditorStateChange}
+            <div className="mb-4">
+              <label htmlFor="content">Content:</label>
+            </div>
+            <QuillEditor
+              className="mb-4"
+              value={formData.content}
+              onChange={onEditorStateChange}
+              modules={quillModules}
+              formats={quillFormats}
             />
+            <Button
+              className="ml-auto rounded-md bg-black px-4 py-2 text-white"
+              type="submit"
+            >
+              {action}
+            </Button>
           </div>
         </div>
-
-        <Button
-          className="ml-auto rounded-md bg-black px-4 py-2 text-white"
-          type="submit"
-        >
-          {action}
-        </Button>
       </form>
     </>
   );
