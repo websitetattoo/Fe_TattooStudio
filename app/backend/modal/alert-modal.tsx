@@ -7,7 +7,7 @@ import { RoundSpinner } from "@/components/ui/spinner";
 interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
   loading: boolean;
 }
 

@@ -1,11 +1,13 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
+
+import { get } from "@/lib/http";
 import HighlightText from "@/components/highlight-text";
 import PageTitle from "@/components/page-title";
 import NewsCard from "./_components/news-card";
-import { useEffect, useState } from "react";
-import http from "@/lib/http";
 import { RoundSpinner } from "@/components/ui/spinner";
-import { useQuery, useQueryClient } from "react-query";
 import {
   Pagination,
   PaginationContent,
@@ -43,9 +45,8 @@ export default function index() {
       );
     }
   }, [data, isLoading, currentPage, queryClient]);
-  console.log(data);
   const fetchNews = async (pageNum: number) => {
-    const response = await http.get(`/news?page=${pageNum}&limit=${PAGE_SIZE}`);
+    const response = await get(`/news?page=${pageNum}&limit=${PAGE_SIZE}`);
     return response.data;
   };
 

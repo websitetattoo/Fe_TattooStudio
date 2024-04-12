@@ -5,8 +5,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 //Components
+import { News } from "@/app/types/type";
 import { CardContent, CardTitle } from "@/components/ui/card";
-import { News } from "@/components/tables/news-tables/type/news";
 import ButtonNews from "./buttonNews";
 
 export default function NewsCard({
@@ -17,7 +17,6 @@ export default function NewsCard({
   imgObj: News;
   disabled?: boolean;
 }) {
-  console.log(itemID);
   return (
     <>
       <div>

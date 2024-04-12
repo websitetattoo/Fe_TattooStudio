@@ -1,9 +1,10 @@
 "use client";
-import { News } from "@/components/tables/news-tables/type/news";
-import http from "@/lib/http";
-import Image from "next/image";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import Image from "next/image";
+
+import { News } from "@/app/types/type";
+import { get } from "@/lib/http";
 
 export default function index() {
   const [news, setNews] = useState<News>();
@@ -21,7 +22,7 @@ export default function index() {
   }
 
   const getNewsById = async () => {
-    const res = await http.get(`/news/${params.slug}`);
+    const res = await get(`/news/${params.slug}`);
     const data = res.data;
     setNews(data);
   };

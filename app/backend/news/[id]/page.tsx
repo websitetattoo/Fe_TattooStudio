@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 //Components
 import BreadCrumb from "@/components/breadcrumb";
 //Forms
-import { NewsForm } from "@/app/backend/forms/news-form";
+import { NewsForm } from "@/app/backend/news/_components/forms/create-update-form";
 //Types
 import { News } from "@/app/types/type";
 import { get } from "@/lib/http";

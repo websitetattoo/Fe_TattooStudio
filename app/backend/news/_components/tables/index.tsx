@@ -8,7 +8,7 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { columns } from "./columns";
 import { News } from "@/app/types/type";
-import { DataTable } from "../../UI/data-table";
+import { DataTable } from "./data";
 
 //Interface Policies
 interface NewsClientProps {
