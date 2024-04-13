@@ -5,28 +5,23 @@ import HighlightText from "@/components/highlight-text";
 //
 import PageTitle from "@/components/page-title";
 import PoliciesComp from "./_components/Policies";
-import { Policies } from "@/app/types/type";
-import { get } from "@/lib/http";
+//Query
+import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
+//Types
+import { Data, Policies } from "@/app/types/type";
 
 export default function index() {
   const artPolicyTitle =
     "At Florida Kings Tattoo, We try to keep our polices simple so the focus can remain on the art. However, we do need  to have policies in place to ensure fair treatment for all customers.";
 
   const [policies, setPolicies] = useState<Policies[]>([]);
+  const { data, isLoading: loading } = useGetDataPolicies();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await get("/policies");
-        const data = response.data as Policies[];
-        setPolicies(data);
-      } catch (error: any) {
-        alert(error.message);
-      }
-    };
+    const dataPolicy = (data as Data)?.data as Policies[];
+    setPolicies(dataPolicy);
+  }, [data]);
 
-    fetchData(); // Gọi hàm fetchData khi component được mount
-  }, []);
   return (
     <div className="bg-tattoo-color-bg">
       <div className="w-full py-12 lg:m-auto lg:w-9/12">

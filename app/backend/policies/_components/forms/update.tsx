@@ -1,70 +1,95 @@
 "use client";
 //Library
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { stateToHTML } from "draft-js-export-html";
 import dynamic from "next/dynamic";
-
 import { Trash } from "lucide-react";
-//.......
+//Library UI
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
-import { useToast } from "@/components/ui/use-toast";
-import { RoundSpinner } from "@/components/ui/spinner";
-import { ToastAction } from "@radix-ui/react-toast";
-import { post, put, remove } from "@/lib/http";
+import { put } from "@/lib/http";
 import {
   CheckBoxIsImportant,
   CheckBoxIsSubTitle,
 } from "@/components/checkbox-policy";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
-//css
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/ui/react-quiff";
-
-// Lazy loading Editor when go to News Form to avoid error
-const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
+import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
+//Query
+import { useCreatePolicy } from "@/app/query/policies/useCreatePolicy";
+import { useDeletePolicy } from "@/app/query/policies/useDeletePolicy";
+import { useUpdatePolicy } from "@/app/query/policies/useUpdatePolicy";
+//Types
+import { TypeFormPostPolicy } from "@/app/types/type";
 
 interface UpdateFormProps {
   initialData: any | null;
 }
-
-interface FormData {
-  title: string;
-  subtitle: string;
-  content: string;
-  isSubTitle: boolean;
-  isImportant: boolean;
-}
+// Lazy loading Editor khi nhập News Form để tránh lỗi
+const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 
 export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
   const params = useParams();
-  const router = useRouter();
-  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<{ [key: string]: string }>({});
-  const [loading, setLoading] = useState(false);
-
-  const title = initialData ? "Edit policy" : "Create policy";
-  const description = initialData ? "Edit a policy." : "Add a new policy";
-  const action = initialData ? "Save changes" : "Create";
-
-  const [formData, setFormData] = useState<FormData>({
+  //Khởi tạo giá trị ban đầu
+  const initialPostFormData: TypeFormPostPolicy = {
+    id: "",
     title: "",
-    content: "", // Initial editor state
-    subtitle: "",
-    isSubTitle: false,
+    content: "",
     isImportant: false,
-  });
+    isSubTitle: false,
+    subtitle: "",
+  };
+  const [formData, setFormData] =
+    useState<TypeFormPostPolicy>(initialPostFormData);
+  const { mutationCreate, isLoading } = useCreatePolicy();
+  const { mutationDelete, isLoadingDelete } = useDeletePolicy();
+  const { mutationUpdate, isLoadingUpdate } = useUpdatePolicy();
 
-  const extractHTMLContent = (editorState: any) => {
-    const contentState = editorState.getCurrentContent();
-    const html = stateToHTML(contentState);
-    return html;
+  const title = `${initialData ? "Edit" : "Create"} policy`;
+  const description = `${initialData ? "Edit" : "Add a new"} policy.`;
+  const action = `${initialData ? "Save changes" : "Create"}`;
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        id: params?.id.toString(),
+        subtitle: initialData.isSubtitle === false ? "" : initialData.subtitle,
+        title: initialData.title || "",
+        content: initialData.content || "",
+        isImportant: initialData.isImportant || false,
+        isSubTitle: initialData.isSubTitle || false,
+      });
+    } else {
+      setFormData(initialPostFormData);
+    }
+  }, [initialData]);
+
+  // Xử lý validate cho các thẻ input
+  const validateInput = (value: any): { [key: string]: string } => {
+    const errors: { [key: string]: string } = {};
+    if (value.title.trim() === "") {
+      errors.title = "Title can't be empty.";
+    }
+    if (value.isSubTitle && value.subtitle.trim() === "") {
+      errors.subtitle = "Subtitle can't be empty.";
+    } else {
+      // Xóa thông báo lỗi cho trường subtitle nếu isSubTitle là false
+      delete errors.subtitle;
+    }
+    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
+    // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
+    const constaint = /^\s*$/.test(contentInsideQuiff);
+    if (value.content === "<p><br></p>" || constaint) {
+      errors.content = "Content can't be empty.";
+    }
+    return errors;
   };
 
-  // Function to handle editor state change
+  // Định nghĩa các hàm xử lý -- Begin add
+  // Hàm xử lý change input editor
   const onEditorStateChange = (newEditorState: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -72,76 +97,38 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
     }));
   };
 
+  // Hàm xử lý submit form
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+
     // Data validation
     const errors = validateInput(formData);
     if (Object.keys(errors).length > 0) {
       setError(errors);
       return;
     }
-    try {
-      setLoading(true);
 
-      const editorState = formData.content;
-      const formattedContent = extractHTMLContent(editorState);
-      // Định nghĩa data post lên api gồm title,content, subtitle(nếu có)
-      let postData: {
-        title: string;
-        content: string;
-        subtitle: string;
-        isSubTitle: boolean;
-        isImportant: boolean;
-      } = {
-        title: formData.title,
-        content: formattedContent,
-        isSubTitle: formData.isSubTitle,
-        isImportant: formData.isImportant,
-        subtitle: formData.subtitle !== "" ? formData.subtitle : "No value",
-      };
+    // Định nghĩa data post lên
+    let postData: TypeFormPostPolicy = {
+      id: formData.id,
+      title: formData.title,
+      content: formData.content,
+      isSubTitle: formData.isSubTitle,
+      isImportant: formData.isImportant,
+      subtitle: formData.subtitle !== "" ? formData.subtitle : "No value",
+    };
 
-      if (initialData) {
-        await put(`/policies/${params.id}`, postData);
-        setError({});
-      } else {
-        await post(`/policies/create`, postData);
-        router.refresh();
-        setFormData({
-          title: "",
-          content: "",
-          isImportant: false,
-          isSubTitle: false,
-          subtitle: "",
-        });
-        setError({});
-      }
-      toast({
-        title: "Policy saved successfully",
-        description: initialData
-          ? "Policy updated successfully"
-          : "Policy created successfully",
-        action: (
-          <div className="rounded bg-tattoo-color-bg p-2 text-white">
-            <ToastAction altText="done">Done</ToastAction>
-          </div>
-        ),
-      });
-    } catch (error) {
-      toast({
-        title: "Something went wrong.",
-        description: "There was a problem with your request",
-        action: (
-          <div className="rounded bg-tattoo-color-bg p-2 text-white">
-            <ToastAction altText="Try again">Try again</ToastAction>
-          </div>
-        ),
-      });
-    } finally {
-      setLoading(false);
+    if (initialData) {
+      mutationUpdate.mutate(postData);
+      setError({});
+    } else {
+      mutationCreate.mutate(postData);
+      setFormData(initialPostFormData);
+      setError({});
     }
   };
 
-  // Function to handle form field change
+  // Hàm xử lý thay đổi trường biểu mẫu
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -164,84 +151,37 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
       return prevError;
     });
   };
+
   const handleToggleImportant = () => {
     setFormData((prevState) => ({
       ...prevState,
       isImportant: !prevState.isImportant,
     }));
   };
+
   const onDelete = async () => {
     try {
-      setLoading(true);
-      await remove(`/policies/${params._Id}`, {
-        message: "Delete successfully",
-      });
-      router.refresh();
+      mutationDelete.mutate(params?.id.toString());
     } catch (error: any) {
     } finally {
-      setLoading(false);
-      setOpen(false);
+      setOpen(isLoadingDelete);
     }
   };
+  // Định nghĩa các hàm xử lý -- End add
 
-  const validateInput = (value: any): { [key: string]: string } => {
-    const errors: { [key: string]: string } = {};
-    if (value.title.trim() === "") {
-      errors.title = "Title can't be empty.";
-    }
-    if (value.isSubTitle && value.subtitle.trim() === "") {
-      errors.subtitle = "Subtitle can't be empty.";
-    } else {
-      delete errors.subtitle; // Xóa thông báo lỗi cho trường subtitle nếu isSubTitle là false
-    }
-    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
-    // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
-    const constaint = /^\s*$/.test(contentInsideQuiff);
-    if (value.content === "<p><br></p>" || constaint) {
-      errors.content = "Content can't be empty.";
-    }
-    return errors;
-  };
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        subtitle: initialData.isSubtitle === false ? "" : initialData.subtitle,
-        title: initialData.title || "",
-        content: initialData.content || "",
-        isImportant: initialData.isImportant || false,
-        isSubTitle: initialData.isSubTitle || false,
-      });
-    } else {
-      setFormData({
-        title: "",
-        content: "",
-        isImportant: false,
-        isSubTitle: false,
-        subtitle: "",
-      });
-    }
-  }, [initialData]);
-
-  if (loading) {
-    return (
-      <div className="flex min-h-[500px] items-center justify-center align-middle">
-        <RoundSpinner className="h-16 w-full align-middle " size="xl" />
-      </div>
-    );
-  }
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
-        loading={loading}
+        loading={isLoadingDelete}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
-            disabled={loading}
+            disabled={isLoadingDelete}
             variant="destructive"
             size="sm"
             onClick={() => setOpen(true)}
@@ -285,7 +225,7 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
               className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
               py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={loading}
+              disabled={isLoading}
               placeholder="Title policy"
             />
             <div className="FormMessage"></div>
@@ -309,7 +249,7 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
                 className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
               py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={loading}
+                disabled={isLoading}
                 placeholder="SubTitle policy"
               />
             </div>

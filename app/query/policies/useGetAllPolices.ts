@@ -8,41 +8,41 @@ import { getAllPolicies } from "@/app/service/apis/policies.api";
 //Types
 import { filterPolicesData } from "@/app/types/type";
 
-export const useGetDataPolicies = (filterDataApi: filterPolicesData) => {
+export const useGetDataPolicies = (filterDataApi?: filterPolicesData) => {
+  if (!filterDataApi) {
+    const { data, isLoading } = useQuery(
+      [QUERIES_KEYS.GET_POLICIES],
+      () => getAllPolicies(),
+      {
+        keepPreviousData: true,
+        staleTime: 5 * 1000,
+      },
+    );
+    return { data, isLoading };
+  }
+
   const { page, pageSize } = filterDataApi;
   const queryClient = useQueryClient();
 
   if (page !== undefined && pageSize !== undefined) {
     const { page: currentPage, ...other } = filterDataApi;
-    const nextPage = currentPage + 1;
-    queryClient.prefetchQuery(
-      [QUERIES_KEYS.GET_POLICIES, { page: nextPage, ...other }],
-      () => getAllPolicies({ page: nextPage, ...other }),
-    );
+    if (currentPage) {
+      const nextPage = currentPage + 1;
+      queryClient.prefetchQuery(
+        [QUERIES_KEYS.GET_POLICIES, { page: nextPage, ...other }],
+        () => getAllPolicies({ page: nextPage, ...other }),
+      );
+    }
   }
 
-  const { data: cachedData, isLoading: isCachedLoading } = useQuery(
-    [QUERIES_KEYS.GET_POLICIES, filterDataApi],
-    () => queryClient.getQueryData([QUERIES_KEYS.GET_POLICIES, filterDataApi]),
-    {
-      enabled: false,
-    },
-  );
-
-  const { data, isLoading, isError } = useQuery(
+  const { data, isLoading } = useQuery(
     [QUERIES_KEYS.GET_POLICIES, filterDataApi],
     () => getAllPolicies(filterDataApi),
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,
-      // Chỉ kích hoạt truy vấn nếu không có dữ liệu được lưu trong bộ nhớ đệm
-      enabled: !cachedData,
     },
   );
 
-  // Trả về dữ liệu đã lưu trong bộ nhớ cache nếu nó có sẵn và không tải
-  if (!isLoading && !isError && cachedData) {
-    return { data: cachedData, isLoading: isCachedLoading };
-  }
   return { data, isLoading };
 };

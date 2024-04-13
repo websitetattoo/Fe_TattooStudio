@@ -19,8 +19,8 @@ import { News } from "@/app/types/type";
 //import http from "@/lib/http";
 //css
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "../../../ui/react-quiff";
 import { post, put } from "@/lib/http";
+import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
 // Lazy loading Editor when go to News Form to avoid error
 const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 

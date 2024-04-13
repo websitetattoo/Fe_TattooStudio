@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
 import { PoliciesTables } from "./_components/tables";
+
 import { RoundSpinner } from "@/components/ui/spinner";
-import { Policies } from "@/app/types/type";
-import { PaginationComponent } from "../ui/Pagination";
+import { PaginationComponent } from "../UI/Pagination";
+import { Data, Policies } from "@/app/types/type";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Policies", link: "/backend/policies" }];
@@ -22,7 +23,7 @@ export default function Index() {
 
   const { data, isLoading: loading } = useGetDataPolicies(filterDataApi);
   useEffect(() => {
-    const dataPolicy = data?.data as Policies[];
+    const dataPolicy = (data as Data)?.data as Policies[];
     setPolicies(dataPolicy);
     setIsLoading(loading);
   }, [data, isLoading]);
@@ -36,11 +37,11 @@ export default function Index() {
     setCurrentPageSize(pageSize);
     setCurrentPage(1);
   };
-
   //Định nghĩa các hàm xử lý - End add
+
   const propsPage = {
     pageSize: currentPageSize,
-    total: data?.total,
+    total: (data as Data)?.total ?? 0,
     onPageChange: handlePageChange,
     onPageSizeChange: handlePageChangeSize,
   };
@@ -50,7 +51,7 @@ export default function Index() {
       {!loading && Array.isArray(policies) ? (
         <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
           <BreadCrumb items={breadcrumbItems} />
-          <PoliciesTables data={policies} total={data?.total} />
+          <PoliciesTables data={policies} total={(data as Data)?.total ?? 0} />
           <PaginationComponent propsPage={propsPage} />
         </div>
       ) : (
