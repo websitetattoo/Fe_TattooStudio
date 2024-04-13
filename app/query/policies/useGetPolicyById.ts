@@ -3,9 +3,9 @@ import { useQuery, useQueryClient } from "react-query";
 // Constants
 import { QUERIES_KEYS } from "@/constants/queries";
 // Services
-import { getPolicesById } from "@/app/service/apis/policies.api";
+import { getPolicyById } from "@/app/service/apis/policies.api";
 
-export const useGetDataProductById = (id: string) => {
+export const useGetDataPolicyById = (id: string) => {
   const queryClient = useQueryClient();
 
   const { data: cachedData, isLoading: isCachedLoading } = useQuery(
@@ -18,7 +18,7 @@ export const useGetDataProductById = (id: string) => {
 
   const { data, isLoading, isError } = useQuery(
     [QUERIES_KEYS.GET_POLICIES, id],
-    () => getPolicesById(id),
+    () => getPolicyById(id),
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,

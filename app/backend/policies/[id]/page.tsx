@@ -2,10 +2,11 @@
 //Libaries
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
-import BreadCrumb from "@/components/breadcrumb";
-import { useGetDataProductById } from "@/app/query/policies/useGetPoliesById";
+//Query
+import { useGetDataPolicyById } from "@/app/query/policies/useGetPolicyById";
+//Type
 import { Policies } from "@/app/types/type";
+import BreadCrumb from "@/components/breadcrumb";
 import { UpdateForm } from "../_components/forms/update";
 
 export default function Page() {
@@ -13,7 +14,7 @@ export default function Page() {
   const [initialData, setInitialData] = useState<Policies | null>(null);
 
   //useQuery
-  const { data: policies, isLoading } = useGetDataProductById(
+  const { data: policies, isLoading } = useGetDataPolicyById(
     params.id.toString(),
   );
 

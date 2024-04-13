@@ -1,32 +1,43 @@
 import { filterPolicesData } from "@/app/types/type";
-import { get } from "@/lib/http";
+import { get, post, put, remove } from "@/lib/http";
 
 const pathUrl = "/policies/";
 
-export const getAllPolicies = async (filterData: filterPolicesData) => {
-  const { page, pageSize, keyWord, sort, top } = filterData;
+export const getAllPolicies = async (filterData?: filterPolicesData) => {
+  if (!filterData) {
+    const result = await get(pathUrl);
+    return result.data;
+  }
+
+  const { page, pageSize } = filterData;
   let url = `${pathUrl}?`;
 
   if (page !== undefined && pageSize !== undefined) {
     url += `page=${page}&limit=${pageSize}&`;
   }
 
-  if (keyWord !== undefined) {
-    url += `title=${keyWord}&`;
-  }
-
-  if (top !== undefined) {
-    url += `limit=${top}&`;
-  }
-
-  if (sort !== undefined) {
-    url += `sort=${sort}`;
-  }
   const result = await get(url);
   return result.data;
 };
 
-export const getPolicesById = async (id: string) => {
+export const getPolicyById = async (id: string) => {
   const result = await get(`${pathUrl}${id}`);
+  return result.data;
+};
+
+export const deletePolicy = async (id: string) => {
+  const result = await remove(`${pathUrl}${id}`);
+  return result.data;
+};
+
+export const createPolicy = async (data: any) => {
+  const { id, ...postData } = data;
+  const result = await post(pathUrl, postData);
+  return result.data;
+};
+
+export const updatePolicy = async (data: any) => {
+  const { id, ...orther } = data;
+  const result = await put(`${pathUrl}${id}`, orther);
   return result.data;
 };
