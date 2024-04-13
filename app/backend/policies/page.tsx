@@ -7,8 +7,8 @@ import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
 import { PoliciesTables } from "./_components/tables";
 
 import { RoundSpinner } from "@/components/ui/spinner";
-import { PaginationComponent } from "../UI/Pagination";
 import { Data, Policies } from "@/app/types/type";
+import { PaginationComponent } from "../UI/pagination";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Policies", link: "/backend/policies" }];

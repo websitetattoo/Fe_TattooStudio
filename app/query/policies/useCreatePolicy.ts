@@ -21,7 +21,6 @@ export const useCreatePolicy = () => {
         title: "Error",
       });
     },
-    onMutate: () => {},
   });
 
   return {
