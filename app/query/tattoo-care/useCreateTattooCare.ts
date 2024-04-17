@@ -2,17 +2,18 @@
 import { useMutation } from "react-query";
 import { useToast } from "@/components/ui/use-toast";
 // services
-import { createPolicy } from "@/app/service/apis/policies.api";
+import { createTatooCare } from "@/app/service/apis/tattooCare.api";
+//Types
 import { TypeFormPostPolicy } from "@/app/types/type";
 
-export const useCreatePolicy = () => {
+export const useCreateTatooCare = () => {
   const { toast } = useToast();
   const mutation = useMutation({
-    mutationFn: async (policy: TypeFormPostPolicy) => createPolicy(policy),
+    mutationFn: async (policy: TypeFormPostPolicy) => createTatooCare(policy),
     onSuccess: () => {
       // Hiện thông báo lưu thành công
       toast({
-        title: "Create Policy Successfully",
+        title: "Create TatooCare Successfully",
       });
     },
     onError: () => {

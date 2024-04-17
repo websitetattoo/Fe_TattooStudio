@@ -95,3 +95,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   --tw-ring-opacity: 1;
   --tw-ring-color: transparent !important;
 }
+
+.ul_StyleCSS > ul {
+  list-style-type: disc;
+}
+
+.ul_StyleCSS > ol {
+  list-style-type: decimal;
+}
