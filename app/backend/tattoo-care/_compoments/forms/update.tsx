@@ -8,19 +8,15 @@ import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
-import {
-  CheckBoxIsImportant,
-  CheckBoxIsSubTitle,
-} from "@/components/checkbox-policy";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 import "react-quill/dist/quill.snow.css";
 import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
 //Query
-import { useCreatePolicy } from "@/app/query/policies/useCreatePolicy";
-import { useDeletePolicy } from "@/app/query/policies/useDeletePolicy";
-import { useUpdatePolicy } from "@/app/query/policies/useUpdatePolicy";
+import { useUpdateTattooCare } from "@/app/query/tattoo-care/useUpdateTattooCare";
+import { useDeleteTattooCare } from "@/app/query/tattoo-care/useDeleteTattooCare";
 //Types
-import { TypeFormPostPolicy } from "@/app/types/type";
+import { TypeFormPostTattooCare } from "@/app/types/type";
+import { useCreateTatooCare } from "@/app/query/tattoo-care/useCreateTattooCare";
 
 interface UpdateFormProps {
   initialData: any | null;
@@ -28,38 +24,36 @@ interface UpdateFormProps {
 // Lazy loading Editor khi nhập News Form để tránh lỗi
 const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 
-export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
+export const UpdateFormTattooCare: React.FC<UpdateFormProps> = ({
+  initialData,
+}) => {
   const params = useParams();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<{ [key: string]: string }>({});
   //Khởi tạo giá trị ban đầu
-  const initialPostFormData: TypeFormPostPolicy = {
+  const initialPostFormData: TypeFormPostTattooCare = {
     id: "",
     title: "",
     content: "",
-    isImportant: false,
-    isSubTitle: false,
-    subtitle: "",
   };
   const [formData, setFormData] =
-    useState<TypeFormPostPolicy>(initialPostFormData);
-  const { mutationCreate, isLoading } = useCreatePolicy();
-  const { mutationDelete, isLoadingDelete } = useDeletePolicy();
-  const { mutationUpdate, isLoadingUpdate } = useUpdatePolicy();
+    useState<TypeFormPostTattooCare>(initialPostFormData);
+  const { mutationCreate, isLoading } = useCreateTatooCare();
+  const { mutationDelete, isLoadingDelete } = useDeleteTattooCare();
+  const { mutationUpdate, isLoadingUpdate } = useUpdateTattooCare();
 
-  const title = `${initialData ? "Edit" : "Create"} policy`;
-  const description = `${initialData ? "Edit" : "Add a new"} policy.`;
+  const title = `${initialData ? "Edit" : "Create"} Tattoo Care`;
+  const description = `${initialData ? "Edit" : "Add a new"} Tattoo Care.`;
   const action = `${initialData ? "Save changes" : "Create"}`;
+
+  console.log("initialData", initialData);
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         id: params?.id.toString(),
-        subtitle: initialData.isSubtitle === false ? "" : initialData.subtitle,
         title: initialData.title || "",
         content: initialData.content || "",
-        isImportant: initialData.isImportant || false,
-        isSubTitle: initialData.isSubTitle || false,
       });
     } else {
       setFormData(initialPostFormData);
@@ -107,13 +101,10 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
     }
 
     // Định nghĩa data post lên
-    let postData: TypeFormPostPolicy = {
+    let postData: TypeFormPostTattooCare = {
       id: formData.id,
       title: formData.title,
       content: formData.content,
-      isSubTitle: formData.isSubTitle,
-      isImportant: formData.isImportant,
-      subtitle: formData.subtitle !== "" ? formData.subtitle : "No value",
     };
 
     if (initialData) {
@@ -132,28 +123,6 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
-    }));
-  };
-  const handleToggleSubTitle = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      isSubTitle: !prevState.isSubTitle,
-      subtitle: prevState.isSubTitle ? "" : prevState.subtitle,
-    }));
-    setError((prevError) => {
-      // Nếu isSubtitle là false, xóa lỗi subtitle
-      if (formData.isSubTitle) {
-        const { subtitle, ...restErrors } = prevError;
-        return restErrors;
-      }
-      return prevError;
-    });
-  };
-
-  const handleToggleImportant = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      isImportant: !prevState.isImportant,
     }));
   };
 
@@ -190,20 +159,6 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
       </div>
       <Separator />
       <form onSubmit={handleSubmit} className="w-full space-y-8">
-        <div className="gap-y-4 md:grid md:grid-cols-8">
-          <div className="grid md:grid-cols-1">
-            <CheckBoxIsSubTitle
-              isChecked={formData.isSubTitle ?? false}
-              onToggle={handleToggleSubTitle}
-            />
-          </div>
-          <div className="grid md:grid-cols-1">
-            <CheckBoxIsImportant
-              isChecked={formData.isImportant ?? false}
-              onToggle={handleToggleImportant}
-            />
-          </div>
-        </div>
         <div className="gap-y-4 md:grid md:grid-cols-1">
           {error && error.title && (
             <div className="grid w-full">
@@ -228,30 +183,6 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
             />
             <div className="FormMessage"></div>
           </div>
-          {error && error.subtitle && (
-            <div className="grid w-full">
-              <div className="text-red-500">{error.subtitle}</div>
-            </div>
-          )}
-          {formData.isSubTitle && (
-            <div className="grid md:grid-cols-8">
-              <label htmlFor="subtitle" className="col-span-1 pr-2">
-                Sub Title:
-              </label>
-              <input
-                type="text"
-                id="subtitle"
-                name="subtitle"
-                value={formData.subtitle}
-                onChange={handleInputChange}
-                className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
-              py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
-              focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isLoading}
-                placeholder="SubTitle policy"
-              />
-            </div>
-          )}
           {error && error.content && (
             <div className="grid w-full">
               <div className="text-red-500">{error.content}</div>

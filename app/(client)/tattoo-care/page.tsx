@@ -1,7 +1,25 @@
+"use client";
+
+//Libaries
+import { useEffect, useState } from "react";
+//Query
+import { useGetDataTatooCare } from "@/app/query/tattoo-care/useGetAllTattooCare";
+//Types
+import { Data, Tattoocare } from "@/app/types/type";
+
 import PageTitle from "@/components/page-title";
 import TextTattoo from "./_components/text-tattoo";
 
 export default function index() {
+  const [tatooCare, setTatooCare] = useState<Tattoocare[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading: loading } = useGetDataTatooCare();
+
+  useEffect(() => {
+    const dataTatooCare = (data as Data)?.data as Tattoocare[];
+    setTatooCare(dataTatooCare);
+    setIsLoading(loading);
+  }, [data, isLoading]);
   const arrWeekList = [
     {
       id: 1,
@@ -63,7 +81,7 @@ export default function index() {
         </div>
 
         <div>
-          {arrWeekList?.map((item, index) => (
+          {tatooCare?.map((item, index) => (
             <TextTattoo key={index} textObj={item} />
           ))}
         </div>
