@@ -64,6 +64,7 @@ export const Icons = {
   check: Check,
   policy: NotebookText,
   TattooCare: NotebookText,
+  Faq: NotebookText,
   news: BookOpenText,
 };
 

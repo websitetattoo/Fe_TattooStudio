@@ -17,6 +17,11 @@ export type Tattoocare = {
   content: string;
 };
 
+export type Faq = {
+  title: string;
+  content: string;
+};
+
 export type News = {
   image: string;
   title: string;
@@ -39,6 +44,13 @@ export type filterTattooCareData = {
   keyWord?: string;
   sort?: string;
 };
+
+export type filterFaqData = {
+  page?: number;
+  pageSize?: number;
+  keyWord?: string;
+  sort?: string;
+};
 // Định nghĩa các type filter - End add
 
 // Định nghĩa các type from Post- Begin add
@@ -52,6 +64,12 @@ export type TypeFormPostPolicy = {
 };
 
 export type TypeFormPostTattooCare = {
+  id: string;
+  title?: string;
+  content?: string;
+};
+
+export type TypeFormPostFaq = {
   id: string;
   title?: string;
   content?: string;
