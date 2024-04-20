@@ -7,23 +7,48 @@
   background-size: 30px 30px;
 }
 
-.select-css button {
-  background-color: #181818 !important;
-  border: 1px solid #b8b8b8 !important;
+.select-css > div > div {
+  background-color: #0e1115 !important;
+  border: none !important;
+  box-shadow: 0 0 0 0.8px #b8b8b8;
+  height: 37.6px !important;
   border-radius: 0px !important;
+  color: white;
 }
 
-:is(.dark .dark\:focus\:ring-slate-300:focus) {
-  --tw-ring-opacity: 0;
-  --tw-ring-color: none !important;
+.select-css .ant-select-selection-placeholder {
+  color: #b8b8b8 !important;
 }
 
-::file-selector-button {
-  background-color: transparent;
-  color: #ccc;
-  border: none;
-  outline: none;
-  height: 18px;
+.select-css .ant-select-arrow {
+  color: #ccc !important;
+}
+
+.select-css .ant-select-selection-item {
+  color: white !important;
+}
+.dateTimePicker-css > div {
+  box-shadow: 0 0 0 0.8px #b8b8b8;
+  color: white !important;
+}
+.dateTimePicker-css > div > div {
+  background-color: #0e1115 !important;
+  border: none !important;
+  height: 37.6px !important;
+  border-radius: 0px !important;
+  color: white !important;
+}
+
+.dateTimePicker-css .ant-picker-input input::placeholder {
+  color: white !important;
+}
+
+.dateTimePicker-css .anticon-calendar {
+  color: #ccc !important;
+}
+
+.dateTimePicker-css .ant-picker-input {
+  color: white !important;
 }
 
 .InputFile-css input[type="file"] {
@@ -102,4 +127,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .ul_StyleCSS > ol {
   list-style-type: decimal;
+}
+
+button.ant-btn:hover {
+  background-color: black !important;
+  color: white !important;
 }

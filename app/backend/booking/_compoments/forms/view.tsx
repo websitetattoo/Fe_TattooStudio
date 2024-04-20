@@ -2,12 +2,13 @@
 //Library
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 //Library UI
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 //Types
 import { Booking, TypeFormViewBooking } from "@/app/types/type";
+
+import { Image } from "antd";
 
 interface ViewFormProps {
   initialData: Booking | null;
@@ -54,14 +55,6 @@ export const ViewBooking: React.FC<ViewFormProps> = ({ initialData }) => {
       });
     }
   }, [initialData]);
-
-  const handleClick = (index: any) => {
-    setSelectedImage(index);
-  };
-
-  const handleClose = () => {
-    setSelectedImage(null);
-  };
 
   return (
     <>
@@ -184,37 +177,17 @@ export const ViewBooking: React.FC<ViewFormProps> = ({ initialData }) => {
         </div>
       </div>
       <h3>Images: </h3>
-      <div className="ml-0 flex flex-wrap md:ml-20 lg:ml-36">
+      <div className="ml-0 flex flex-wrap md:ml-20 lg:ml-40">
         {formData?.images?.map((url: string, index: number) => (
-          <div
-            key={index}
-            className="w-fulw relative p-2 md:w-1/2 lg:w-1/4"
-            onClick={() => handleClick(index)}
-          >
+          <div key={index} className="wrap m-1 flex">
             <Image
-              src={url}
+              className="w-fulw h-full object-cover lg:w-1/4"
               width={300}
               height={300}
-              alt="Tattoo Image"
-              className="h-full w-full cursor-pointer object-cover"
+              src={url}
             />
           </div>
         ))}
-        {selectedImage !== null && (
-          <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75">
-            <div className="relative">
-              <button
-                className="absolute -right-[16px] -top-4 m-4 bg-black p-1 font-medium text-white"
-                onClick={handleClose}
-              >
-                X
-              </button>
-              {formData.images && formData.images[selectedImage] && (
-                <img src={formData.images[selectedImage]} alt="Tattoo Image" />
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
