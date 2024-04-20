@@ -14,7 +14,6 @@ import {
 } from "@/components/checkbox-policy";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/ui/react-quiff";
 import { RoundSpinner } from "@/components/ui/spinner";
 //Query
 import { useCreatePolicy } from "@/app/query/policies/useCreatePolicy";
@@ -22,6 +21,7 @@ import { useDeletePolicy } from "@/app/query/policies/useDeletePolicy";
 import { useUpdatePolicy } from "@/app/query/policies/useUpdatePolicy";
 //Types
 import { TypeFormPostPolicy } from "@/app/types/type";
+import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
 
 interface UpdateFormProps {
   initialData: any | null;
@@ -73,13 +73,6 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
     if (value.title.trim() === "") {
       errors.title = "Title can't be empty.";
     }
-    if (value.isSubTitle && value.subtitle.trim() === "") {
-      errors.subtitle = "Subtitle can't be empty.";
-    } else {
-      // Xóa thông báo lỗi cho trường subtitle nếu isSubTitle là false
-      delete errors.subtitle;
-    }
-    if (value.content.trim() === "" || value.content === "<p><br></p>") {
     const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
     // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
     const constaint = /^\s*$/.test(contentInsideQuiff);
@@ -174,7 +167,6 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
     }
   };
   // Định nghĩa các hàm xử lý -- End add
-
   return (
     <main>
       {!isLoadingUpdate || !isLoading ? (

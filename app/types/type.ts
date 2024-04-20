@@ -36,6 +36,20 @@ export type User = {
   instagram: string;
   facebook: string;
 };
+
+export type Artist = {
+  name?: string;
+};
+
+export type Booking = {
+  name: string;
+  phone: string;
+  address: string;
+  email: string;
+  schedule: string;
+  artist: Artist;
+  images: string[];
+};
 // Định nghĩa các type đối tượng - End add
 
 // Định nghĩa các type filter - Begin add
@@ -59,6 +73,14 @@ export type filterFaqData = {
   keyWord?: string;
   sort?: string;
 };
+
+export type filterBookingData = {
+  page?: number;
+  pageSize?: number;
+  keyWord?: string;
+  sort?: string;
+  arrType?: PopulateBooking;
+};
 // Định nghĩa các type filter - End add
 
 // Định nghĩa các type from Post- Begin add
@@ -70,7 +92,6 @@ export type TypeFormPostPolicy = {
   isSubTitle?: boolean;
   isImportant?: boolean;
 };
-
 
 export type TypeFormPostNews = {
   id: string;
@@ -86,6 +107,7 @@ export type TypeFormUpdateUser = {
   email: string;
   instagram: string;
   facebook: string;
+};
 
 export type TypeFormPostTattooCare = {
   id: string;
@@ -97,6 +119,24 @@ export type TypeFormPostFaq = {
   id: string;
   title?: string;
   content?: string;
-
 };
 // Định nghĩa các type from Post- End add
+
+// Định nghĩa các type from View - Begin add
+export type TypeFormViewBooking = {
+  id: string;
+  name?: string;
+  phone?: string;
+  address?: string;
+  email?: string;
+  schedule?: string;
+  artist?: string;
+  images?: string[];
+};
+// Định nghĩa các type from View - End add
+
+// Định nghĩa các type Populate - Begin add
+export type PopulateBooking = {
+  artist: string;
+};
+// Định nghĩa các type Populate - End add
