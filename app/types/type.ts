@@ -15,9 +15,11 @@ export type Policies = {
 export type Tattoocare = {
   title: string;
   content: string;
-  subtitle: string;
-  isSubTitle: boolean;
-  isImportant: boolean;
+};
+
+export type Faq = {
+  title: string;
+  content: string;
 };
 
 export type News = {
@@ -43,6 +45,20 @@ export type filterData = {
   keyWord?: string;
   sort?: string;
 };
+
+export type filterTattooCareData = {
+  page?: number;
+  pageSize?: number;
+  keyWord?: string;
+  sort?: string;
+};
+
+export type filterFaqData = {
+  page?: number;
+  pageSize?: number;
+  keyWord?: string;
+  sort?: string;
+};
 // Định nghĩa các type filter - End add
 
 // Định nghĩa các type from Post- Begin add
@@ -54,6 +70,7 @@ export type TypeFormPostPolicy = {
   isSubTitle?: boolean;
   isImportant?: boolean;
 };
+
 
 export type TypeFormPostNews = {
   id: string;
@@ -69,5 +86,17 @@ export type TypeFormUpdateUser = {
   email: string;
   instagram: string;
   facebook: string;
+
+export type TypeFormPostTattooCare = {
+  id: string;
+  title?: string;
+  content?: string;
+};
+
+export type TypeFormPostFaq = {
+  id: string;
+  title?: string;
+  content?: string;
+
 };
 // Định nghĩa các type from Post- End add

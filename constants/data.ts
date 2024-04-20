@@ -36,6 +36,18 @@ export const navItems: NavItem[] = [
     label: "policies",
   },
   {
+    title: "Tattoo Care",
+    href: "/backend/tattoo-care",
+    icon: "TattooCare",
+    label: "TattooCare",
+  },
+  {
+    title: "Faq",
+    href: "/backend/faq",
+    icon: "Faq",
+    label: "Faq",
+  },
+  {
     title: "News",
     href: "/backend/news",
     icon: "news",

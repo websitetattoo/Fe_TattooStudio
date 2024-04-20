@@ -3,18 +3,16 @@
 import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { useGetDataTatooCare } from "@/app/query/tattoo-care/useGetAllTattooCare";
+import { useGetDataFaq } from "@/app/query/faq/useGetAllFaq";
 
 import { RoundSpinner } from "@/components/ui/spinner";
-import { Data, Tattoocare } from "@/app/types/type";
+import { Data, Faq } from "@/app/types/type";
 import { PaginationComponent } from "../UI/pagination";
-import { TatooCareTables } from "./_compoments/tables";
+import { FaqTables } from "./_compoments/tables";
 
 export default function Index() {
-  const breadcrumbItems = [
-    { title: "Tattoo Care", link: "/backend/tatoo-care" },
-  ];
-  const [tatooCare, setTatooCare] = useState<Tattoocare[]>([]);
+  const breadcrumbItems = [{ title: "Faq", link: "/backend/faq" }];
+  const [faq, setfaq] = useState<Faq[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(5);
@@ -23,10 +21,10 @@ export default function Index() {
     pageSize: currentPageSize,
   };
 
-  const { data, isLoading: loading } = useGetDataTatooCare(filterDataApi);
+  const { data, isLoading: loading } = useGetDataFaq(filterDataApi);
   useEffect(() => {
-    const dataTatooCare = (data as Data)?.data as Tattoocare[];
-    setTatooCare(dataTatooCare);
+    const datafaq = (data as Data)?.data as Faq[];
+    setfaq(datafaq);
     setIsLoading(loading);
   }, [data, isLoading]);
 
@@ -50,13 +48,10 @@ export default function Index() {
 
   return (
     <>
-      {!loading && Array.isArray(tatooCare) ? (
+      {!loading && Array.isArray(faq) ? (
         <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
           <BreadCrumb items={breadcrumbItems} />
-          <TatooCareTables
-            data={tatooCare}
-            total={(data as Data)?.total ?? 0}
-          />
+          <FaqTables data={faq} total={(data as Data)?.total ?? 0} />
           <PaginationComponent propsPage={propsPage} />
         </div>
       ) : (

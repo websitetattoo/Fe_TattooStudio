@@ -63,6 +63,8 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   policy: NotebookText,
+  TattooCare: NotebookText,
+  Faq: NotebookText,
   news: BookOpenText,
 };
 

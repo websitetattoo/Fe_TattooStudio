@@ -80,6 +80,15 @@ export const UpdateForm: React.FC<UpdateFormProps> = ({ initialData }) => {
       delete errors.subtitle;
     }
     if (value.content.trim() === "" || value.content === "<p><br></p>") {
+    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
+    // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
+    const constaint = /^\s*$/.test(contentInsideQuiff);
+    if (
+      !value ||
+      !value.content.trim() ||
+      constaint ||
+      value.content.trim() === "<p><br></p>"
+    ) {
       errors.content = "Content can't be empty.";
     }
     return errors;
