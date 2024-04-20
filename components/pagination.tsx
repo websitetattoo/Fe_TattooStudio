@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { twMerge } from "tailwind-merge";
-import { classNames } from "uploadthing/client";
 
 interface PropsPageType {
   pageSize: number;
