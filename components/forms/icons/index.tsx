@@ -16,8 +16,6 @@ import {
   LayoutDashboardIcon,
   Loader2,
   LogIn,
-  LucideIcon,
-  LucideProps,
   Moon,
   MoreVertical,
   NotebookText,
@@ -31,6 +29,9 @@ import {
   User2Icon,
   UserX2Icon,
   X,
+  Columns4,
+  FileSliders,
+  CalendarCheck,
 } from "lucide-react";
 
 export const Icons = {
@@ -62,10 +63,11 @@ export const Icons = {
   laptop: Laptop,
   twitter: Twitter,
   check: Check,
-  policy: NotebookText,
-  TattooCare: NotebookText,
+  policy: Columns4,
+  TattooCare: FileSliders,
   Faq: NotebookText,
   news: BookOpenText,
+  booking: CalendarCheck,
 };
 
 import { FC } from "react";

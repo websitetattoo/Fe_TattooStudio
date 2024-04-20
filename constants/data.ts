@@ -54,6 +54,12 @@ export const navItems: NavItem[] = [
     label: "news",
   },
   {
+    title: "Booking",
+    href: "/backend/booking",
+    icon: "booking",
+    label: "booking",
+  },
+  {
     title: "Logout",
     href: "/",
     icon: "login",
