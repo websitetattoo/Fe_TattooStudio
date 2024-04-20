@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 //Components
 import BreadCrumb from "@/components/breadcrumb";
+import { get } from "@/lib/http";
 //Forms
 import { NewsForm } from "@/app/backend/news/_components/forms/create-update-form";
 //Types
 import { News } from "@/app/types/type";
-import { get } from "@/lib/http";
 
 export default function Page() {
   const params = useParams();

@@ -17,12 +17,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { twMerge } from "tailwind-merge";
+import { classNames } from "uploadthing/client";
 
 interface PropsPageType {
   pageSize: number;
   total: number;
   onPageChange: (pageNumber: number) => void; //Call back trả về page được click
   onPageSizeChange: (pageSize: number) => void; //Call back trả về khi change pageSize
+  className?: string;
 }
 
 export function PaginationComponent({
@@ -30,7 +33,8 @@ export function PaginationComponent({
 }: {
   propsPage: PropsPageType;
 }) {
-  const { pageSize, total, onPageChange, onPageSizeChange } = propsPage;
+  const { pageSize, total, onPageChange, onPageSizeChange, className } =
+    propsPage;
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState("5");
   const pageSizeOptions = ["5", "10", "15", "20", "25", "30", "50"];
@@ -67,7 +71,12 @@ export function PaginationComponent({
   };
 
   return (
-    <div className="flex items-center justify-end space-x-2 py-4">
+    <div
+      className={twMerge(
+        "flex items-center justify-end space-x-2 py-4",
+        className,
+      )}
+    >
       <Pagination>
         <PaginationContent>
           <PaginationItem>
@@ -75,7 +84,12 @@ export function PaginationComponent({
           </PaginationItem>
 
           {pages.map((pageNumber) => (
-            <PaginationItem key={pageNumber}>
+            <PaginationItem
+              key={pageNumber}
+              className={
+                currentPage === pageNumber ? "rounded bg-white text-black" : ""
+              }
+            >
               <PaginationLink onClick={() => handlePageClick(pageNumber)}>
                 {pageNumber}
               </PaginationLink>
@@ -91,7 +105,9 @@ export function PaginationComponent({
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">{currentPageSize} items/ page</Button>
+              <Button variant={className ? "secondary" : "outline"}>
+                {currentPageSize} items/ page
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-white">
               <DropdownMenuLabel>Option</DropdownMenuLabel>
@@ -104,7 +120,7 @@ export function PaginationComponent({
                   pageSizeOptions?.length > 0 &&
                   pageSizeOptions.map((item, index) => (
                     <DropdownMenuRadioItem
-                      className="hover:bg-blue-100"
+                      className={twMerge(" hover:bg-blue-100")}
                       key={index}
                       value={item}
                     >

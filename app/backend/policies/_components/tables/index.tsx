@@ -8,7 +8,7 @@ import { Heading } from "@/components/ui/heading";
 
 import { columns } from "./columns";
 import { Policies } from "@/app/types/type";
-import { DataTable } from "@/app/backend/UI/data-table";
+import { DataTable } from "@/app/backend/ui/data-table";
 
 interface PoliciesTablesProps {
   data: Policies[];

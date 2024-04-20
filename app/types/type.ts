@@ -26,10 +26,18 @@ export type News = {
   content: string;
   createdDate: Date;
 };
+
+export type User = {
+  _id?: string;
+  tel: string;
+  email: string;
+  instagram: string;
+  facebook: string;
+};
 // Định nghĩa các type đối tượng - End add
 
 // Định nghĩa các type filter - Begin add
-export type filterPolicesData = {
+export type filterData = {
   page?: number;
   pageSize?: number;
   keyWord?: string;
@@ -45,5 +53,21 @@ export type TypeFormPostPolicy = {
   content?: string;
   isSubTitle?: boolean;
   isImportant?: boolean;
+};
+
+export type TypeFormPostNews = {
+  id: string;
+  files: File | null;
+  title: string;
+  content: string;
+  createdDate: Date;
+};
+
+export type TypeFormUpdateUser = {
+  id: string;
+  tel: string;
+  email: string;
+  instagram: string;
+  facebook: string;
 };
 // Định nghĩa các type from Post- End add

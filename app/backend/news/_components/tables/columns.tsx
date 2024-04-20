@@ -8,11 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { News } from "@/app/types/type";
 
-interface ColumnsProps {
-  onRefresh: () => void; // Định nghĩa hàm onRefresh
-}
-
-export const columns = ({ onRefresh }: ColumnsProps): ColumnDef<News>[] => [
+export const columns = (): ColumnDef<News>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -36,11 +32,11 @@ export const columns = ({ onRefresh }: ColumnsProps): ColumnDef<News>[] => [
     accessorKey: "file",
     header: "File",
     cell: ({ row }) => (
-      <div>
+      <div className=" w-40 md:w-[300px]">
         <Image
           width={700}
           height={700}
-          className="h-auto w-auto align-middle md:h-[200px] md:w-[2000px] md:object-cover lg:object-center"
+          className="h-20 align-middle md:h-[200px] md:object-cover lg:object-center"
           src={row.original.image}
           alt="File"
         />
@@ -50,6 +46,11 @@ export const columns = ({ onRefresh }: ColumnsProps): ColumnDef<News>[] => [
   {
     accessorKey: "title",
     header: "Title",
+    cell: ({ row }) => (
+      <div className="line-clamp-6 w-auto md:w-[100px]">
+        {row.original.title}
+      </div>
+    ),
   },
   {
     accessorKey: "createdDate",
@@ -69,8 +70,8 @@ export const columns = ({ onRefresh }: ColumnsProps): ColumnDef<News>[] => [
     id: "actions",
     cell: ({ row }) => (
       <div className="w-full">
-        <CellAction data={row.original} onRefresh={onRefresh} />
+        <CellAction data={row.original} />
       </div>
-    ), // Truyền hàm onRefresh được nhận từ PoliciesClient sang CellAction
+    ),
   },
 ];

@@ -78,25 +78,12 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <TableCell key={cell.id} className="h-[20px] align-top">
+                      <TableCell key={cell.id} className="h-[20px] align-top ">
                         {cell.column.columnDef.cell &&
-                        typeof cell.column.columnDef.cell === "function" ? (
-                          cell.column.id === "content" ? (
-                            <div
-                              className="line-clamp-6"
-                              dangerouslySetInnerHTML={{
-                                __html: cell.column.columnDef.cell(
-                                  cell.getContext(),
-                                ),
-                              }}
-                            />
-                          ) : (
-                            flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext() ?? "No value",
-                            )
-                          )
-                        ) : null}
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext() ?? "No value",
+                          )}
                       </TableCell>
                     );
                   })}

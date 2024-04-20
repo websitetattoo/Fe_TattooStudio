@@ -1,3 +1,5 @@
 export const QUERIES_KEYS = {
   GET_POLICIES: "GET_POLICIES",
+  GET_NEWS: "GET_NEWS",
+  GET_USER: "GET_USER",
 };

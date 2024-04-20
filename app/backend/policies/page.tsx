@@ -7,7 +7,7 @@ import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
 import { PoliciesTables } from "./_components/tables";
 
 import { RoundSpinner } from "@/components/ui/spinner";
-import { PaginationComponent } from "../UI/Pagination";
+import { PaginationComponent } from "../../../components/pagination";
 import { Data, Policies } from "@/app/types/type";
 
 export default function Index() {
@@ -27,7 +27,7 @@ export default function Index() {
     setPolicies(dataPolicy);
     setIsLoading(loading);
   }, [data, isLoading]);
-
+  console.log("data:", data, isLoading);
   //Định nghĩa các hàm xử lý - Begin add
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
