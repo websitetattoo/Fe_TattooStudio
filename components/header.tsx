@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -19,15 +19,10 @@ import {
   WhatsAppIcon,
   XIcon,
 } from "./forms/icons";
+import { useGetDataUser } from "@/app/query/user/useGetUser";
+import { User } from "@/app/types/type";
 
 interface SocialProps {
-  icon: any;
-  label: string;
-  value: string;
-  href?: string;
-}
-
-interface ArtistProps {
   icon: any;
   label: string;
   value: string;
@@ -64,30 +59,43 @@ const navigateLinks: NavigationLink[] = [
 ];
 
 export default function Header() {
-  const [social] = useState<SocialProps[]>([
-    {
-      icon: WhatsAppIcon,
-      label: "Tel",
-      value: "407-799-7181",
-    },
-    {
-      icon: MailIcon,
-      label: "Email",
-      value: "floridakingstattoo@gmail.com",
-    },
-    {
-      icon: InstagramIcon,
-      label: "Instagram",
-      value: "Florida Kings Tattoo",
-    },
-    {
-      icon: FacebookIcon,
-      label: "Facebook",
-      value: "Florida Kings Tattoo",
-    },
-  ]);
+  const [firstUser, setFirstUser] = useState<User | undefined>();
+  const { data, isLoading: loading } = useGetDataUser();
+  const [social, setSocial] = useState<SocialProps[]>([]);
 
-  const [artists, setArtists] = useState<ArtistProps[]>([]);
+  useEffect(() => {
+    const userData = data as User[];
+    if (userData && userData.length > 0) {
+      setFirstUser(userData[0]);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (firstUser) {
+      setSocial([
+        {
+          icon: WhatsAppIcon,
+          label: "Tel",
+          value: `${firstUser?.tel}`,
+        },
+        {
+          icon: MailIcon,
+          label: "Email",
+          value: `${firstUser?.email}`,
+        },
+        {
+          icon: InstagramIcon,
+          label: "Instagram",
+          value: `${firstUser?.instagram}`,
+        },
+        {
+          icon: FacebookIcon,
+          label: "Facebook",
+          value: `${firstUser?.facebook}`,
+        },
+      ]);
+    }
+  }, [firstUser]);
 
   const [open, setOpen] = useState<boolean>(false);
   const handleCloseDrawer = () => {

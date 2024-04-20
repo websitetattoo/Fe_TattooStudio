@@ -4,15 +4,15 @@ import { useQuery, useQueryClient } from "react-query";
 // Constants
 import { QUERIES_KEYS } from "@/constants/queries";
 // Services
-import { getAllPolicies } from "@/app/service/apis/policies.api";
+import { getAllNews } from "@/app/service/apis/news.api";
 //Types
 import { filterData } from "@/app/types/type";
 
-export const useGetDataPolicies = (filterDataApi?: filterData) => {
+export const useGetDataNews = (filterDataApi?: filterData) => {
   if (!filterDataApi) {
     const { data, isLoading } = useQuery(
-      [QUERIES_KEYS.GET_POLICIES],
-      () => getAllPolicies(),
+      [QUERIES_KEYS.GET_NEWS],
+      () => getAllNews(),
       {
         keepPreviousData: true,
         staleTime: 5 * 1000,
@@ -29,15 +29,15 @@ export const useGetDataPolicies = (filterDataApi?: filterData) => {
     if (currentPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(
-        [QUERIES_KEYS.GET_POLICIES, { page: nextPage, ...other }],
-        () => getAllPolicies({ page: nextPage, ...other }),
+        [QUERIES_KEYS.GET_NEWS, { page: nextPage, ...other }],
+        () => getAllNews({ page: nextPage, ...other }),
       );
     }
   }
 
   const { data, isLoading } = useQuery(
-    [QUERIES_KEYS.GET_POLICIES, filterDataApi],
-    () => getAllPolicies(filterDataApi),
+    [QUERIES_KEYS.GET_NEWS, filterDataApi],
+    () => getAllNews(filterDataApi),
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,

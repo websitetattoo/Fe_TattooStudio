@@ -6,22 +6,23 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+
 import { columns } from "./columns";
 import { News } from "@/app/types/type";
-import { DataTable } from "./data";
+import { DataTable } from "@/app/backend/ui/data-table";
 
 //Interface Policies
 interface NewsClientProps {
   data: News[];
-  onRefresh: () => void;
+  total: number;
 }
 
-export const NewsClient: React.FC<NewsClientProps> = ({ data, onRefresh }) => {
+export const NewsTables: React.FC<NewsClientProps> = ({ data, total }) => {
   return (
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`News (${data.length})`}
+          title={`News (${total})`}
           description="Manage News (Client side table functionalities.)"
         />
         <Link href={`/backend/news/create`}>
@@ -31,11 +32,7 @@ export const NewsClient: React.FC<NewsClientProps> = ({ data, onRefresh }) => {
         </Link>
       </div>
       <Separator />
-      <DataTable
-        searchKey="title"
-        columns={columns({ onRefresh })} // Truyền hàm onRefresh được nhận từ bên ngoài -> columns
-        data={data}
-      />
+      <DataTable searchKey="title" columns={columns()} data={data} />
     </>
   );
 };

@@ -7,8 +7,8 @@ import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
 import { PoliciesTables } from "./_components/tables";
 
 import { RoundSpinner } from "@/components/ui/spinner";
+import { PaginationComponent } from "../../../components/pagination";
 import { Data, Policies } from "@/app/types/type";
-import { PaginationComponent } from "../UI/pagination";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Policies", link: "/backend/policies" }];
@@ -27,7 +27,7 @@ export default function Index() {
     setPolicies(dataPolicy);
     setIsLoading(loading);
   }, [data, isLoading]);
-
+  console.log("data:", data, isLoading);
   //Định nghĩa các hàm xử lý - Begin add
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);

@@ -8,7 +8,12 @@ interface PolicyItem {
 
 export default function Policies({ obj }: { obj: PolicyItem }) {
   const { title, subtitle, content, isImportant, isSubTitle } = obj;
-  const contentLines = content.split("\n").filter((line) => line.trim() !== "");
+  const contentLines = content
+    .replace(/^,|,$/g, "") // Loại bỏ ký tự "," ở đầu và cuối
+    .split(/<\/?(?:p|li|ul|br|ol)[^>]*>/)
+    .filter((line) => line.trim() !== "");
+
+  console.log(obj);
   return (
     <>
       <div className="w-full pb-14">
