@@ -1,24 +1,28 @@
-//import { filterArtistData } from "@/app/types/type";
+import { filterArtistData } from "@/app/types/type";
 import { get, post, put, remove } from "@/lib/http";
 
 const pathUrl = "/Artist/";
 
-// export const getAllArtist = async (filterData?: filterArtistData) => {
-//   if (!filterData) {
-//     const result = await get(pathUrl);
-//     return result.data;
-//   }
+export const getAllArtist = async (filterData?: filterArtistData) => {
+  if (!filterData) {
+    const result = await get(pathUrl);
+    return result.data;
+  }
 
-//   const { page, pageSize } = filterData;
-//   let url = `${pathUrl}?`;
+  const { page, pageSize, fields } = filterData;
+  let url = `${pathUrl}?`;
 
-//   if (page !== undefined && pageSize !== undefined) {
-//     url += `page=${page}&limit=${pageSize}&`;
-//   }
+  if (page !== undefined && pageSize !== undefined) {
+    url += `page=${page}&limit=${pageSize}&`;
+  }
 
-//   const result = await get(url);
-//   return result.data;
-// };
+  if (fields !== undefined) {
+    url += `fields=${fields}`;
+  }
+
+  const result = await get(url);
+  return result.data;
+};
 
 export const getArtistById = async (id: string) => {
   const result = await get(`${pathUrl}${id}`);
