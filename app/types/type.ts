@@ -38,7 +38,13 @@ export type User = {
 };
 
 export type Artist = {
-  name?: string;
+  _id?: string;
+  name: string;
+  header: string;
+  description: string;
+  avatar: string;
+  images: string[];
+  link: string;
 };
 
 export type Booking = {
@@ -72,6 +78,14 @@ export type filterFaqData = {
   pageSize?: number;
   keyWord?: string;
   sort?: string;
+};
+
+export type filterArtistData = {
+  page?: number;
+  pageSize?: number;
+  keyWord?: string;
+  sort?: string;
+  fields?: string;
 };
 
 export type filterBookingData = {

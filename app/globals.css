@@ -40,7 +40,7 @@
 }
 
 .dateTimePicker-css .ant-picker-input input::placeholder {
-  color: white !important;
+  color: #ccc !important;
 }
 
 .dateTimePicker-css .anticon-calendar {
@@ -129,7 +129,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   list-style-type: decimal;
 }
 
-button.ant-btn:hover {
+button.ant-btn {
   background-color: black !important;
   color: white !important;
+}
+
+.fromContact-Style .ant-form-item-explain-error {
+  padding-left: 10px !important;
 }
