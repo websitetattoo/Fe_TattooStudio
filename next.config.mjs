@@ -6,7 +6,13 @@ const nextConfig = {
   },
   // dùng để nhận được đường dẫn ảnh cloudinary vào thẻ img
   images: {
-    domains: ['res.cloudinary.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '**',
+      },
+    ],
   },
 };
 
