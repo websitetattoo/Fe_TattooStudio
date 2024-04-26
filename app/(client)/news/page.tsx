@@ -52,13 +52,11 @@ export default function index() {
       </div>
       <div className=" -bottom-10 h-full w-full  flex-wrap  justify-start py-24 pt-12 md:flex  md:p-20 lg:flex">
         {news?.map((item: any, index: number) => (
-          <div className="start-0 w-full p-4 py-12 md:w-10/12 lg:w-6/12">
+          <div className="start-0 w-full p-4 py-12 lg:w-6/12">
             <NewsCard key={index} imgObj={item} itemID={item._id} />
           </div>
         ))}
       </div>
-
-      <PaginationComponent propsPage={propsPage} />
     </div>
   );
 }
