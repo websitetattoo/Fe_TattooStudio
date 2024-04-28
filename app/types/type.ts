@@ -134,6 +134,16 @@ export type TypeFormPostFaq = {
   title?: string;
   content?: string;
 };
+
+export type TypeFormPostBooking = {
+  name: string;
+  phone: string;
+  address: string;
+  email: string;
+  schedule: string;
+  artist: string;
+  files: File[] | null;
+};
 // Định nghĩa các type from Post- End add
 
 // Định nghĩa các type from View - Begin add

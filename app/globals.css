@@ -137,3 +137,15 @@ button.ant-btn {
 .fromContact-Style .ant-form-item-explain-error {
   padding-left: 10px !important;
 }
+
+.spinCSS_Style svg.animate-spin {
+  fill: white !important;
+  height: 3rem !important;
+}
+
+.spinCSS_Style {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

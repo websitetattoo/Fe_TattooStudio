@@ -4,21 +4,26 @@ import { useQuery, useQueryClient } from "react-query";
 import { QUERIES_KEYS } from "@/constants/queries";
 // Services
 import { getBookingById } from "@/app/service/apis/booking.api";
+//Types
+import { filterBookingData } from "@/app/types/type";
 
-export const useGetDataBookingById = (id: string) => {
+export const useGetDataBookingById = (
+  id: string,
+  filterData?: filterBookingData,
+) => {
   const queryClient = useQueryClient();
 
   const { data: cachedData, isLoading: isCachedLoading } = useQuery(
-    [QUERIES_KEYS.GET_BOOKING, id],
-    () => queryClient.getQueryData([QUERIES_KEYS.GET_BOOKING, id]),
+    [QUERIES_KEYS.GET_BOOKING, id, filterData],
+    () => queryClient.getQueryData([QUERIES_KEYS.GET_BOOKING, id, filterData]),
     {
       enabled: false,
     },
   );
 
   const { data, isLoading, isError } = useQuery(
-    [QUERIES_KEYS.GET_BOOKING, id],
-    () => getBookingById(id),
+    [QUERIES_KEYS.GET_BOOKING, id, filterData],
+    () => getBookingById(id, filterData),
     {
       keepPreviousData: true,
       staleTime: 5 * 1000,

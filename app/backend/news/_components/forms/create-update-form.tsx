@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
-import { quillFormats, quillModules } from "@/app/backend/ui/react-quiff";
 import CustomFileInput from "@/components/custom-choose-file";
 import { RoundSpinner } from "@/components/ui/spinner";
 //Query
@@ -20,6 +19,7 @@ import { useUpdateNews } from "@/app/query/news/useUpdateNews";
 import { News, TypeFormPostNews } from "@/app/types/type";
 //css
 import "react-quill/dist/quill.snow.css";
+import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
 // Lazy loading Editor when go to News Form to avoid error
 const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -107,7 +107,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
       files: formData.files,
       createdDate: formData.createdDate,
     };
-    console.log(postData);
+
     if (initialData) {
       mutationUpdate.mutate(postData);
       setError({});
