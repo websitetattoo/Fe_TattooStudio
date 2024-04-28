@@ -36,7 +36,6 @@ export const deleteNews = async (id: string) => {
 
 export const createNews = async (data: any) => {
   const { id, ...postData } = data;
-
   const result = await post(pathUrl, postData, configHeader);
   return result.data;
 };

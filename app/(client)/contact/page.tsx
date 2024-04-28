@@ -1,13 +1,16 @@
 "use client";
 //Libaries
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { RoundSpinner } from "@/components/ui/spinner";
 import { Select, DatePicker } from "antd";
 import type { FormProps } from "antd";
 import { Form } from "antd";
 //Query
 import { useGetDataArtist } from "@/app/query/artist/useGetAllArtist";
-import PageTitle from "@/components/page-title";
+import { useCreateBooking } from "@/app/query/booking/useCreateBooking";
+//Type
 import { Artist, Data } from "@/app/types/type";
+import PageTitle from "@/components/page-title";
 
 type convertArtist = {
   value?: string;
@@ -26,8 +29,20 @@ type FieldType = {
   remember?: string;
 };
 
+type FormData = {
+  artist: string;
+  schedule: string;
+  address: string;
+  description: string;
+  email: string;
+  name: string;
+  phone: string;
+  files: File[] | null;
+};
+
 export default function Index() {
   const [formInfo] = Form.useForm();
+  const { mutationCreate, isLoading } = useCreateBooking();
 
   const [schedule, setSchedule] = useState("");
   const [artist, setArtist] = useState("");
@@ -38,6 +53,13 @@ export default function Index() {
   const [description, setDescription] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [artistName, setArtistName] = useState<convertArtist[]>([]);
+
+  const validateMessages = {
+    required: "${label} is required!",
+    types: {
+      email: "${label} is not a valid email!",
+    },
+  };
 
   const filterDataApi = {
     fields: "name",
@@ -74,12 +96,29 @@ export default function Index() {
 
   const handleChangeFilesInput = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedFiles(event.target.files);
-    console.log("event.target.files:", event.target.files);
   };
 
-  const handleSubmit: FormProps<FieldType>["onFinish"] = (values) => {
-    const form = new FormData();
-    console.log("values:", values);
+  const handleSubmit: FormProps<FieldType>["onFinish"] = (values: any) => {
+    let arrImages = [];
+    if (selectedFiles) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        arrImages.push(file);
+      }
+    } else return "Post dữ liệu không thành công";
+
+    const formData: FormData = {
+      artist: values.Artist,
+      schedule: values.Schedule,
+      address: values.address,
+      description: values.description,
+      email: values.email,
+      name: values.name,
+      phone: values.phone,
+      files: arrImages,
+    };
+
+    mutationCreate.mutate(formData);
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -90,7 +129,7 @@ export default function Index() {
   //Các hàm xử lý form - End add
 
   return (
-    <div className="m-auto w-11/12 md:w-9/12 lg:w-9/12">
+    <div className="relative m-auto w-11/12 md:w-9/12 lg:w-9/12">
       <div>
         <PageTitle>
           <div className="m-auto w-10/12">
@@ -109,9 +148,10 @@ export default function Index() {
           onFinish={handleSubmit}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
+          validateMessages={validateMessages}
         >
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="name"
             rules={[{ required: true, message: "Please input your name!" }]}
           >
@@ -130,7 +170,7 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="phone"
             rules={[
               { required: true, message: "Please input your phone number!" },
@@ -151,7 +191,7 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="address"
             rules={[
               { required: true, message: "Please input your phone address!" },
@@ -172,10 +212,11 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="email"
             rules={[
-              { required: true, message: "Please input your phone email!" },
+              { required: true, message: "Please input your Email!" },
+              { type: "email" },
             ]}
           >
             <div className="w-full px-3 lg:w-full">
@@ -184,7 +225,7 @@ export default function Index() {
               </label>
               <input
                 className="mt-1 w-full cursor-pointer border border-tattoo-gray bg-tattoo-color-bg p-2 text-sm text-white"
-                type="text"
+                type="email"
                 placeholder="Ex: test@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -193,7 +234,7 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="Schedule"
             rules={[{ required: true, message: "Please input your Schedule!" }]}
             initialValue={schedule}
@@ -218,7 +259,7 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="Artist"
             rules={[{ required: true, message: "Please input your Artist!" }]}
             initialValue={artist}
@@ -249,7 +290,7 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="description"
             rules={[
               { required: true, message: "Please input your Description!" },
@@ -269,7 +310,7 @@ export default function Index() {
           </Form.Item>
 
           <Form.Item<FieldType>
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             name="file"
             rules={[{ required: true, message: "Please input your image!" }]}
           >
@@ -298,6 +339,11 @@ export default function Index() {
           </Form.Item>
         </Form>
       </div>
+      {isLoading && (
+        <div className="spinCSS_Style flex h-full items-center justify-center text-white">
+          <RoundSpinner className="h-16 w-full" size="md" />
+        </div>
+      )}
     </div>
   );
 }

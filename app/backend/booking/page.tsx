@@ -28,7 +28,7 @@ export default function Index() {
 
   useEffect(() => {
     const databooking = (data as Data)?.data as Booking[];
-    const newBookingData = databooking?.map((item) => {
+    const newBookingData = databooking?.map((item: any) => {
       const dateValue = new Date(item.schedule);
       const schedule = dateValue.toLocaleDateString("en-US", {
         year: "numeric",

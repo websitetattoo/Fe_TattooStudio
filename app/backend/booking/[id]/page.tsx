@@ -12,9 +12,17 @@ import { ViewBooking } from "../_compoments/forms/view";
 export default function Page() {
   const params = useParams();
   const [initialData, setInitialData] = useState<Booking | null>(null);
+  const filterDataApi = {
+    arrType: {
+      artist: "artist",
+    },
+  };
 
   //useQuery
-  const { data: Faq, isLoading } = useGetDataBookingById(params.id.toString());
+  const { data: Faq, isLoading } = useGetDataBookingById(
+    params.id.toString(),
+    filterDataApi,
+  );
 
   const breadcrumbItems = [
     { title: "booking", link: "/backend/booking" },
