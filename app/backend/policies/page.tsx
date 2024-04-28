@@ -27,7 +27,6 @@ export default function Index() {
     setPolicies(dataPolicy);
     setIsLoading(loading);
   }, [data, isLoading]);
-  console.log("data:", data, isLoading);
   //Định nghĩa các hàm xử lý - Begin add
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
