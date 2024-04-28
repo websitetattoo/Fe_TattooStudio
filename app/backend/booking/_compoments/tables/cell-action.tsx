@@ -1,7 +1,7 @@
 "use client";
 //Library
 import Link from "next/link";
-import { Edit, MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal } from "lucide-react";
 //Library UI
 import { Button } from "@/components/ui/button";
 import {
@@ -41,7 +41,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <Link href={`/backend/booking/${data._id}`}>
             <DropdownMenuItem>
-              <Edit className="mr-2 h-4 w-4" /> View
+              <Eye className="mr-2 h-4 w-4" /> View
             </DropdownMenuItem>
           </Link>
         </DropdownMenuContent>
