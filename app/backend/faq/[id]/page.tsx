@@ -26,8 +26,6 @@ export default function Page() {
     setInitialData(data);
   }, [Faq, isLoading]);
 
-  console.log("initialDatđssss:", initialData);
-
   if (initialData) {
     return (
       <div className="flex-1 space-y-4 p-8">

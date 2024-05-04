@@ -142,7 +142,6 @@ export type TypeFormPostArtist = {
   name: string;
   header: string;
   description: string;
-  email: string;
   avatar: UploadFile[] | File[] | null;
   images: UploadFile[] | File[] | null;
   link: string;

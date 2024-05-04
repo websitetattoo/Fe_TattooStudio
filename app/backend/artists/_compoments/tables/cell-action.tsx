@@ -15,6 +15,8 @@ import {
 import { Drawer } from "antd";
 import { Image } from "antd";
 //Query
+import { useDeleteArtist } from "@/app/query/artist/useDeleteArtist";
+//Type
 import { Artist } from "@/app/types/type";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 
@@ -52,14 +54,13 @@ const MemoizedDrawerContent = React.memo(DrawerContent);
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
-  //const { mutationDelete, isLoadingDelete } = useDeleteArtist();
+  const { mutationDelete, isLoadingDelete } = useDeleteArtist();
 
   //Hàm xử lý xoá Artist
-  // const handleDeleteArtist = async () => {
-  //   mutationDelete.mutate(data._id);
-  //   setOpen(false);
-  // };
-  console.log("openDrawer:", openDrawer);
+  const handleDeleteArtist = async () => {
+    mutationDelete.mutate(data._id);
+    setOpen(false);
+  };
 
   const onCloseDrawer = useCallback(() => {
     setOpenDrawer(false);
@@ -67,12 +68,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={handleDeleteArtist}
         loading={isLoadingDelete}
-      /> */}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="link" className="h-8 w-8 p-0">
@@ -85,7 +86,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setOpenDrawer(true)}>
             <Eye className="mr-2 h-4 w-4" /> View
           </DropdownMenuItem>
-          <Link href={`/backend/artist/${data._id}`}>
+          <Link href={`/backend/artists/${data._id}`}>
             <DropdownMenuItem>
               <Edit className="mr-2 h-4 w-4" /> Update
             </DropdownMenuItem>
