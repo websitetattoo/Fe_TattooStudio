@@ -50,7 +50,6 @@ export const getBookingById = async (
 };
 
 export const createBooking = async (data: any) => {
-  console.log("form1:", data);
   const result = await post(pathUrl, data, configHeader);
   return result.data;
 };

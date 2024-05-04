@@ -3,6 +3,10 @@ import { get, post, put, remove } from "@/lib/http";
 
 const pathUrl = "/Artist/";
 
+const configHeader = {
+  headers: { "Content-Type": "multipart/form-data" },
+};
+
 export const getAllArtist = async (filterData?: filterArtistData) => {
   if (!filterData) {
     const result = await get(pathUrl);
@@ -35,8 +39,7 @@ export const deleteArtist = async (id: string) => {
 };
 
 export const createArtist = async (data: any) => {
-  const { id, ...postData } = data;
-  const result = await post(pathUrl, postData);
+  const result = await post(pathUrl, data, configHeader);
   return result.data;
 };
 
