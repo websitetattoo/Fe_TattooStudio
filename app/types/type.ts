@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 // Định nghĩa các type đối tượng - Begin add
 export type Data = {
   total?: number;
@@ -135,10 +137,22 @@ export type TypeFormPostFaq = {
   content?: string;
 };
 
+export type TypeFormPostArtist = {
+  id?: string;
+  name: string;
+  header: string;
+  description: string;
+  email: string;
+  avatar: UploadFile[] | File[] | null;
+  images: UploadFile[] | File[] | null;
+  link: string;
+};
+
 export type TypeFormPostBooking = {
   name: string;
   phone: string;
   address: string;
+  description: string;
   email: string;
   schedule: string;
   artist: string;

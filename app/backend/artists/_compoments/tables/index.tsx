@@ -23,7 +23,7 @@ export const ArtistTables: React.FC<ArtistTablesProps> = ({ data, total }) => {
           title={`Artist (${total})`}
           description="Manage Artist (Client side table functionalities.)"
         />
-        <Link href={`/backend/Artist/create`}>
+        <Link href={`/backend/artists/create`}>
           <Button className=" text-xs md:text-sm">
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Button>

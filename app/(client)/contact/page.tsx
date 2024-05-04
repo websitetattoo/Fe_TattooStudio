@@ -9,7 +9,7 @@ import { Form } from "antd";
 import { useGetDataArtist } from "@/app/query/artist/useGetAllArtist";
 import { useCreateBooking } from "@/app/query/booking/useCreateBooking";
 //Type
-import { Artist, Data } from "@/app/types/type";
+import { Artist, Data, TypeFormPostBooking } from "@/app/types/type";
 import PageTitle from "@/components/page-title";
 
 type convertArtist = {
@@ -29,16 +29,16 @@ type FieldType = {
   remember?: string;
 };
 
-type FormData = {
-  artist: string;
-  schedule: string;
-  address: string;
-  description: string;
-  email: string;
-  name: string;
-  phone: string;
-  files: File[] | null;
-};
+// type FormData = {
+//   artist: string;
+//   schedule: string;
+//   address: string;
+//   description: string;
+//   email: string;
+//   name: string;
+//   phone: string;
+//   files: File[] | null;
+// };
 
 export default function Index() {
   const [formInfo] = Form.useForm();
@@ -107,7 +107,7 @@ export default function Index() {
       }
     } else return "Post dữ liệu không thành công";
 
-    const formData: FormData = {
+    const formData: TypeFormPostBooking = {
       artist: values.Artist,
       schedule: values.Schedule,
       address: values.address,

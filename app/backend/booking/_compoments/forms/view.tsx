@@ -50,7 +50,7 @@ export const ViewBooking: React.FC<ViewFormProps> = ({ initialData }) => {
         address: initialData.address || "",
         email: initialData.email || "",
         schedule: schedule || "",
-        artist: initialData.artist.name || "",
+        artist: initialData.artist?.name || "",
         images: initialData.images,
       });
     }
