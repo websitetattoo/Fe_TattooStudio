@@ -29,7 +29,6 @@ type FieldType = {
   images?: string;
   name?: string;
   header?: string;
-  email: string;
   link?: string;
   description?: string;
   file?: string;
@@ -51,23 +50,9 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
   const [errorImages, setErrorImages] = useState("");
   const [open, setOpen] = useState(false);
 
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    // {
-    //   uid: "-1",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const [images, setImages] = useState<UploadFile[]>([
-    // {
-    //   uid: "-1",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-  ]);
+  const [images, setImages] = useState<UploadFile[]>([]);
 
   //Khởi tạo giá trị ban đầu
   const initialPostFormData: TypeFormPostArtist = {
@@ -75,7 +60,6 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
     name: "",
     header: "",
     description: "",
-    email: "",
     avatar: [],
     images: [],
     link: "",
@@ -94,12 +78,34 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
 
   useEffect(() => {
     if (initialData) {
+      let initialImages: UploadFile[] = [];
+      let initialAvatar: UploadFile[] = [
+        {
+          uid: "-1",
+          name: "avatar.png",
+          status: "done",
+          url: initialData.avatar || "",
+        },
+      ];
+      setFileList(initialAvatar);
+
+      if (initialData.images.length > 0) {
+        for (let i = 0; i < initialData.images.length; i++) {
+          initialImages.push({
+            uid: i.toString(),
+            name: "image.png",
+            status: "done",
+            url: initialData.images[i].url || "",
+          });
+        }
+      }
+      setImages(initialImages);
+
       setFormData({
         id: params?.id.toString(),
         name: initialData.name || "",
         header: initialData.header || "",
         description: initialData.description || "",
-        email: initialData.email || "",
         avatar: initialData.avatar || "",
         link: initialData.link || "",
         images: initialData.images || [],
@@ -194,13 +200,12 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         name: formData.name,
         header: formData.header,
         description: formData.description,
-        email: formData.email,
         avatar: fileList,
         images: images,
         link: formData.link,
       };
 
-      console.log(artistData, "artistData");
+      //console.log(artistData, "artistData");
       mutationCreate.mutate(artistData);
       setFormData(initialPostFormData);
       setFileList([]);
@@ -342,29 +347,6 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
 
         <Form.Item<FieldType>
           className="w-full lg:w-1/2"
-          name="email"
-          rules={[{ required: true, message: "Please input your email!" }]}
-        >
-          <div className="w-full px-3 lg:w-full">
-            <label className="text-base font-medium capitalize ">
-              your email:
-            </label>
-            <input
-              id="email"
-              name="email"
-              className="focus-visible:ring-ring border-input placeholder:text-muted-foreground focus-visible:ring-ring mt-1 w-full cursor-pointer rounded-md border
-              bg-transparent p-2  px-3 py-1 text-sm text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium
-              focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-              type="text"
-              placeholder="Ex: Jessica@gmail.com"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          className="w-full lg:w-1/2"
           name="header"
           rules={[{ required: true, message: "Please input your header!" }]}
         >
@@ -387,7 +369,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         </Form.Item>
 
         <Form.Item<FieldType>
-          className="w-full lg:w-1/2"
+          className="w-full py-3 lg:w-1/2"
           name="link"
           rules={[{ required: true, message: "Please input your link!" }]}
         >
