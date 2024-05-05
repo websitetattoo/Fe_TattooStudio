@@ -157,6 +157,12 @@ export type TypeFormPostBooking = {
   artist: string;
   files: File[] | null;
 };
+
+export type TypeFormPostImage = {
+  id: string;
+  parentId: string;
+  image: UploadFile | File | null;
+};
 // Định nghĩa các type from Post- End add
 
 // Định nghĩa các type from View - Begin add

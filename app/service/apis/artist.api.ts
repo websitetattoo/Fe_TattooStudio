@@ -45,6 +45,6 @@ export const createArtist = async (data: any) => {
 
 export const updateArtist = async (data: any) => {
   const { id, ...orther } = data;
-  const result = await put(`${pathUrl}${id}`, orther);
+  const result = await put(`${pathUrl}${id}`, orther, configHeader);
   return result.data;
 };
