@@ -14,11 +14,13 @@ import ImgCrop from "antd-img-crop";
 //Query
 import { useCreateArtist } from "@/app/query/artist/useCreateArtist";
 // import { useDeleteArtist } from "@/app/query/Artist/useDeleteArtist";
-// import { useUpdateArtist } from "@/app/query/Artist/useUpdateArtist";
+import { useUpdateArtist } from "@/app/query/artist/useUpdateArtist";
 //Types
 import { TypeFormPostArtist } from "@/app/types/type";
 import "react-quill/dist/quill.snow.css";
 import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
+//Lib
+import { uploadImage } from "@/lib/utils";
 
 interface UpdateFormProps {
   initialData: any | null;
@@ -48,11 +50,10 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
   const [error, setError] = useState("");
   const [errorAvatar, setErrorAvatar] = useState("");
   const [errorImages, setErrorImages] = useState("");
-  const [open, setOpen] = useState(false);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
   const [images, setImages] = useState<UploadFile[]>([]);
+  const [removeImage, setRemoveImage] = useState<UploadFile[]>([]);
 
   //Khởi tạo giá trị ban đầu
   const initialPostFormData: TypeFormPostArtist = {
@@ -68,13 +69,11 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
     useState<TypeFormPostArtist>(initialPostFormData);
   const { mutationCreate, isLoading } = useCreateArtist();
   // const { mutationDelete, isLoadingDelete } = useDeleteArtist();
-  // const { mutationUpdate, isLoadingUpdate } = useUpdateArtist();
+  const { mutationUpdate, isLoadingUpdate } = useUpdateArtist();
 
   const title = `${initialData ? "Edit" : "Create"} Artist`;
   const description = `${initialData ? "Edit" : "Add a new"} Artist.`;
   const action = `${initialData ? "Save changes" : "Create"}`;
-
-  // console.log("initialData", initialData);
 
   useEffect(() => {
     if (initialData) {
@@ -92,7 +91,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
       if (initialData.images.length > 0) {
         for (let i = 0; i < initialData.images.length; i++) {
           initialImages.push({
-            uid: i.toString(),
+            uid: initialData.images[i]._id,
             name: "image.png",
             status: "done",
             url: initialData.images[i].url || "",
@@ -109,6 +108,12 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         avatar: initialData.avatar || "",
         link: initialData.link || "",
         images: initialData.images || [],
+      });
+
+      formInfo.setFieldsValue({
+        name: initialData.name || "",
+        header: initialData.header || "",
+        link: initialData.link || "",
       });
     } else {
       setFormData(initialPostFormData);
@@ -146,6 +151,10 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
     imgWindow?.document.write(image.outerHTML);
   };
 
+  const onRemove = (file: UploadFile) => {
+    setRemoveImage((prevImages) => [...prevImages, file]);
+  };
+
   // Hàm xử lý thay đổi trường biểu mẫu
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -165,38 +174,13 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
   };
 
   // Hàm xử lý submit form
-  const handleSubmit: FormProps<FieldType>["onFinish"] = (values: any) => {
-    if (formData.description.trim() === "") {
-      setTimeout(() => {
-        setError("Please input your description!");
-      }, 200);
-    } else {
-      setError("");
-    }
-
-    if (fileList.length === 0) {
-      setTimeout(() => {
-        setErrorAvatar("Please upload your avatar!");
-      }, 200);
-    } else {
-      setErrorAvatar("");
-    }
-
-    if (images.length === 0) {
-      setTimeout(() => {
-        setErrorImages("Please upload your images!");
-      }, 200);
-    } else {
-      setErrorImages("");
-    }
-
-    if (
-      formData.description.trim() !== "" &&
-      fileList.length !== 0 &&
-      images.length !== 0
-    ) {
+  const handleSubmit: FormProps<FieldType>["onFinish"] = async (
+    values: any,
+  ) => {
+    if (initialData) {
       // Định nghĩa data post lên
       const artistData: TypeFormPostArtist = {
+        id: formData.id,
         name: formData.name,
         header: formData.header,
         description: formData.description,
@@ -205,11 +189,75 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         link: formData.link,
       };
 
-      //console.log(artistData, "artistData");
-      mutationCreate.mutate(artistData);
-      setFormData(initialPostFormData);
-      setFileList([]);
-      setImages([]);
+      let newImagesList: UploadFile[] = [];
+      let tmpRemote = 0;
+      //Lặp qua và đẩy avatar lên cloud trc khi update
+      for (const file of images) {
+        if (file.url) {
+          newImagesList.push(file);
+        } else {
+          const dataFile = {
+            id: removeImage[tmpRemote].uid,
+            parentId: formData.id,
+          };
+          const fileListCloud = await uploadImage(dataFile, file);
+          newImagesList.push(fileListCloud);
+          tmpRemote++;
+        }
+      }
+      //console.log(newImagesList);
+      //Gán lại giá trị các ảnh kèm theo khi update
+      if (newImagesList.length > 0) {
+        artistData.images = newImagesList;
+      }
+      //Xử lý update
+      mutationUpdate.mutate(artistData);
+    } else {
+      if (formData.description.trim() === "") {
+        setTimeout(() => {
+          setError("Please input your description!");
+        }, 200);
+      } else {
+        setError("");
+      }
+
+      if (fileList.length === 0) {
+        setTimeout(() => {
+          setErrorAvatar("Please upload your avatar!");
+        }, 200);
+      } else {
+        setErrorAvatar("");
+      }
+
+      if (images.length === 0) {
+        setTimeout(() => {
+          setErrorImages("Please upload your images!");
+        }, 200);
+      } else {
+        setErrorImages("");
+      }
+
+      if (
+        formData.description.trim() !== "" &&
+        fileList.length !== 0 &&
+        images.length !== 0
+      ) {
+        // Định nghĩa data post lên
+        const artistData: TypeFormPostArtist = {
+          name: formData.name,
+          header: formData.header,
+          description: formData.description,
+          avatar: fileList,
+          images: images,
+          link: formData.link,
+        };
+
+        //console.log(artistData, "artistData");
+        mutationCreate.mutate(artistData);
+        setFormData(initialPostFormData);
+        setFileList([]);
+        setImages([]);
+      }
     }
   };
 
@@ -310,6 +358,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
                 fileList={images}
                 onChange={onChangeImages}
                 onPreview={onPreview}
+                onRemove={onRemove}
               >
                 {images.length < 20 && "+ Upload"}
               </Upload>
