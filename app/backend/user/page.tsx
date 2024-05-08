@@ -6,6 +6,7 @@ import { useGetDataUser } from "@/app/query/user/useGetUser";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, User } from "@/app/types/type";
 import { UsersTables } from "./_components/tables";
+import { DialogCloseButton } from "@/components/changePassword";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "User", link: "/backend/user" }];
@@ -24,6 +25,7 @@ export default function Index() {
       {!loading && Array.isArray(user) ? (
         <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
           <BreadCrumb items={breadcrumbItems} />
+          <DialogCloseButton />
           <UsersTables data={user} />
         </div>
       ) : (

@@ -59,10 +59,4 @@ export const navItems: NavItem[] = [
     icon: "booking",
     label: "booking",
   },
-  {
-    title: "Logout",
-    href: "/",
-    icon: "login",
-    label: "login",
-  },
 ];

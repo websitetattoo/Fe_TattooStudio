@@ -37,6 +37,7 @@ export type User = {
   email: string;
   instagram: string;
   facebook: string;
+  password: string;
 };
 
 export type Artist = {
@@ -123,6 +124,7 @@ export type TypeFormUpdateUser = {
   email: string;
   instagram: string;
   facebook: string;
+  password: string;
 };
 
 export type TypeFormPostTattooCare = {

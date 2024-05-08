@@ -32,6 +32,7 @@ import {
   Columns4,
   FileSliders,
   CalendarCheck,
+  LogOut,
 } from "lucide-react";
 
 export const Icons = {
@@ -68,6 +69,7 @@ export const Icons = {
   Faq: NotebookText,
   news: BookOpenText,
   booking: CalendarCheck,
+  logout: LogOut,
 };
 
 import { FC } from "react";
