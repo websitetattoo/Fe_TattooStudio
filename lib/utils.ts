@@ -11,12 +11,13 @@ export function cn(...inputs: ClassValue[]) {
 //Hàm xử lý đầy ảnh lên cloudinary và trả về đường dẫn
 export const uploadImage = async (data: any, image: UploadFile) => {
   try {
-    const { id, parentId } = data;
+    const { id, parentId, status } = data;
     const url = process.env.NEXT_PUBLIC_API_ENDPOINT;
     const uploadImageUrl = `${url}/Images`;
     const formData: TypeFormPostImage = {
       id,
       parentId,
+      status,
       image,
     };
 
