@@ -163,6 +163,7 @@ export type TypeFormPostBooking = {
 export type TypeFormPostImage = {
   id: string;
   parentId: string;
+  status: number;
   image: UploadFile | File | null;
 };
 // Định nghĩa các type from Post- End add
@@ -185,3 +186,16 @@ export type PopulateBooking = {
   artist: string;
 };
 // Định nghĩa các type Populate - End add
+
+// Định nghĩa các type Props - Begin add
+export type PropsArtist = {
+  _id?: string;
+  name?: string;
+  header?: string;
+  description?: string;
+  avatar?: string | any;
+  images?: string[] | any;
+  link: string;
+  url?: string | any;
+};
+// Định nghĩa các type Props - End add

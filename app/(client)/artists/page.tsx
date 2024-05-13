@@ -1,38 +1,26 @@
 "use client";
 //Libaries
 import Link from "next/link";
+import { useEffect, useState } from "react";
 //Components
 import PageTitle from "@/components/page-title";
 import ArtistCard from "./_components/artist-card";
 import ButtonAppointment from "@/components/button-appointment";
+//Query
+import { useGetDataArtist } from "@/app/query/artist/useGetAllArtist";
+//Types
+import { Artist, Data } from "@/app/types/type";
 
 export default function index() {
-  const imgArr = [
-    {
-      id: 1,
-      url: "/images/tattootImg.png",
-      name: "Jessica lauren",
-      work: " Tattoo Artists",
-    },
-    {
-      id: 2,
-      url: "/images/tattootImg.png",
-      name: "Jessica lauren",
-      work: " Tattoo Artists",
-    },
-    {
-      id: 3,
-      url: "/images/tattootImg.png",
-      name: "Jessica lauren",
-      work: " Tattoo Artists",
-    },
-    {
-      id: 4,
-      url: "/images/tattootImg.png",
-      name: "Jessica lauren",
-      work: " Tattoo Artists",
-    },
-  ];
+  const { data, isLoading: loading } = useGetDataArtist();
+  const [Artist, setArtist] = useState<Artist[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const dataArtist = (data as Data)?.data as Artist[];
+    setArtist(dataArtist);
+    setIsLoading(loading);
+  }, [data, isLoading]);
 
   return (
     <>
@@ -63,9 +51,9 @@ export default function index() {
 
           <div className="mt-12">
             <div className="md:flex lg:flex">
-              {imgArr?.map((item, index) => (
+              {Artist?.map((item, index) => (
                 <div key={index} className="w-full md:w-1/4 lg:w-1/4">
-                  <Link href={`/artists/${item.id}`}>
+                  <Link href={`/artists/${item._id}`}>
                     <ArtistCard imgObj={item} disabled={true} />
                   </Link>
                 </div>

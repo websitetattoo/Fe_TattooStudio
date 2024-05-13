@@ -2,14 +2,8 @@
 import { useState } from "react";
 //Components
 import { InstagramIcon } from "@/components/forms/icons";
-
-type ArtistInfoProps = {
-  id: number;
-  name: string;
-  work: string;
-  description: string;
-  label: string;
-};
+//Types
+import { PropsArtist } from "@/app/types/type";
 
 interface SocialProps {
   icon: any;
@@ -20,7 +14,7 @@ interface SocialProps {
 export default function ArtistInfo({
   employeeObj,
 }: {
-  employeeObj: ArtistInfoProps;
+  employeeObj: PropsArtist | null;
 }) {
   const [social] = useState<SocialProps>({
     icon: InstagramIcon,
@@ -41,7 +35,7 @@ export default function ArtistInfo({
               className="mx-4 mb-2 hidden w-14 bg-white lg:inline-block"
             ></span>
             <span className="block text-center text-lg font-bold capitalize text-tattoo-highlight md:text-2xl lg:inline lg:text-right lg:text-3xl">
-              {employeeObj.work}
+              {employeeObj.header}
             </span>
           </div>
           <div className="mt-4">
@@ -57,7 +51,7 @@ export default function ArtistInfo({
                 </span>
                 <div>
                   <span className="ml-3 text-tattoo-gray  md:ml-3 lg:ml-3 lg:text-lg">
-                    {employeeObj.label}
+                    {employeeObj.link}
                   </span>
                 </div>
               </div>

@@ -22,17 +22,21 @@ export const columns = (): ColumnDef<Artist>[] => [
   {
     accessorKey: "avatar",
     header: "AVATAR",
-    cell: ({ row }) => (
-      <div className=" w-40 md:w-[300px]">
-        <Image
-          width={700}
-          height={700}
-          className="h-20 align-middle md:h-[200px] md:object-cover lg:object-center"
-          src={row.original.avatar}
-          alt="File"
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+      console.log("row", row);
+
+      return (
+        <div className=" w-40 md:w-[300px]">
+          <Image
+            width={700}
+            height={700}
+            className="h-20 align-middle md:h-[200px] md:object-cover lg:object-center"
+            src={row.original.avatar}
+            alt="File"
+          />
+        </div>
+      );
+    },
   },
   {
     accessorKey: "link",

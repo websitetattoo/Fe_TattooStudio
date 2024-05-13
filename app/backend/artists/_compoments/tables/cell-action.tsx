@@ -66,6 +66,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     setOpenDrawer(false);
   }, []);
 
+  console.log("openDrawer:", openDrawer)
+
   return (
     <>
       <AlertModal

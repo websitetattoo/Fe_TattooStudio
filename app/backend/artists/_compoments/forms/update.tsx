@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Trash } from "lucide-react";
+import { Heading } from "@/components/ui/heading";
+import { Button } from "@/components/ui/button";
 //Library UI
 import { Form } from "antd";
 import type { FormProps } from "antd";
@@ -13,7 +15,7 @@ import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
 //Query
 import { useCreateArtist } from "@/app/query/artist/useCreateArtist";
-// import { useDeleteArtist } from "@/app/query/Artist/useDeleteArtist";
+import { useDeleteArtist } from "@/app/query/artist/useDeleteArtist";
 import { useUpdateArtist } from "@/app/query/artist/useUpdateArtist";
 //Types
 import { TypeFormPostArtist } from "@/app/types/type";
@@ -47,6 +49,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
 }) => {
   const [formInfo] = Form.useForm();
   const params = useParams();
+  const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [errorAvatar, setErrorAvatar] = useState("");
   const [errorImages, setErrorImages] = useState("");
@@ -68,7 +71,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
   const [formData, setFormData] =
     useState<TypeFormPostArtist>(initialPostFormData);
   const { mutationCreate, isLoading } = useCreateArtist();
-  // const { mutationDelete, isLoadingDelete } = useDeleteArtist();
+  const { mutationDelete, isLoadingDelete } = useDeleteArtist();
   const { mutationUpdate, isLoadingUpdate } = useUpdateArtist();
 
   const title = `${initialData ? "Edit" : "Create"} Artist`;
@@ -77,6 +80,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
 
   useEffect(() => {
     if (initialData) {
+      console.log("initialData:", initialData);
       let initialImages: UploadFile[] = [];
       let initialAvatar: UploadFile[] = [
         {
@@ -188,28 +192,51 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         images: images,
         link: formData.link,
       };
-
-      let newImagesList: UploadFile[] = [];
-      let tmpRemote = 0;
-      //Lặp qua và đẩy avatar lên cloud trc khi update
-      for (const file of images) {
-        if (file.url) {
-          newImagesList.push(file);
-        } else {
-          const dataFile = {
-            id: removeImage[tmpRemote].uid,
-            parentId: formData.id,
-          };
-          const fileListCloud = await uploadImage(dataFile, file);
-          newImagesList.push(fileListCloud);
-          tmpRemote++;
+      //console.log("removeImage:", removeImage);
+      if (removeImage.length > 0) {
+        let newImagesList: any[] = [];
+        let tmpRemote = 0;
+        //Lặp qua và đẩy avatar lên cloud trước khi update
+        for (const file of images) {
+          if (file.url) {
+            newImagesList.push(file.url);
+          } else {
+            const dataFile = {
+              id: removeImage[tmpRemote].uid,
+              parentId: formData.id,
+              status: 0,
+            };
+            //console.log("dataFile:", dataFile);
+            const fileListCloud = await uploadImage(dataFile, file);
+            newImagesList.push(fileListCloud);
+            tmpRemote++;
+          }
+        }
+        //Gán lại giá trị các ảnh kèm theo khi update
+        if (newImagesList.length > 0) {
+          artistData.images = newImagesList;
+        }
+      } else {
+        let newImagesList: any[] = [];
+        for (const file of images) {
+          if (file.url) {
+            newImagesList.push(file.url);
+          } else {
+            const dataFile = {
+              id: file.uid,
+              parentId: formData.id,
+              status: 1,
+            };
+            const fileListCloud = await uploadImage(dataFile, file);
+            newImagesList.push(fileListCloud);
+          }
+        }
+        if (newImagesList.length > 0) {
+          artistData.images = newImagesList;
         }
       }
-      //console.log(newImagesList);
-      //Gán lại giá trị các ảnh kèm theo khi update
-      if (newImagesList.length > 0) {
-        artistData.images = newImagesList;
-      }
+
+      //console.log("artistData:", artistData);
       //Xử lý update
       mutationUpdate.mutate(artistData);
     } else {
@@ -252,7 +279,6 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
           link: formData.link,
         };
 
-        //console.log(artistData, "artistData");
         mutationCreate.mutate(artistData);
         setFormData(initialPostFormData);
         setFileList([]);
@@ -261,14 +287,14 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
     }
   };
 
-  // const onDelete = async () => {
-  //   try {
-  //     mutationDelete.mutate(params?.id.toString());
-  //   } catch (error: any) {
-  //   } finally {
-  //     setOpen(isLoadingDelete);
-  //   }
-  // };
+  const onDelete = async () => {
+    try {
+      mutationDelete.mutate(params?.id.toString());
+    } catch (error: any) {
+    } finally {
+      setOpen(isLoadingDelete);
+    }
+  };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
     errorInfo,
@@ -302,12 +328,25 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
         loading={isLoadingDelete}
-      /> */}
+      />
+      <div className="flex items-center justify-between">
+        <Heading title={title} description={description} />
+        {initialData && (
+          <Button
+            disabled={isLoadingDelete}
+            variant="destructive"
+            size="sm"
+            onClick={() => setOpen(true)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
       <Form
         className="fromContact-Style flex w-full flex-wrap"
         name="basic"

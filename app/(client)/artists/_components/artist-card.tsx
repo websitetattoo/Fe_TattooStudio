@@ -7,20 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-type ArtistCardProps = {
-  id: number;
-  url: string;
-  name?: string;
-  work?: string;
-  disabled?: boolean;
-};
+//Types
+import { PropsArtist } from "@/app/types/type";
 
 export default function ArtistCard({
   imgObj,
   disabled,
 }: {
-  imgObj: ArtistCardProps;
+  imgObj: PropsArtist;
   disabled?: boolean;
 }) {
   return (
@@ -29,7 +23,7 @@ export default function ArtistCard({
         <CardContent className="p-2">
           <div className="relative w-full overflow-hidden">
             <Image
-              src={imgObj.url}
+              src={imgObj.avatar ? imgObj.avatar : imgObj.url}
               width={300}
               height={300}
               alt="Tattoo Image"
@@ -46,7 +40,7 @@ export default function ArtistCard({
               style={{ marginTop: "0px" }}
               className="block text-base md:text-sm lg:text-base"
             >
-              {imgObj.work}
+              {imgObj.header}
             </CardDescription>
           </CardHeader>
         )}
