@@ -2,12 +2,11 @@
 import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { get } from "@/lib/http";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, News } from "@/app/types/type";
 import { NewsTables } from "./_components/tables";
 import { useGetDataNews } from "@/app/query/news/useGetAllNews";
-import { PaginationComponent } from "../../../components/pagination";
+import { PaginationComponent } from "../Comon/pagination";
 
 const breadcrumbItems = [{ title: "News", link: "/backend/news" }];
 

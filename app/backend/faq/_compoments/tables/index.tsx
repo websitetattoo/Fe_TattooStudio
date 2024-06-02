@@ -8,7 +8,7 @@ import { Heading } from "@/components/ui/heading";
 
 import { columns } from "./columns";
 import { Faq } from "@/app/types/type";
-import { DataTable } from "@/app/backend/UI/data-table";
+import { DataTable } from "@/app/backend/Comon/data-table";
 
 interface faqTablesProps {
   data: Faq[];

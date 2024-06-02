@@ -15,7 +15,7 @@ export const useGetDataArtist = (filterDataApi?: filterArtistData) => {
       () => getAllArtist(),
       {
         keepPreviousData: true,
-        staleTime: 5 * 1000,
+        staleTime: 5 * 10000,
       },
     );
     return { data, isLoading };

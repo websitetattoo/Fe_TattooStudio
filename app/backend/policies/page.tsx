@@ -7,7 +7,7 @@ import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
 import { PoliciesTables } from "./_components/tables";
 
 import { RoundSpinner } from "@/components/ui/spinner";
-import { PaginationComponent } from "../../../components/pagination";
+import { PaginationComponent } from "../Comon/pagination";
 import { Data, Policies } from "@/app/types/type";
 
 export default function Index() {

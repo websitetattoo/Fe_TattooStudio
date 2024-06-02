@@ -79,7 +79,9 @@ export default function index() {
               </PageTitle>
             </div>
             <div className="flex justify-center pb-8">
-              <ButtonAppointment>book an appointment</ButtonAppointment>
+              <Link href={"/contact"}>
+                <ButtonAppointment>book an appointment</ButtonAppointment>
+              </Link>
             </div>
           </div>
         </div>

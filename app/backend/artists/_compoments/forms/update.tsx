@@ -20,7 +20,7 @@ import { useUpdateArtist } from "@/app/query/artist/useUpdateArtist";
 //Types
 import { TypeFormPostArtist } from "@/app/types/type";
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
 //Lib
 import { uploadImage } from "@/lib/utils";
 
@@ -192,7 +192,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         images: images,
         link: formData.link,
       };
-      //console.log("removeImage:", removeImage);
+
       if (removeImage.length > 0) {
         let newImagesList: any[] = [];
         let tmpRemote = 0;
@@ -206,7 +206,6 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
               parentId: formData.id,
               status: 0,
             };
-            //console.log("dataFile:", dataFile);
             const fileListCloud = await uploadImage(dataFile, file);
             newImagesList.push(fileListCloud);
             tmpRemote++;

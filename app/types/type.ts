@@ -46,7 +46,7 @@ export type Artist = {
   header: string;
   description: string;
   avatar: string;
-  images: string[];
+  images: string[] | any;
   link: string;
 };
 

@@ -19,7 +19,7 @@ import { useUpdateNews } from "@/app/query/news/useUpdateNews";
 import { News, TypeFormPostNews } from "@/app/types/type";
 //css
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
 // Lazy loading Editor when go to News Form to avoid error
 const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 

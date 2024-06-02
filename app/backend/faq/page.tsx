@@ -8,7 +8,7 @@ import { useGetDataFaq } from "@/app/query/faq/useGetAllFaq";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, Faq } from "@/app/types/type";
 import { FaqTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/components/pagination";
+import { PaginationComponent } from "@/app/backend/Comon/pagination";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Faq", link: "/backend/faq" }];

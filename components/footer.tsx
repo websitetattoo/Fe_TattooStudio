@@ -79,7 +79,7 @@ export default function Footer() {
                 Daily open:9:00 - 20:00
               </div>
               <Link href={"/contact"}>
-                <button className="flex w-full justify-around bg-tattoo-highlight p-3">
+                <button className="flex w-full justify-around bg-tattoo-highlight p-3 duration-200 ease-in hover:opacity-50">
                   <CalendarMinus2 className="text-white" />
                   <span className="pl-1 font-bold">BOOK NOW</span>
                 </button>

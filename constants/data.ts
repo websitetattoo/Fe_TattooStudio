@@ -11,15 +11,15 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/backend",
-    icon: "dashboard",
-    label: "Dashboard",
-  },
+  // {
+  //   title: "Dashboard",
+  //   href: "/backend",
+  //   icon: "dashboard",
+  //   label: "Dashboard",
+  // },
   {
     title: "User",
-    href: "/backend/user",
+    href: "/backend",
     icon: "user",
     label: "user",
   },

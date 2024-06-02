@@ -21,7 +21,7 @@ import { useDeletePolicy } from "@/app/query/policies/useDeletePolicy";
 import { useUpdatePolicy } from "@/app/query/policies/useUpdatePolicy";
 //Types
 import { TypeFormPostPolicy } from "@/app/types/type";
-import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
 
 interface UpdateFormProps {
   initialData: any | null;

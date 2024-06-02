@@ -20,7 +20,7 @@ export function DialogCloseButton() {
       <DialogTrigger asChild>
         <Button variant="outline">Change password</Button>
       </DialogTrigger>
-      <DialogContent className="bg-red-400 sm:max-w-md">
+      <DialogContent className="bg-white sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Change your admin password</DialogTitle>
         </DialogHeader>
