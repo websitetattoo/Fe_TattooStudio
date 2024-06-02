@@ -8,7 +8,7 @@ import { useGetDataTatooCare } from "@/app/query/tattoo-care/useGetAllTattooCare
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, Tattoocare } from "@/app/types/type";
 import { TatooCareTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/components/pagination";
+import { PaginationComponent } from "@/app/backend/Comon/pagination";
 
 export default function Index() {
   const breadcrumbItems = [

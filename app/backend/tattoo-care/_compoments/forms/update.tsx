@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/UI/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
 //Query
 import { useUpdateTattooCare } from "@/app/query/tattoo-care/useUpdateTattooCare";
 import { useDeleteTattooCare } from "@/app/query/tattoo-care/useDeleteTattooCare";

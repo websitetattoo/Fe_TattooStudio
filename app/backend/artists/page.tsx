@@ -8,7 +8,7 @@ import BreadCrumb from "@/components/breadcrumb";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, Artist } from "@/app/types/type";
 import { ArtistTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/components/pagination";
+import { PaginationComponent } from "@/app/backend/Comon/pagination";
 import { useGetDataArtist } from "@/app/query/artist/useGetAllArtist";
 
 export default function Index() {

@@ -29,17 +29,6 @@ type FieldType = {
   remember?: string;
 };
 
-// type FormData = {
-//   artist: string;
-//   schedule: string;
-//   address: string;
-//   description: string;
-//   email: string;
-//   name: string;
-//   phone: string;
-//   files: File[] | null;
-// };
-
 export default function Index() {
   const [formInfo] = Form.useForm();
   const { mutationCreate, isLoading } = useCreateBooking();

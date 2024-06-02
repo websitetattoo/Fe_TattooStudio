@@ -7,41 +7,17 @@ import PageTitle from "@/components/page-title";
 import NewsCard from "./_components/news-card";
 import { Data, News } from "@/app/types/type";
 import { useGetDataNews } from "@/app/query/news/useGetAllNews";
-import { PaginationComponent } from "@/components/pagination";
+import { PaginationComponent } from "@/app/backend/Comon/pagination";
 
 export default function index() {
   const [news, setNews] = useState<News[]>([]);
+  const filterDataApi = {};
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
-  const filterDataApi = {
-    page: currentPage,
-    pageSize: currentPageSize,
-  };
   const { data, isLoading: loading } = useGetDataNews(filterDataApi);
   useEffect(() => {
     const dataNews = (data as Data)?.data as News[];
     setNews(dataNews);
   }, [data]);
-
-  //Định nghĩa các hàm xử lý - Begin add
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handlePageChangeSize = (pageSize: number) => {
-    setCurrentPageSize(pageSize);
-    setCurrentPage(1);
-  };
-  //Định nghĩa các hàm xử lý - End add
-
-  const propsPage = {
-    pageSize: currentPageSize,
-    total: (data as Data)?.total ?? 0,
-    onPageChange: handlePageChange,
-    onPageSizeChange: handlePageChangeSize,
-    className: "text-white",
-  };
 
   return (
     <div className="bg-tattoo-color-bg bg-transparent">

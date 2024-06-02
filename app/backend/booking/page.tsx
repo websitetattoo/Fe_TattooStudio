@@ -9,7 +9,7 @@ import { useGetDataBooking } from "@/app/query/booking/useGetAllBooking";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Booking, Data } from "@/app/types/type";
 import { BookingTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/components/pagination";
+import { PaginationComponent } from "@/app/backend/Comon/pagination";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Booking", link: "/backend/booking" }];
