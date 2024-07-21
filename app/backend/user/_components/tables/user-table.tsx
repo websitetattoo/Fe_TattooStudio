@@ -38,16 +38,6 @@ export function DataTable<TData, TValue>({
   });
   return (
     <>
-      {/* UI nút search*/}
-      <Input
-        placeholder={`Search ${searchKey}...`}
-        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) => {
-          table.getColumn(searchKey)?.setFilterValue(event.target.value);
-        }}
-        className="w-full md:max-w-sm"
-      />
-
       {/* UI bảng table chứa dữ liệu*/}
       <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
         <Table className="relative">

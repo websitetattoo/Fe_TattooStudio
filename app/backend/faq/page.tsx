@@ -8,14 +8,14 @@ import { useGetDataFaq } from "@/app/query/faq/useGetAllFaq";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, Faq } from "@/app/types/type";
 import { FaqTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/app/backend/Comon/pagination";
+import { PaginationComponent } from "@/app/backend/Common/pagination";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Faq", link: "/backend/faq" }];
   const [faq, setfaq] = useState<Faq[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
+  const [currentPageSize, setCurrentPageSize] = useState(25);
   const filterDataApi = {
     page: currentPage,
     pageSize: currentPageSize,

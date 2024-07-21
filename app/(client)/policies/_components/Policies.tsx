@@ -13,7 +13,6 @@ export default function Policies({ obj }: { obj: PolicyItem }) {
     .split(/<\/?(?:p|li|ul|br|ol)[^>]*>/)
     .filter((line) => line.trim() !== "");
 
-  console.log(obj);
   return (
     <>
       <div className="w-full pb-14">

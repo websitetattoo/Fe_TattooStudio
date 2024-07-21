@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Trash } from "lucide-react";
 //Library UI
 import { Button } from "@/components/ui/button";
+import { Button as ButtonAnt } from "antd";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
@@ -19,7 +20,7 @@ import { useUpdateNews } from "@/app/query/news/useUpdateNews";
 import { News, TypeFormPostNews } from "@/app/types/type";
 //css
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Common/react-quiff";
 // Lazy loading Editor when go to News Form to avoid error
 const QuillEditor = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -177,110 +178,106 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
 
   return (
     <main>
-      {!isLoadingUpdate && !isLoading ? (
-        <div>
-          <AlertModal
-            isOpen={open}
-            onClose={() => setOpen(false)}
-            onConfirm={onDelete}
-            loading={isLoadingDelete}
-          />
-          <div className="flex items-center justify-between">
-            <div className="mb-10">
-              <Heading title={title} description={description} />
-            </div>
-            {initialData && (
-              <Button
-                disabled={isLoadingDelete}
-                variant="destructive"
-                size="sm"
-                onClick={() => setOpen(true)}
-              >
-                <Trash className="h-4 w-4" />
-              </Button>
-            )}
+      <div>
+        <AlertModal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          onConfirm={onDelete}
+          loading={isLoadingDelete}
+        />
+        <div className="flex items-center justify-between">
+          <div className="mb-10">
+            <Heading title={title} description={description} />
           </div>
-          <Separator />
-          <form onSubmit={handleSubmit} className="w-full space-y-8">
-            <div className="gap-y-4 md:grid md:grid-cols-1">
-              {error && error.files && (
-                <div className="grid w-full">
-                  <div className="text-red-500">{error.files}</div>
-                </div>
-              )}
-              <div className="grid md:grid-cols-8">
-                <label htmlFor="file" className="col-span-1 pr-2">
-                  Image:
-                </label>
-                <CustomFileInput
-                  imageUrl={imageUrl}
-                  onFileChange={handleFileChange}
-                  error={error.files}
-                  onSuccess={() => {
-                    setImageUrl(null);
-                  }}
-                />
+          {initialData && (
+            <Button
+              disabled={isLoadingDelete}
+              variant="destructive"
+              size="sm"
+              onClick={() => setOpen(true)}
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+        <Separator />
+        <form onSubmit={handleSubmit} className="w-full space-y-8">
+          <div className="gap-y-4 md:grid md:grid-cols-1">
+            {error && error.files && (
+              <div className="grid w-full">
+                <div className="text-red-500">{error.files}</div>
               </div>
-              {error && error.title && (
-                <div className="grid w-full">
-                  <div className="text-red-500">{error.title}</div>
-                </div>
-              )}
-              <div className="grid md:grid-cols-8">
-                <label htmlFor="title" className="col-span-1 pr-2">
-                  Title:
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  className="border-input placeholder:text-muted-foreground focus-visible:ring-ring :font-medium col-span-7 rounded-md border bg-transparent 
+            )}
+            <div className="grid md:grid-cols-8">
+              <label htmlFor="file" className="col-span-1 pr-2">
+                Image:
+              </label>
+              <CustomFileInput
+                imageUrl={imageUrl}
+                onFileChange={handleFileChange}
+                error={error.files}
+                onSuccess={() => {
+                  setImageUrl(null);
+                }}
+              />
+            </div>
+            {error && error.title && (
+              <div className="grid w-full">
+                <div className="text-red-500">{error.title}</div>
+              </div>
+            )}
+            <div className="grid md:grid-cols-8">
+              <label htmlFor="title" className="col-span-1 pr-2">
+                Title:
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                className="border-input placeholder:text-muted-foreground focus-visible:ring-ring :font-medium col-span-7 rounded-md border bg-transparent 
               px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm focus-visible:outline-none 
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={isLoading}
-                  placeholder="Title News"
-                />
-                <div className="FormMessage"></div>
-              </div>
-              {error && error.subtitle && (
-                <div className="grid w-full">
-                  <div className="text-red-500">{error.subtitle}</div>
-                </div>
-              )}
-
-              {error && error.content && (
-                <div className="grid w-full">
-                  <div className="text-red-500">{error.content}</div>
-                </div>
-              )}
-              <div className="">
-                <div className="mb-4">
-                  <label htmlFor="content">Content:</label>
-                </div>
-                <QuillEditor
-                  className="mb-4"
-                  value={formData.content}
-                  onChange={onEditorStateChange}
-                  modules={quillModules}
-                  formats={quillFormats}
-                />
-                <Button
-                  className="ml-auto rounded-md bg-black px-4 py-2 text-white"
-                  type="submit"
-                >
-                  {action}
-                </Button>
-              </div>
+                disabled={isLoading}
+                placeholder="Title News"
+              />
+              <div className="FormMessage"></div>
             </div>
-          </form>
-        </div>
-      ) : (
-        <div className="flex h-full min-h-96 items-center justify-center ">
-          <RoundSpinner className="h-16 w-full" size="xl" />
-        </div>
-      )}
+            {error && error.subtitle && (
+              <div className="grid w-full">
+                <div className="text-red-500">{error.subtitle}</div>
+              </div>
+            )}
+
+            {error && error.content && (
+              <div className="grid w-full">
+                <div className="text-red-500">{error.content}</div>
+              </div>
+            )}
+            <div className="">
+              <div className="mb-4">
+                <label htmlFor="content">Content:</label>
+              </div>
+              <QuillEditor
+                className="mb-4"
+                value={formData.content}
+                onChange={onEditorStateChange}
+                modules={quillModules}
+                formats={quillFormats}
+              />
+              <ButtonAnt
+                className="ml-0 flex items-center justify-center rounded-md bg-black px-4 py-2 text-white"
+                type="primary"
+                htmlType="submit"
+                loading={isLoadingUpdate}
+              >
+                {action}
+              </ButtonAnt>
+            </div>
+          </div>
+        </form>
+      </div>
     </main>
   );
 };

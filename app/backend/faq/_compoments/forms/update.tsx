@@ -6,11 +6,12 @@ import dynamic from "next/dynamic";
 import { Trash } from "lucide-react";
 //Library UI
 import { Button } from "@/components/ui/button";
+import { Button as ButtonAnt } from "antd";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Common/react-quiff";
 //Query
 import { useCreateFaq } from "@/app/query/faq/useCreateFaq";
 import { useDeleteFaq } from "@/app/query/faq/useDeleteFaq";
@@ -43,8 +44,6 @@ export const UpdateFormFaq: React.FC<UpdateFormProps> = ({ initialData }) => {
   const title = `${initialData ? "Edit" : "Create"} Faq`;
   const description = `${initialData ? "Edit" : "Add a new"} Faq.`;
   const action = `${initialData ? "Save changes" : "Create"}`;
-
-  console.log("initialData", initialData);
 
   useEffect(() => {
     if (initialData) {
@@ -197,12 +196,15 @@ export const UpdateFormFaq: React.FC<UpdateFormProps> = ({ initialData }) => {
               modules={quillModules}
               formats={quillFormats}
             />
-            <Button
-              className="ml-auto rounded-md bg-black px-4 py-2 text-white"
-              type="submit"
+
+            <ButtonAnt
+              className="ml-0 flex items-center justify-center rounded-md bg-black px-4 py-2 text-white"
+              type="primary"
+              htmlType="submit"
+              loading={isLoadingUpdate}
             >
               {action}
-            </Button>
+            </ButtonAnt>
           </div>
         </div>
       </form>

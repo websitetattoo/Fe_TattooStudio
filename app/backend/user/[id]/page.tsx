@@ -1,22 +1,18 @@
 "use client";
 //Libaries
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 //Query
+import { useGetDataUser } from "@/app/query/user/useGetUser";
 //Type
 import BreadCrumb from "@/components/breadcrumb";
 import { UpdateUser } from "../_components/forms/update";
 import { User } from "@/app/types/type";
-import { useGetDataUserById } from "@/app/query/user/useGetUserById";
-import { useGetDataUser } from "@/app/query/user/useGetUser";
 
 export default function Page() {
-  const params = useParams();
   const [initialData, setInitialData] = useState<User[] | null>(null);
 
   //useQuery
   const { data, isLoading } = useGetDataUser();
-  console.log(data, isLoading);
   const breadcrumbItems = [
     { title: "User", link: "/backend/user" },
     { title: "Update", link: "#" },

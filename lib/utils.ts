@@ -32,3 +32,10 @@ export const uploadImage = async (data: any, image: UploadFile) => {
     throw error;
   }
 };
+
+//Hàm chuyển đổi văn bản có chứa mã html => chuỗi thuần túy
+export const stripHtmlTags = (html: string) => {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};

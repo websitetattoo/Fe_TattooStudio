@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { columns } from "./columns";
 import { News } from "@/app/types/type";
-import { DataTable } from "@/app/backend/Comon/data-table";
+import { DataTable } from "@/app/backend/Common/data-table";
 
 //Interface Policies
 interface NewsClientProps {

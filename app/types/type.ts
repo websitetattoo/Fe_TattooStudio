@@ -179,6 +179,16 @@ export type TypeFormViewBooking = {
   artist?: string;
   images?: string[];
 };
+
+export type TypeFormViewArtist = {
+  id: string;
+  name?: string;
+  header?: string;
+  description?: string;
+  link?: string;
+  avatar?: string;
+  images?: string[];
+};
 // Định nghĩa các type from View - End add
 
 // Định nghĩa các type Populate - Begin add

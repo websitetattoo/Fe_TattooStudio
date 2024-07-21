@@ -1,14 +1,14 @@
 "use client";
 
 //Libary
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import BreadCrumb from "@/components/breadcrumb";
 
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, Artist } from "@/app/types/type";
 import { ArtistTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/app/backend/Comon/pagination";
+import { PaginationComponent } from "@/app/backend/Common/pagination";
 import { useGetDataArtist } from "@/app/query/artist/useGetAllArtist";
 
 export default function Index() {
@@ -16,18 +16,23 @@ export default function Index() {
   const [Artist, setArtist] = useState<Artist[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
+  const [currentPageSize, setCurrentPageSize] = useState(25);
   const filterDataApi = {
     page: currentPage,
     pageSize: currentPageSize,
   };
 
   const { data, isLoading: loading } = useGetDataArtist(filterDataApi);
+  const prevDataRef = useRef<Artist[] | null>(null);
+
   useEffect(() => {
     const dataArtist = (data as Data)?.data as Artist[];
-    setArtist(dataArtist);
+    if (JSON.stringify(prevDataRef.current) !== JSON.stringify(dataArtist)) {
+      setArtist(dataArtist);
+      prevDataRef.current = dataArtist;
+    }
     setIsLoading(loading);
-  }, [data, isLoading]);
+  }, [data, loading]);
 
   //Định nghĩa các hàm xử lý - Begin add
   const handlePageChange = (pageNumber: number) => {

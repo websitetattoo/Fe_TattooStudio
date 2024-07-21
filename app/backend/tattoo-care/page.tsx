@@ -8,7 +8,7 @@ import { useGetDataTatooCare } from "@/app/query/tattoo-care/useGetAllTattooCare
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, Tattoocare } from "@/app/types/type";
 import { TatooCareTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/app/backend/Comon/pagination";
+import { PaginationComponent } from "@/app/backend/Common/pagination";
 
 export default function Index() {
   const breadcrumbItems = [
@@ -17,7 +17,7 @@ export default function Index() {
   const [tatooCare, setTatooCare] = useState<Tattoocare[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
+  const [currentPageSize, setCurrentPageSize] = useState(25);
   const filterDataApi = {
     page: currentPage,
     pageSize: currentPageSize,

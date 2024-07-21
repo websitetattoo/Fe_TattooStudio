@@ -1,11 +1,8 @@
-import { Copy } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -38,7 +35,11 @@ export function DialogCloseButton() {
         </div>
         <DialogFooter className="sm:justify-center">
           <DialogClose asChild>
-            <Button type="submit" variant="secondary">
+            <Button
+              className="bg-black text-white"
+              type="submit"
+              variant="secondary"
+            >
               Submit
             </Button>
           </DialogClose>

@@ -12,7 +12,7 @@ export const useUpdateArtist = () => {
   const { toast } = useToast();
 
   const mutation = useMutation({
-    mutationFn: async (Faq: TypeFormPostArtist) => updateArtist(Faq),
+    mutationFn: async (Artist: TypeFormPostArtist) => updateArtist(Artist),
     onSuccess: () => {
       queryClient.invalidateQueries([QUERIES_KEYS.GET_ARTIST]);
       toast({

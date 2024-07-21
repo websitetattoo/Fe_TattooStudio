@@ -7,7 +7,7 @@ import { useGetDataArtistById } from "@/app/query/artist/useGetArtistById";
 //Type
 import { Artist } from "@/app/types/type";
 import BreadCrumb from "@/components/breadcrumb";
-import { UpdateFormArtist } from "../_compoments/forms/update";
+import { ViewArtist } from "../../_compoments/forms/view";
 
 export default function Page() {
   const params = useParams();
@@ -20,7 +20,7 @@ export default function Page() {
 
   const breadcrumbItems = [
     { title: "Artist", link: "/backend/artist" },
-    { title: "Update", link: "#" },
+    { title: "View", link: "#" },
   ];
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Page() {
     return (
       <div className="flex-1 space-y-4 p-8">
         <BreadCrumb items={breadcrumbItems} />
-        <UpdateFormArtist initialData={initialData} key={null} />
+        <ViewArtist initialData={initialData} key={null} />
       </div>
     );
   }

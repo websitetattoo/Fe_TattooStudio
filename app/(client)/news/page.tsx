@@ -7,7 +7,7 @@ import PageTitle from "@/components/page-title";
 import NewsCard from "./_components/news-card";
 import { Data, News } from "@/app/types/type";
 import { useGetDataNews } from "@/app/query/news/useGetAllNews";
-import { PaginationComponent } from "@/app/backend/Comon/pagination";
+import { PaginationComponent } from "@/app/backend/Common/pagination";
 
 export default function index() {
   const [news, setNews] = useState<News[]>([]);
