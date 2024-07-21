@@ -3,36 +3,36 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 //Query
-import { useGetDataTatooCareById } from "@/app/query/tattoo-care/useGetTattooCareById";
+import { useGetDataArtistById } from "@/app/query/artist/useGetArtistById";
 //Type
-import { Tattoocare } from "@/app/types/type";
+import { Artist } from "@/app/types/type";
 import BreadCrumb from "@/components/breadcrumb";
-import { UpdateFormTattooCare } from "../_compoments/forms/update";
+import { UpdateFormArtist } from "../../_compoments/forms/update";
 
 export default function Page() {
   const params = useParams();
-  const [initialData, setInitialData] = useState<Tattoocare | null>(null);
+  const [initialData, setInitialData] = useState<Artist | null>(null);
 
   //useQuery
-  const { data: TattooCare, isLoading } = useGetDataTatooCareById(
+  const { data: Artist, isLoading } = useGetDataArtistById(
     params.id.toString(),
   );
 
   const breadcrumbItems = [
-    { title: "Tattoo Care", link: "/backend/tattoo-care" },
+    { title: "Artist", link: "/backend/artist" },
     { title: "Update", link: "#" },
   ];
 
   useEffect(() => {
-    const data = TattooCare as Tattoocare;
+    const data = Artist as Artist;
     setInitialData(data);
-  }, [TattooCare, isLoading]);
+  }, [Artist, isLoading]);
 
   if (initialData) {
     return (
       <div className="flex-1 space-y-4 p-8">
         <BreadCrumb items={breadcrumbItems} />
-        <UpdateFormTattooCare initialData={initialData} key={null} />
+        <UpdateFormArtist initialData={initialData} key={null} />
       </div>
     );
   }

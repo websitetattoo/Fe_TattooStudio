@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 
 import { CellAction } from "./cell-action";
@@ -23,7 +22,6 @@ export const columns = (): ColumnDef<Artist>[] => [
     accessorKey: "avatar",
     header: "AVATAR",
     cell: ({ row }) => {
-      console.log(row);
       const imageUrl = row.original.avatar;
 
       return (
@@ -45,6 +43,8 @@ export const columns = (): ColumnDef<Artist>[] => [
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} />,
+    cell: ({ row }) => (
+      <CellAction data={row.original} setOpenDrawer={() => open} />
+    ),
   },
 ];

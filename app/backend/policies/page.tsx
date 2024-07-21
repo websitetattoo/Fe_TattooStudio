@@ -7,7 +7,7 @@ import { useGetDataPolicies } from "@/app/query/policies/useGetAllPolices";
 import { PoliciesTables } from "./_components/tables";
 
 import { RoundSpinner } from "@/components/ui/spinner";
-import { PaginationComponent } from "../Comon/pagination";
+import { PaginationComponent } from "../Common/pagination";
 import { Data, Policies } from "@/app/types/type";
 
 export default function Index() {
@@ -15,7 +15,7 @@ export default function Index() {
   const [policies, setPolicies] = useState<Policies[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
+  const [currentPageSize, setCurrentPageSize] = useState(25);
   const filterDataApi = {
     page: currentPage,
     pageSize: currentPageSize,

@@ -8,7 +8,7 @@ import { Heading } from "@/components/ui/heading";
 
 import { columns } from "./columns";
 import { Booking } from "@/app/types/type";
-import { DataTable } from "@/app/backend/Comon/data-table";
+import { DataTable } from "@/app/backend/Common/data-table";
 
 interface BookingTablesProps {
   data: Booking[];

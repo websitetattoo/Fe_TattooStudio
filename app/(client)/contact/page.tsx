@@ -108,6 +108,21 @@ export default function Index() {
     };
 
     mutationCreate.mutate(formData);
+
+    handleClearForm();
+  };
+
+  //Set rỗng Form khi submit
+  const handleClearForm = () => {
+    setSchedule("");
+    setEmail("");
+    setAddress("");
+    setName("");
+    setPhone("");
+    setDescription("");
+    setArtist("");
+    setSelectedFiles(null);
+    formInfo.resetFields();
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -271,6 +286,7 @@ export default function Index() {
                       .toLowerCase()
                       .localeCompare((optionB?.label ?? "").toLowerCase())
                   }
+                  value={artist || undefined}
                   onChange={handleChangeSelect}
                   options={artistName}
                 />

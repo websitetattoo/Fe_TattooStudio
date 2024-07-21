@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 //Components
 import PageTitle from "@/components/page-title";
 import ArtistCard from "../_components/artist-card";
@@ -82,7 +83,9 @@ export default function index() {
                 </PageTitle>
               </div>
               <div className="mt-4 flex justify-center pb-8 font-medium lg:mt-8">
-                <ButtonAppointment>book an appointment</ButtonAppointment>
+                <Link href={"/contact"}>
+                  <ButtonAppointment>book an appointment</ButtonAppointment>
+                </Link>
               </div>
             </div>
           </div>

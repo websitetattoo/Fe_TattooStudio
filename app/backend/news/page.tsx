@@ -6,7 +6,7 @@ import { RoundSpinner } from "@/components/ui/spinner";
 import { Data, News } from "@/app/types/type";
 import { NewsTables } from "./_components/tables";
 import { useGetDataNews } from "@/app/query/news/useGetAllNews";
-import { PaginationComponent } from "../Comon/pagination";
+import { PaginationComponent } from "../Common/pagination";
 
 const breadcrumbItems = [{ title: "News", link: "/backend/news" }];
 
@@ -14,7 +14,7 @@ export default function Index() {
   const [news, setNews] = useState<News[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
+  const [currentPageSize, setCurrentPageSize] = useState(25);
   const filterDataApi = {
     page: currentPage,
     pageSize: currentPageSize,

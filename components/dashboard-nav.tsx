@@ -1,13 +1,14 @@
 "use client";
-
+//Libaries
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 
 import { Icons } from "@/components/forms/icons";
 import { cn } from "@/lib/utils";
-import { Dispatch, SetStateAction } from "react";
 import { NavItem } from "@/constants/data";
-import Cookies from "js-cookie";
+
 interface DashboardNavProps {
   items: NavItem[];
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -39,8 +40,8 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
             >
               <span
                 className={cn(
-                  "hover:bg-accent hover:text-accent-foreground group flex items-center rounded-md px-3 py-2 text-sm font-medium",
-                  path === item.href ? "bg-accent" : "transparent",
+                  "hover:text-accent-foreground group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150 hover:bg-indigo-100",
+                  path === item.href ? "bg-indigo-100" : "transparent",
                   item.disabled && "cursor-not-allowed opacity-80",
                 )}
               >
@@ -51,16 +52,16 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
           )
         );
       })}
-      {/* Logout logic */}
+      {/* Handle Logout */}
       <Link href="/login">
         <span
           className={cn(
-            "hover:bg-accent hover:text-accent-foreground group flex items-center rounded-md px-3 py-2 text-sm font-medium",
+            "hover:text-accent-foreground group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150 hover:bg-indigo-100",
             path === "/logout" ? "bg-accent" : "transparent",
           )}
           onClick={() => {
             if (setOpen) setOpen(false);
-            handleLogout(); // Call handleLogout function to remove session token
+            handleLogout();
           }}
         >
           <Icons.logout className="mr-2 h-4 w-4" />

@@ -9,13 +9,13 @@ import { useGetDataBooking } from "@/app/query/booking/useGetAllBooking";
 import { RoundSpinner } from "@/components/ui/spinner";
 import { Booking, Data } from "@/app/types/type";
 import { BookingTables } from "./_compoments/tables";
-import { PaginationComponent } from "@/app/backend/Comon/pagination";
+import { PaginationComponent } from "@/app/backend/Common/pagination";
 
 export default function Index() {
   const breadcrumbItems = [{ title: "Booking", link: "/backend/booking" }];
   const [booking, setBooking] = useState<Booking[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(5);
+  const [currentPageSize, setCurrentPageSize] = useState(25);
   const filterDataApi = {
     page: currentPage,
     pageSize: currentPageSize,

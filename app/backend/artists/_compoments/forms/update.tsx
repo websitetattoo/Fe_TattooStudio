@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import { Trash } from "lucide-react";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
+import { Button as ButtonAnt } from "antd";
+
 //Library UI
 import { Form } from "antd";
 import type { FormProps } from "antd";
@@ -20,7 +22,7 @@ import { useUpdateArtist } from "@/app/query/artist/useUpdateArtist";
 //Types
 import { TypeFormPostArtist } from "@/app/types/type";
 import "react-quill/dist/quill.snow.css";
-import { quillFormats, quillModules } from "@/app/backend/Comon/react-quiff";
+import { quillFormats, quillModules } from "@/app/backend/Common/react-quiff";
 //Lib
 import { uploadImage } from "@/lib/utils";
 
@@ -80,7 +82,6 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
 
   useEffect(() => {
     if (initialData) {
-      console.log("initialData:", initialData);
       let initialImages: UploadFile[] = [];
       let initialAvatar: UploadFile[] = [
         {
@@ -356,7 +357,6 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
       >
         <Form.Item<FieldType>
           className="w-full"
-          //name="avatar"
           rules={[{ required: true, message: "Please input your avatar!" }]}
         >
           <label className="mb-3 ml-2 text-base font-medium capitalize">
@@ -501,12 +501,14 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         )}
 
         <Form.Item className="flex w-full justify-start pb-20 pt-4 text-center">
-          <button
-            className="ml-4 rounded-md bg-black px-4 py-2 text-white"
-            type="submit"
+          <ButtonAnt
+            className="ml-4 flex items-center justify-center rounded-md bg-black px-2 py-2 text-white"
+            type="primary"
+            htmlType="submit"
+            loading={isLoadingUpdate}
           >
             {action}
-          </button>
+          </ButtonAnt>
         </Form.Item>
       </Form>
     </>

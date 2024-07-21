@@ -47,7 +47,6 @@ export const UpdateUser: React.FC<UpdateFormProps> = ({ initialData }) => {
     } else {
       setFormData(initialPostFormData);
     }
-    console.log(params?.id.toString());
   }, [initialData]);
 
   // Xử lý validate cho các thẻ input

@@ -26,7 +26,7 @@ interface PropsPageType {
   onPageSizeChange: (pageSize: number) => void; //Call back trả về khi change pageSize
   className?: string;
 }
-
+const pageSizeOptions: Array<number> = [25, 50, 100];
 export function PaginationComponent({
   propsPage,
 }: {
@@ -34,9 +34,8 @@ export function PaginationComponent({
 }) {
   const { pageSize, total, onPageChange, onPageSizeChange, className } =
     propsPage;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState("5");
-  const pageSizeOptions = ["5", "10", "15", "20", "25", "30", "50"];
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPageSize, setCurrentPageSize] = useState<number>(25);
 
   // Tính số lượng trang
   const pageCount = Math.ceil(total / pageSize);
@@ -65,7 +64,7 @@ export function PaginationComponent({
   };
 
   const handleChangePageSize = (value: string) => {
-    setCurrentPageSize(value);
+    setCurrentPageSize(+value);
     onPageSizeChange(+value);
   };
 
@@ -112,18 +111,18 @@ export function PaginationComponent({
               <DropdownMenuLabel>Option</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup
-                value={currentPageSize}
+                value={currentPageSize + ""}
                 onValueChange={handleChangePageSize}
               >
                 {Array.isArray(pageSizeOptions) &&
                   pageSizeOptions?.length > 0 &&
-                  pageSizeOptions.map((item, index) => (
+                  pageSizeOptions.map((pageSize, index) => (
                     <DropdownMenuRadioItem
                       className={twMerge(" hover:bg-blue-100")}
                       key={index}
-                      value={item}
+                      value={pageSize.toString()}
                     >
-                      {item} items/ page
+                      {pageSize} items/ page
                     </DropdownMenuRadioItem>
                   ))}
               </DropdownMenuRadioGroup>

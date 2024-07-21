@@ -42,7 +42,7 @@ export const ViewBooking: React.FC<ViewFormProps> = ({ initialData }) => {
         hour: "numeric",
         minute: "numeric",
       });
-      console.log("initialData", initialData);
+
       setFormData({
         id: params?.id.toString(),
         name: initialData.name || "",

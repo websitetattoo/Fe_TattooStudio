@@ -2,7 +2,7 @@
 //Library
 import Link from "next/link";
 import { Edit, MoreHorizontal, Trash, Eye } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 //Library UI
 import { Button } from "@/components/ui/button";
 import {
@@ -12,8 +12,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Drawer } from "antd";
-import { Image } from "antd";
 //Query
 import { useDeleteArtist } from "@/app/query/artist/useDeleteArtist";
 //Type
@@ -23,37 +21,11 @@ import { AlertModal } from "@/app/backend/modal/alert-modal";
 interface CellActionProps {
   data: Artist | any;
   onCloseDrawer?: any;
-  openDrawer?: any;
+  openDrawer?: boolean;
 }
-
-const DrawerContent: React.FC<CellActionProps> = ({
-  data,
-  onCloseDrawer,
-  openDrawer,
-}) => {
-  return (
-    <Drawer title="Images" onClose={onCloseDrawer} open={openDrawer}>
-      <div>
-        {data?.images?.map((item: any, index: number) => (
-          <div key={index} className="wrap m-1 flex">
-            <Image
-              className="h-full w-full object-cover"
-              width={300}
-              height={300}
-              src={item.url}
-            />
-          </div>
-        ))}
-      </div>
-    </Drawer>
-  );
-};
-
-const MemoizedDrawerContent = React.memo(DrawerContent);
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
-  const [openDrawer, setOpenDrawer] = useState(false);
   const { mutationDelete, isLoadingDelete } = useDeleteArtist();
 
   //Hàm xử lý xoá Artist
@@ -61,12 +33,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     mutationDelete.mutate(data._id);
     setOpen(false);
   };
-
-  const onCloseDrawer = useCallback(() => {
-    setOpenDrawer(false);
-  }, []);
-
-  console.log("openDrawer:", openDrawer)
 
   return (
     <>
@@ -85,10 +51,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white" align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => setOpenDrawer(true)}>
-            <Eye className="mr-2 h-4 w-4" /> View
-          </DropdownMenuItem>
-          <Link href={`/backend/artists/${data._id}`}>
+          <Link href={`/backend/artists/view/${data._id}`}>
+            <DropdownMenuItem>
+              <Eye className="mr-2 h-4 w-4" /> View
+            </DropdownMenuItem>
+          </Link>
+          <Link href={`/backend/artists/update/${data._id}`}>
             <DropdownMenuItem>
               <Edit className="mr-2 h-4 w-4" /> Update
             </DropdownMenuItem>
@@ -99,11 +67,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <MemoizedDrawerContent
-        data={data}
-        onCloseDrawer={onCloseDrawer}
-        openDrawer={openDrawer}
-      />
+      {/* <Drawer title="Images" onClose={onCloseDrawer} open={openDrawer}>
+        <div>
+          {data?.images?.map((item: any, index: number) => (
+            <div key={index} className="wrap m-1 flex">
+              <Image
+                className="h-full w-full object-cover"
+                width={300}
+                height={300}
+                src={item.url}
+              />
+            </div>
+          ))}
+        </div>
+      </Drawer> */}
     </>
   );
 };
