@@ -23,7 +23,7 @@ export default function index() {
     <div className="bg-tattoo-color-bg bg-transparent">
       <div className="w-full py-12 lg:m-auto lg:w-9/12">
         <PageTitle>
-          <HighlightText>NEWS</HighlightText>
+          <HighlightText>news</HighlightText>
         </PageTitle>
       </div>
       <div className="-bottom-10 h-full w-full  flex-wrap justify-start py-24 pt-12 md:flex md:p-20 lg:flex">

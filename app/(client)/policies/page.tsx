@@ -30,14 +30,14 @@ export default function index() {
             <HighlightText className="font-bold">POLICIES</HighlightText>
           </PageTitle>
         </div>
-        <div className="px-12 md:px-0">
-          <div className="pb-16 md:flex md:items-center md:justify-center">
+        <div className="px-4 md:px-0">
+          <div className="pb-4 md:flex md:items-center md:justify-center">
             <div className="text-center text-xl text-white md:w-9/12 md:pb-8 lg:w-full lg:text-2xl">
               {artPolicyTitle}
             </div>
           </div>
 
-          <div className="text-left md:m-auto md:w-9/12 md:py-12 lg:w-full">
+          <div className="pb-12 text-left md:m-auto md:w-9/12 md:pt-4 lg:w-full">
             {policies?.map((item, index) => (
               <PoliciesComp key={index} obj={item} />
             ))}

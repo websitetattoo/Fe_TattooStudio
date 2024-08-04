@@ -40,7 +40,7 @@ export default function index() {
                   width={400}
                   height={400}
                   alt="Tattoo Image"
-                  className="w-full md:h-[600px] md:object-cover lg:object-cover"
+                  className="h-[600px] w-full md:h-[600px] md:object-cover lg:object-cover"
                 />
               </div>
 

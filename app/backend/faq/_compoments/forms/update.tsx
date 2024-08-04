@@ -37,13 +37,14 @@ export const UpdateFormFaq: React.FC<UpdateFormProps> = ({ initialData }) => {
   };
   const [formData, setFormData] =
     useState<TypeFormPostFaq>(initialPostFormData);
-  const { mutationCreate, isLoading } = useCreateFaq();
+  const { mutationCreate, isLoading: isLoadingCreate } = useCreateFaq();
   const { mutationDelete, isLoadingDelete } = useDeleteFaq();
   const { mutationUpdate, isLoadingUpdate } = useUpdateFaq();
 
   const title = `${initialData ? "Edit" : "Create"} Faq`;
   const description = `${initialData ? "Edit" : "Add a new"} Faq.`;
   const action = `${initialData ? "Save changes" : "Create"}`;
+  const actionLoading = initialData ? isLoadingUpdate : isLoadingCreate;
 
   useEffect(() => {
     if (initialData) {
@@ -108,9 +109,16 @@ export const UpdateFormFaq: React.FC<UpdateFormProps> = ({ initialData }) => {
       mutationUpdate.mutate(postData);
       setError({});
     } else {
-      mutationCreate.mutate(postData);
-      setFormData(initialPostFormData);
-      setError({});
+      //Xử lý Insert thông tin Faq
+      mutationCreate.mutate(postData, {
+        onSuccess: () => {
+          setFormData(initialPostFormData);
+          setError({});
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      });
     }
   };
 
@@ -175,8 +183,8 @@ export const UpdateFormFaq: React.FC<UpdateFormProps> = ({ initialData }) => {
               className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
               py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isLoading}
-              placeholder="Title policy"
+              disabled={isLoadingCreate}
+              placeholder="Title Faq"
             />
             <div className="FormMessage"></div>
           </div>
@@ -201,7 +209,7 @@ export const UpdateFormFaq: React.FC<UpdateFormProps> = ({ initialData }) => {
               className="ml-0 flex items-center justify-center rounded-md bg-black px-4 py-2 text-white"
               type="primary"
               htmlType="submit"
-              loading={isLoadingUpdate}
+              loading={actionLoading}
             >
               {action}
             </ButtonAnt>

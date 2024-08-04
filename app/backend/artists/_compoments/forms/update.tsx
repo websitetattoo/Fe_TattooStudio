@@ -14,7 +14,6 @@ import type { FormProps } from "antd";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 import { Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
-import ImgCrop from "antd-img-crop";
 //Query
 import { useCreateArtist } from "@/app/query/artist/useCreateArtist";
 import { useDeleteArtist } from "@/app/query/artist/useDeleteArtist";
@@ -72,13 +71,14 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
   };
   const [formData, setFormData] =
     useState<TypeFormPostArtist>(initialPostFormData);
-  const { mutationCreate, isLoading } = useCreateArtist();
+  const { mutationCreate, isLoading: isLoadingCreate } = useCreateArtist();
   const { mutationDelete, isLoadingDelete } = useDeleteArtist();
   const { mutationUpdate, isLoadingUpdate } = useUpdateArtist();
 
   const title = `${initialData ? "Edit" : "Create"} Artist`;
   const description = `${initialData ? "Edit" : "Add a new"} Artist.`;
   const action = `${initialData ? "Save changes" : "Create"}`;
+  const actionLoading = initialData ? isLoadingUpdate : isLoadingCreate;
 
   useEffect(() => {
     if (initialData) {
@@ -279,10 +279,17 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
           link: formData.link,
         };
 
-        mutationCreate.mutate(artistData);
-        setFormData(initialPostFormData);
-        setFileList([]);
-        setImages([]);
+        //Xử lý Insert thông tin Artist
+        mutationCreate.mutate(artistData, {
+          onSuccess: () => {
+            setFormData(initialPostFormData);
+            setFileList([]);
+            setImages([]);
+          },
+          onError: (error) => {
+            console.error(error);
+          },
+        });
       }
     }
   };
@@ -363,16 +370,14 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
             your avatar:
           </label>
           <div className="ml-2 mt-1">
-            <ImgCrop rotationSlider>
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                onChange={onChangeAvatar}
-                onPreview={onPreview}
-              >
-                {fileList.length < 1 && "+ Upload"}
-              </Upload>
-            </ImgCrop>
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onChange={onChangeAvatar}
+              onPreview={onPreview}
+            >
+              {fileList.length < 1 && "+ Upload"}
+            </Upload>
           </div>
         </Form.Item>
         {errorAvatar && (
@@ -382,25 +387,22 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
         )}
 
         <Form.Item<FieldType>
-          className="w-full"
-          //name="images"
+          className="w-full py-4"
           rules={[{ required: true, message: "Please input your images!" }]}
         >
           <label className="mb-3 ml-2 text-base font-medium capitalize">
             your images:
           </label>
           <div className="ml-2 mt-1">
-            <ImgCrop rotationSlider>
-              <Upload
-                listType="picture-card"
-                fileList={images}
-                onChange={onChangeImages}
-                onPreview={onPreview}
-                onRemove={onRemove}
-              >
-                {images.length < 20 && "+ Upload"}
-              </Upload>
-            </ImgCrop>
+            <Upload
+              listType="picture-card"
+              fileList={images}
+              onChange={onChangeImages}
+              onPreview={onPreview}
+              onRemove={onRemove}
+            >
+              {images.length < 20 && "+ Upload"}
+            </Upload>
           </div>
         </Form.Item>
         {errorImages && (
@@ -505,7 +507,7 @@ export const UpdateFormArtist: React.FC<UpdateFormProps> = ({
             className="ml-4 flex items-center justify-center rounded-md bg-black px-2 py-2 text-white"
             type="primary"
             htmlType="submit"
-            loading={isLoadingUpdate}
+            loading={actionLoading}
           >
             {action}
           </ButtonAnt>

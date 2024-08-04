@@ -44,7 +44,7 @@ export const columns = (): ColumnDef<Artist>[] => [
   {
     id: "actions",
     cell: ({ row }) => (
-      <CellAction data={row.original} setOpenDrawer={() => open} />
+      <CellAction data={row.original} />
     ),
   },
 ];

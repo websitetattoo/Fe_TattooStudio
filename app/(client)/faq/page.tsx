@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { Data, Faq } from "@/app/types/type";
 import { useGetDataFaq } from "@/app/query/faq/useGetAllFaq";
+import { stripHtmlTags } from "@/lib/utils";
 
 export default function Index() {
   const [faq, setFaq] = useState<Faq[]>([]);
@@ -32,16 +33,20 @@ export default function Index() {
       </PageTitle>
       <div className="mx-auto w-full md:w-4/5 lg:w-3/5">
         <Accordion type="multiple" className="w-full">
-          {faq?.map((q, idx) => (
-            <AccordionItem value={idx + ""} key={idx}>
-              <AccordionTrigger className="text-left text-lg md:px-4">
-                {q.title}
-              </AccordionTrigger>
-              <AccordionContent className="text-justify text-tattoo-gray md:px-4">
-                {q.content}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
+          {faq?.map((q, idx) => {
+            const stripHtmlContent = stripHtmlTags(q.content || "");
+
+            return (
+              <AccordionItem value={idx + ""} key={idx}>
+                <AccordionTrigger className="text-left text-lg md:px-4">
+                  {q.title}
+                </AccordionTrigger>
+                <AccordionContent className="text-justify text-tattoo-gray md:px-4">
+                  {stripHtmlContent}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
         </Accordion>
       </div>
     </main>

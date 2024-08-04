@@ -39,8 +39,8 @@ export const columns = (): ColumnDef<News>[] => [
     ),
   },
   {
-    accessorKey: "createdDate",
-    header: "CreatedDate",
+    accessorKey: "created Date",
+    header: "Created Date",
     cell: ({ row }) => (
       <div className="w-full">
         {format(new Date(row.original.createdDate), "MM/dd/yyyy")}

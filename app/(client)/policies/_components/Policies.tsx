@@ -16,9 +16,9 @@ export default function Policies({ obj }: { obj: PolicyItem }) {
   return (
     <>
       <div className="w-full pb-14">
-        <h2 className=" mb-2 text-left text-2xl font-bold text-white md:text-left md:text-3xl lg:text-left lg:text-4xl ">
+        <h2 className=" mb-2 text-left text-2xl font-bold text-white md:text-left md:text-3xl lg:text-left lg:text-3xl ">
           {isImportant ? (
-            <span className="mb-2 flex pr-4 text-center text-2xl font-bold text-tattoo-highlight md:inline-flex md:text-left md:text-3xl lg:text-left lg:text-4xl">
+            <span className="mb-2 flex pr-4 text-center text-2xl font-bold text-tattoo-highlight md:inline-flex md:text-left md:text-3xl lg:text-left lg:text-3xl">
               IMPORTANT!
             </span>
           ) : (
