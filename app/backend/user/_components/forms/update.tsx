@@ -24,7 +24,6 @@ export const UpdateUser: React.FC<UpdateFormProps> = ({ initialData }) => {
     email: "",
     instagram: "",
     facebook: "",
-    password: "",
   };
   const [formData, setFormData] =
     useState<TypeFormUpdateUser>(initialPostFormData);
@@ -42,7 +41,6 @@ export const UpdateUser: React.FC<UpdateFormProps> = ({ initialData }) => {
         email: initialData[0].email || "",
         instagram: initialData[0].instagram || "",
         facebook: initialData[0].facebook || "",
-        password: initialData[0].password || "",
       });
     } else {
       setFormData(initialPostFormData);
@@ -93,7 +91,6 @@ export const UpdateUser: React.FC<UpdateFormProps> = ({ initialData }) => {
       email: formData.email,
       instagram: formData.instagram,
       facebook: formData.facebook,
-      password: formData.password,
     };
 
     if (initialData) {
@@ -166,32 +163,6 @@ export const UpdateUser: React.FC<UpdateFormProps> = ({ initialData }) => {
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoadingUpdate}
               placeholder="Email....."
-            />
-            <div className="FormMessage"></div>
-          </div>
-        </div>
-
-        <div className="gap-y-4 md:grid md:grid-cols-1">
-          {error && error.password && (
-            <div className="grid w-full">
-              <div className="text-red-500">{error.password}</div>
-            </div>
-          )}
-          <div className="grid md:grid-cols-8">
-            <label htmlFor="password" className="col-span-1 pr-2">
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
-              py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
-              focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isLoadingUpdate}
-              placeholder="password....."
             />
             <div className="FormMessage"></div>
           </div>

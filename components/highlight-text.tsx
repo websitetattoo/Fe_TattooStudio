@@ -9,7 +9,12 @@ export default function HighlightText({
   className?: string;
 }) {
   return (
-    <span className={twMerge("text-6xl text-tattoo-highlight", className)}>
+    <span
+      className={twMerge(
+        "text-5xl font-bold uppercase text-tattoo-highlight",
+        className,
+      )}
+    >
       {children}
     </span>
   );

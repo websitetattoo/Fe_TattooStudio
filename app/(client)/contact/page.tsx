@@ -159,7 +159,7 @@ export default function Index() {
             name="name"
             rules={[{ required: true, message: "Please input your name!" }]}
           >
-            <div className="w-full px-3 lg:w-full">
+            <div className="w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium uppercase capitalize text-white">
                 your name:
               </label>
@@ -180,7 +180,7 @@ export default function Index() {
               { required: true, message: "Please input your phone number!" },
             ]}
           >
-            <div className="w-full px-3 lg:w-full">
+            <div className="w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium uppercase capitalize text-white">
                 your phone number:
               </label>
@@ -201,7 +201,7 @@ export default function Index() {
               { required: true, message: "Please input your phone address!" },
             ]}
           >
-            <div className="w-full px-3 lg:w-full">
+            <div className="w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium uppercase capitalize text-white">
                 Your Address:
               </label>
@@ -223,7 +223,7 @@ export default function Index() {
               { type: "email" },
             ]}
           >
-            <div className="w-full px-3 lg:w-full">
+            <div className="w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium uppercase capitalize text-white">
                 Your Email:
               </label>
@@ -243,7 +243,7 @@ export default function Index() {
             rules={[{ required: true, message: "Please input your Schedule!" }]}
             initialValue={schedule}
           >
-            <div className="dateTimePicker-css w-full px-3 lg:w-full">
+            <div className="dateTimePicker-css w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium capitalize text-white">
                 Your Schedule:
               </label>
@@ -268,7 +268,7 @@ export default function Index() {
             rules={[{ required: true, message: "Please input your Artist!" }]}
             initialValue={artist}
           >
-            <div className="select-css w-full px-3 lg:w-full">
+            <div className="select-css w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium capitalize text-white">
                 Which artist(s) were you looking to work with?
               </label>
@@ -301,7 +301,7 @@ export default function Index() {
               { required: true, message: "Please input your Description!" },
             ]}
           >
-            <div className="w-full px-3 lg:w-full">
+            <div className="w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium uppercase capitalize text-white">
                 Tattoo Description:
               </label>
@@ -319,7 +319,7 @@ export default function Index() {
             name="file"
             rules={[{ required: true, message: "Please input your image!" }]}
           >
-            <div className="InputFile-css w-full px-3 lg:w-full">
+            <div className="InputFile-css w-full px-3 pt-4 lg:w-full">
               <label className="text-base font-medium uppercase capitalize text-white">
                 Additional reference image for your tattoo: (optional):
               </label>

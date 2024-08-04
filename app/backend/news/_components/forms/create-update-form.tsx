@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/app/backend/modal/alert-modal";
 import CustomFileInput from "@/components/custom-choose-file";
-import { RoundSpinner } from "@/components/ui/spinner";
 //Query
 import { useCreateNews } from "@/app/query/news/useCreateNews";
 import { useDeleteNews } from "@/app/query/news/useDeleteNews";
@@ -43,12 +42,14 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
   };
   const [formData, setFormData] =
     useState<TypeFormPostNews>(initialPostFormData);
-  const { mutationCreate, isLoading } = useCreateNews();
+  const { mutationCreate, isLoading: isLoadingCreate } = useCreateNews();
   const { mutationDelete, isLoadingDelete } = useDeleteNews();
   const { mutationUpdate, isLoadingUpdate } = useUpdateNews();
+
   const title = initialData ? "Edit news" : "Create news";
   const description = initialData ? "Edit a news." : "  Add a news";
   const action = initialData ? "Save changes" : "Create";
+  const actionLoading = initialData ? isLoadingUpdate : isLoadingCreate;
 
   useEffect(() => {
     if (initialData) {
@@ -113,10 +114,17 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
       mutationUpdate.mutate(postData);
       setError({});
     } else {
-      mutationCreate.mutate(postData);
-      setFormData(initialPostFormData);
-      setImageUrl(null);
-      setError({});
+      //Xử lý Insert thông tin News
+      mutationCreate.mutate(postData, {
+        onSuccess: () => {
+          setFormData(initialPostFormData);
+          setImageUrl(null);
+          setError({});
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      });
     }
   };
   // Hàm xử lý thay đổi trường biểu mẫu
@@ -239,7 +247,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
                 className="border-input placeholder:text-muted-foreground focus-visible:ring-ring :font-medium col-span-7 rounded-md border bg-transparent 
               px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm focus-visible:outline-none 
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isLoading}
+                disabled={isLoadingCreate}
                 placeholder="Title News"
               />
               <div className="FormMessage"></div>
@@ -270,7 +278,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData }) => {
                 className="ml-0 flex items-center justify-center rounded-md bg-black px-4 py-2 text-white"
                 type="primary"
                 htmlType="submit"
-                loading={isLoadingUpdate}
+                loading={actionLoading}
               >
                 {action}
               </ButtonAnt>

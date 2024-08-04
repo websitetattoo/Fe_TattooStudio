@@ -39,13 +39,14 @@ export const UpdateFormTattooCare: React.FC<UpdateFormProps> = ({
   };
   const [formData, setFormData] =
     useState<TypeFormPostTattooCare>(initialPostFormData);
-  const { mutationCreate, isLoading } = useCreateTatooCare();
+  const { mutationCreate, isLoading: isLoadingCreate } = useCreateTatooCare();
   const { mutationDelete, isLoadingDelete } = useDeleteTattooCare();
   const { mutationUpdate, isLoadingUpdate } = useUpdateTattooCare();
 
   const title = `${initialData ? "Edit" : "Create"} Tattoo Care`;
   const description = `${initialData ? "Edit" : "Add a new"} Tattoo Care.`;
   const action = `${initialData ? "Save changes" : "Create"}`;
+  const actionLoading = initialData ? isLoadingUpdate : isLoadingCreate;
 
   useEffect(() => {
     if (initialData) {
@@ -65,7 +66,7 @@ export const UpdateFormTattooCare: React.FC<UpdateFormProps> = ({
     if (value.title.trim() === "") {
       errors.title = "Title can't be empty.";
     }
-    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/)[1];
+    const contentInsideQuiff = value.content.match(/<p>(.*?)<\/p>/);
     // Kiểm tra nếu người dùng chỉ nhập khoảng trắng vào editor thì báo lỗi
     const constaint = /^\s*$/.test(contentInsideQuiff);
     if (
@@ -110,9 +111,16 @@ export const UpdateFormTattooCare: React.FC<UpdateFormProps> = ({
       mutationUpdate.mutate(postData);
       setError({});
     } else {
-      mutationCreate.mutate(postData);
-      setFormData(initialPostFormData);
-      setError({});
+      //Xử lý Insert thông tin Tatoo care
+      mutationCreate.mutate(postData, {
+        onSuccess: () => {
+          setFormData(initialPostFormData);
+          setError({});
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      });
     }
   };
 
@@ -177,7 +185,7 @@ export const UpdateFormTattooCare: React.FC<UpdateFormProps> = ({
               className="border-input placeholder:text-muted-foreground focus-visible:ring-ring col-span-7 rounded-md border bg-transparent px-3 
               py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none 
               focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isLoading}
+              disabled={isLoadingCreate}
               placeholder="Title policy"
             />
             <div className="FormMessage"></div>
@@ -202,7 +210,7 @@ export const UpdateFormTattooCare: React.FC<UpdateFormProps> = ({
               className="ml-0 flex items-center justify-center rounded-md bg-black px-4 py-2 text-white"
               type="primary"
               htmlType="submit"
-              loading={isLoadingUpdate}
+              loading={actionLoading}
             >
               {action}
             </ButtonAnt>

@@ -1,5 +1,6 @@
 //Libaries
 import Image from "next/image";
+import { Image as ImageAnt } from "antd";
 //Components
 import {
   CardContent,
@@ -22,13 +23,23 @@ export default function ArtistCard({
       <div>
         <CardContent className="p-2">
           <div className="relative w-full overflow-hidden">
-            <Image
-              src={imgObj.avatar ? imgObj.avatar : imgObj.url}
-              width={300}
-              height={300}
-              alt="Tattoo Image"
-              className="h-full w-full object-cover grayscale transition-transform duration-500 ease-in-out hover:scale-110 hover:grayscale-0"
-            />
+            {disabled ? (
+              <Image
+                src={imgObj.avatar ? imgObj.avatar : imgObj.url}
+                width={300}
+                height={300}
+                alt="Tattoo Image"
+                className="h-[400px] h-full w-full object-cover grayscale transition-transform duration-500 ease-in-out hover:scale-110 hover:grayscale-0"
+              />
+            ) : (
+              <ImageAnt
+                src={imgObj.avatar ? imgObj.avatar : imgObj.url}
+                width={300}
+                height={300}
+                alt="Tattoo Image"
+                className="h-[400px] h-full w-full object-cover grayscale transition-transform duration-500 ease-in-out hover:scale-110 hover:grayscale-0"
+              />
+            )}
           </div>
         </CardContent>
         {disabled && (

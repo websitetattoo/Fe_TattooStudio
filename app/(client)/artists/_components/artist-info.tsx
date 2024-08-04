@@ -4,6 +4,7 @@ import { useState } from "react";
 import { InstagramIcon } from "@/components/forms/icons";
 //Types
 import { PropsArtist } from "@/app/types/type";
+import { stripHtmlTags } from "@/lib/utils";
 
 interface SocialProps {
   icon: any;
@@ -23,6 +24,8 @@ export default function ArtistInfo({
   });
 
   if (employeeObj && Object.keys(employeeObj).length > 0) {
+    const stripHtmlDescription = stripHtmlTags(employeeObj?.description || "");
+
     return (
       <>
         <div>
@@ -40,7 +43,7 @@ export default function ArtistInfo({
           </div>
           <div className="mt-4">
             <p className="text-center text-base text-tattoo-gray md:text-lg lg:text-justify lg:text-lg">
-              {employeeObj.description}
+              {stripHtmlDescription}
             </p>
           </div>
           <div className="w-ful mt-4 md:mt-8 lg:mt-8 lg:flex">
